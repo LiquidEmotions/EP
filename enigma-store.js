@@ -1344,39 +1344,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }));
   }
 });
-
-
-/* ============================================================
-   Phone tab bar: always-visible Home / Shop / Brands / About
-   ============================================================ */
-function enMountTabBar(){
-  if(document.getElementById("tabBar")) return;
-  const file = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const onBrands = () => file === "index.html" && location.hash === "#brands";
-  const ico = {
-    home:   '<path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
-    shop:   '<path d="M4 7.5h16l-1.2 12.5H5.2L4 7.5Z"/><path d="M8.5 7.5V6.5a3.5 3.5 0 0 1 7 0v1"/>',
-    brands: '<rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/>',
-    about:  '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5"/><path d="M12 7.8v.4"/>'
-  };
-  const items = [
-    ["Home",   "index.html",         "home",   () => file === "index.html" && !onBrands()],
-    ["Shop",   "shop.html",          "shop",   () => file === "shop.html"],
-    ["Brands", "index.html#brands",  "brands", () => onBrands()],
-    ["About",  "about.html",         "about",  () => file === "about.html"]
-  ];
-  const nav = document.createElement("nav");
-  nav.className = "tabbar";
-  nav.id = "tabBar";
-  nav.setAttribute("aria-label", "Quick links");
-  const paint = () => {
-    nav.innerHTML = items.map(([label, href, key, isOn]) =>
-      `<a href="${href}"${isOn() ? ' class="active" aria-current="page"' : ""}>` +
-      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ico[key]}</svg>` +
-      `<span>${label}</span></a>`).join("");
-  };
-  paint();
-  window.addEventListener("hashchange", paint);
-  document.body.appendChild(nav);
-}
-document.addEventListener("DOMContentLoaded", enMountTabBar);

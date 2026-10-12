@@ -524,34 +524,20 @@ a.btn{display:inline-flex; align-items:center; justify-content:center; text-deco
 
 
 /* =====================================================================
-   PHONE NAVIGATION: bottom tab bar (Home, Shop, Brands, About)
-   Injected by enigma-store.js. Replaces the hamburger on phones.
+   PHONE HEADER: same Shop / Brands / About links as desktop, on a second row
    ===================================================================== */
-.tabbar{display:none;}
-#brands{scroll-margin-top:72px;}
+#brands{scroll-margin-top:110px;}
 @media (max-width:600px){
   .hamburger, .mobile-menu, .mobile-menu.open{display:none !important;}
-  body{padding-bottom:calc(68px + env(safe-area-inset-bottom, 0px));}
-  .tabbar{
-    display:grid; grid-template-columns:repeat(4, 1fr);
-    position:fixed; left:0; right:0; bottom:0; z-index:40;
-    background:rgba(248,246,251,0.97); backdrop-filter:blur(8px);
-    border-top:1px solid var(--line);
-    padding-bottom:env(safe-area-inset-bottom, 0px);
+  .nav{flex-wrap:wrap; row-gap:0; padding-bottom:0;}
+  .wordmark{order:1;}
+  .nav-right{order:2; margin-left:auto;}
+  .links{
+    display:flex; order:3; flex:none; width:calc(100% + 48px); justify-content:space-between; gap:0;
+    margin:10px -24px 0; padding:0 24px; border-top:1px solid var(--line);
   }
-  .tabbar a{
-    position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
-    min-height:60px; padding:8px 0 7px; text-decoration:none; color:var(--ink-soft);
-    font-size:0.74rem; font-weight:500; letter-spacing:0.01em;
-  }
-  .tabbar svg{width:23px; height:23px;}
-  .tabbar a.active{color:var(--seal);}
-  .tabbar a.active::before{content:""; position:absolute; top:-1px; left:30%; right:30%; height:2px; background:var(--seal);}
-  .tabbar a:active{background:var(--paper-deep);}
-  /* keep floating items clear of the bar */
-  .wa-float{bottom:calc(76px + env(safe-area-inset-bottom, 0px));}
-  .en-toast-box{bottom:calc(80px + env(safe-area-inset-bottom, 0px));}
-  /* header: slimmer, wordmark keeps its sub-name */
+  .links a{flex:1; text-align:center; padding:11px 0 9px; font-size:1rem; font-weight:500; border-bottom:2px solid transparent;}
+  .links a:hover, .links a.active{color:var(--ink); border-color:var(--seal);}
   .wm-sub{display:inline;}
   /* product cards: price block stacks instead of squeezing */
   .card-line{flex-direction:column; align-items:flex-start; gap:4px;}
@@ -560,4 +546,5 @@ a.btn{display:inline-flex; align-items:center; justify-content:center; text-deco
 }
 @media (max-width:480px){
   .wm-sub{display:none;}
+  .links{width:calc(100% + 32px); margin-left:-16px; margin-right:-16px; padding:0 16px;}
 }

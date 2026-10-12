@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Enigma Perfumes</title>
+<meta name="description" content="Place your Enigma Perfumes order.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="enigma.css">
+</head>
+<body>
+<div class="announce" id="announce" aria-label="Store notes"></div>
+<header class="site-header">
+  <div class="nav">
+    <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
+    <nav class="links" aria-label="Main">
+      <a href="shop.html">Shop</a>
+      <a href="index.html#brands">Brands</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <a class="pill" href="wishlist.html" aria-label="Wishlist"><span>♡<span class="pill-label"> Wishlist</span></span><span class="count" data-wishlist-count>0</span></a>
+      <a class="pill" href="cart.html" aria-label="Cart"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h12l-1 10H5l-1-10Z"/><path d="M7 6.5V5a3 3 0 0 1 6 0v1.5"/></svg><span class="pill-label">Cart</span><span class="count" data-cart-count>0</span></a>
+      <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+    <a href="shop.html">Shop</a>
+    <a href="index.html#brands">Brands</a>
+    <a href="about.html">About</a>
+    <a href="wishlist.html">Wishlist</a>
+    <a href="cart.html">Cart</a>
+  </nav>
+</header>
+
+<div id="checkoutView">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="breadcrumb"><a href="shop.html">Shop</a> / <a href="cart.html">Cart</a> / <span>Checkout</span></div>
+      <h1>Checkout</h1>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="checkout-layout">
+      <form id="checkoutForm">
+        <div class="form-section">
+          <h2>Contact</h2>
+          <div class="field-grid">
+            <div class="field full"><label for="email">Email</label><input type="email" id="email" placeholder="you@email.com" autocomplete="email" required></div>
+            <div class="field full"><label for="phone">Phone</label><input type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel" required></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h2>Shipping address</h2>
+          <div class="field-grid">
+            <div class="field"><label for="fname">First name</label><input type="text" id="fname" autocomplete="given-name" required></div>
+            <div class="field"><label for="lname">Last name</label><input type="text" id="lname" autocomplete="family-name" required></div>
+            <div class="field full"><label for="addr">Address</label><input type="text" id="addr" placeholder="House no., street, area" autocomplete="street-address" required></div>
+            <div class="field"><label for="city">City</label><input type="text" id="city" autocomplete="address-level2" required></div>
+            <div class="field"><label for="state">State</label><input type="text" id="state" autocomplete="address-level1" required></div>
+            <div class="field"><label for="pin">PIN code</label><input type="text" id="pin" placeholder="110001" inputmode="numeric" autocomplete="postal-code" required></div>
+            <div class="field"><label for="country">Country</label>
+              <select id="country" autocomplete="country-name" required>
+                <option>India</option><option>United States</option><option>United Kingdom</option><option>United Arab Emirates</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <aside class="summary">
+        <h2>Order summary</h2>
+        <div class="zone-tabs" id="zoneTabs" role="group" aria-label="Shipping zone">
+          <button type="button" class="zone-tab" data-zone="ncr">Delhi NCR</button>
+          <button type="button" class="zone-tab" data-zone="india">Rest of India</button>
+        </div>
+        <div id="miniItems"></div>
+        <div class="summary-row"><span id="miniCountLabel">0 bottles</span><span id="miniSubtotal">₹0</span></div>
+        <div class="summary-row"><span>Shipping</span><span id="miniShipping">₹0</span></div>
+        <div class="summary-row total"><span>Total due</span><span id="miniTotal">₹0</span></div>
+        <button type="submit" form="checkoutForm" class="btn btn-block" id="placeOrderBtn">Place order via WhatsApp</button>
+        <p class="note">Opens WhatsApp with your order filled in. Stock is limited, so we confirm availability there.</p>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div class="confirm-panel" id="confirmPanel">
+  <span class="seal seal-bnib seal-static" aria-hidden="true">✓</span>
+  <h1>Almost there.</h1>
+  <p>We've opened WhatsApp with your order filled in. Hit send in that chat and we'll confirm availability and next steps.</p>
+  <div class="confirm-id" id="orderId"></div>
+  <a class="btn" href="shop.html">Back to the shop</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Enigma Perfumes</h4>
+        <p>Full-size BNIB and tester bottles. Not decants.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Links</h4>
+        <ul>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="index.html#brands">Brands</a></li>
+          <li><a href="wishlist.html">Wishlist</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact us</h4>
+        <div class="contact-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
+        <div class="contact-line">✉️ <a href="mailto:liquidemotions1@gmail.com">liquidemotions1@gmail.com</a></div>
+        <div class="contact-line">💬 <a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Enigma Perfumes.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="enigma-store.js"></script>
+<script>
+const ZONE_KEY = "en_ship_zone";
+let currentZone = localStorage.getItem(ZONE_KEY) || "ncr";
+if(!EN_SHIPPING_ZONES[currentZone]) currentZone = "ncr";
+
+function totals(){
+  const lines = enCartLines();
+  const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
+  const zone = EN_SHIPPING_ZONES[currentZone];
+  const shipping = subtotal === 0 ? 0 : zone.flat;
+  return { lines, subtotal, zone, shipping, total: subtotal + shipping };
+}
+
+function renderSummary(){
+  const t = totals();
+  const items = document.getElementById("miniItems");
+  const btn = document.getElementById("placeOrderBtn");
+  if(!t.lines.length){
+    items.innerHTML = `<p class="note">Your cart is empty. <a href="shop.html" style="color:var(--seal)">Browse the bottles</a> first.</p>`;
+    btn.disabled = true;
+  }else{
+    items.innerHTML = t.lines.map(l => `
+      <div class="mini-item">
+        ${enThumbHtml(l.listing)}
+        <div>
+          <p class="mini-name">${enEsc(l.listing.house)} ${enEsc(l.listing.name)}</p>
+          <div class="mini-meta">${enConditionLabel(l.listing)}, ${enEsc(l.listing.bottleSize)} × ${l.qty}</div>
+        </div>
+        <div class="price">${enFormatPrice(l.lineTotal)}</div>
+      </div>`).join("");
+    btn.disabled = false;
+  }
+  const count = enCartCount();
+  document.getElementById("miniCountLabel").textContent = count === 1 ? "1 bottle" : count + " bottles";
+  document.getElementById("miniSubtotal").textContent = enFormatPrice(t.subtotal);
+  document.getElementById("miniShipping").textContent = t.shipping === 0 ? "Free" : enFormatPrice(t.shipping);
+  document.getElementById("miniTotal").textContent = enFormatPrice(t.total);
+  document.querySelectorAll(".zone-tab").forEach(z => {
+    const on = z.dataset.zone === currentZone;
+    z.classList.toggle("active", on);
+    z.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+function buildMessage(id){
+  const t = totals();
+  const v = (x) => document.getElementById(x).value.trim();
+  const name = `${v("fname")} ${v("lname")}`.trim();
+  const itemLines = t.lines.map(l =>
+    `• ${l.listing.house} ${l.listing.name} (${enConditionLabel(l.listing)}, ${l.listing.bottleSize}) x${l.qty} — ${enFormatPrice(l.lineTotal)}`).join("\n");
+  return `New order: ${id}
+
+*Customer*
+${name}
+${v("phone")}
+${v("email")}
+
+*Shipping to*
+${v("addr")}
+${v("city")}, ${v("state")} ${v("pin")}
+${v("country")}
+
+*Items*
+${itemLines}
+
+Subtotal: ${enFormatPrice(t.subtotal)}
+Shipping (${t.zone.label}): ${t.shipping === 0 ? "Free" : enFormatPrice(t.shipping)}
+Total: ${enFormatPrice(t.total)}
+
+Please confirm availability.`;
+}
+
+/* Remember the last address used on this device */
+const ADDRESS_KEY = "en_last_address";
+const ADDRESS_FIELDS = ["email","phone","fname","lname","addr","city","state","pin","country"];
+try{
+  const saved = JSON.parse(localStorage.getItem(ADDRESS_KEY) || "{}");
+  ADDRESS_FIELDS.forEach(id => { if(saved[id]) document.getElementById(id).value = saved[id]; });
+}catch(e){ /* ignore */ }
+function saveAddress(){
+  const data = {};
+  ADDRESS_FIELDS.forEach(id => { data[id] = document.getElementById(id).value; });
+  try{ localStorage.setItem(ADDRESS_KEY, JSON.stringify(data)); }catch(e){ /* ignore */ }
+}
+
+document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  /* Re-check stock right before the order goes out */
+  const msgs = enValidateCart();
+  if(msgs.length){
+    msgs.forEach(m => enShowToast(m, 4500));
+    renderSummary();
+    return;
+  }
+  if(enCartCount() === 0) return;
+
+  const btn = document.getElementById("placeOrderBtn");
+  btn.disabled = true;
+  btn.textContent = "Placing order...";
+  saveAddress();
+
+  const id = (await enGetNextOrderNumber()) || enFallbackOrderNumber();
+  const url = `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(id))}`;
+  window.open(url, "_blank");
+
+  document.getElementById("orderId").textContent = "Order " + id;
+  document.getElementById("checkoutView").style.display = "none";
+  document.getElementById("confirmPanel").classList.add("show");
+  enClearCart();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+document.getElementById("zoneTabs").addEventListener("click", (e) => {
+  const z = e.target.closest(".zone-tab");
+  if(!z) return;
+  currentZone = z.dataset.zone;
+  try{ localStorage.setItem(ZONE_KEY, currentZone); }catch(err){ /* ignore */ }
+  renderSummary();
+});
+
+renderSummary();
+</script>
+<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20bottle." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
+</body>
+</html>

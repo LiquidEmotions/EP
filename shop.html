@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop all perfumes — Enigma Perfumes</title>
-<meta name="description" content="Every bottle at Enigma Perfumes: full-size BNIB and tester perfumes with live stock counts.">
+<meta name="description" content="Every perfume at Enigma Perfumes: BNIB and tester perfumes with live stock counts.">
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
     <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
     <nav class="links" aria-label="Main">
       <a href="shop.html" class="active">Shop</a>
-      <a href="index.html#brands">Brands</a>
+      <a href="brands.html">Brands</a>
       <a href="about.html">About</a>
     </nav>
     <div class="nav-right">
@@ -29,7 +29,7 @@
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
     <a href="shop.html">Shop</a>
-    <a href="index.html#brands">Brands</a>
+    <a href="brands.html">Brands</a>
     <a href="about.html">About</a>
     <a href="wishlist.html">Wishlist</a>
     <a href="cart.html">Cart</a>
@@ -70,13 +70,13 @@
     <div class="footer-cols">
       <div class="footer-col">
         <h4>Enigma Perfumes</h4>
-        <p>Full-size BNIB and tester bottles. Not decants.</p>
+        <p>BNIB and tester perfumes.</p>
       </div>
       <div class="footer-col">
         <h4>Links</h4>
         <ul>
           <li><a href="shop.html">Shop</a></li>
-          <li><a href="index.html#brands">Brands</a></li>
+          <li><a href="brands.html">Brands</a></li>
           <li><a href="wishlist.html">Wishlist</a></li>
           <li><a href="cart.html">Cart</a></li>
           <li><a href="about.html">About</a></li>
@@ -271,28 +271,18 @@ const suggEl = document.getElementById("suggest");
 let suggIdx = -1;
 
 function suggestionItems(){
-  const words = state.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  if(!words.length) return [];
-  const brandHits = uniq(LISTINGS.map(f => f.house))
-    .filter(b => words.every(w => b.toLowerCase().includes(w))).slice(0, 2)
-    .map(b => ({ brand: b }));
-  const hits = enVisibleListings()
-    .filter(f => { const hay = (f.house + " " + f.name).toLowerCase(); return words.every(w => hay.includes(w)); })
-    .sort((a, b) => {
-      const sa = enIsSoldOut(a) ? 1 : 0, sb = enIsSoldOut(b) ? 1 : 0;
-      if(sa !== sb) return sa - sb;
-      const pa = a.name.toLowerCase().startsWith(words[0]) ? 0 : 1, pb = b.name.toLowerCase().startsWith(words[0]) ? 0 : 1;
-      return pa - pb || a.name.localeCompare(b.name);
-    })
-    .slice(0, 6)
-    .map(f => ({ listing: f }));
-  return brandHits.concat(hits);
+  const r = enSearch(state.q, { brands: 2, notes: 2, perfumes: 6 });
+  return r.brands.map(b => ({ brand: b.brand }))
+    .concat(r.notes.map(n => ({ note: n.note, count: n.count })))
+    .concat(r.perfumes.map(f => ({ listing: f })));
 }
 function renderSuggest(){
   const items = suggestionItems();
   suggIdx = -1;
   if(!items.length){ suggEl.hidden = true; suggEl.innerHTML = ""; qEl.setAttribute("aria-expanded", "false"); return; }
-  suggEl.innerHTML = items.map(it => it.brand
+  suggEl.innerHTML = items.map(it => it.note
+    ? `<button type="button" class="sugg-item sugg-brand" role="option" data-note="${enEsc(it.note)}"><span class="sugg-main"><span class="sugg-house">Note</span><span class="sugg-name">${enEsc(it.note)}</span></span><span class="sugg-side">${it.count === 1 ? "1 perfume" : it.count + " perfumes"}</span></button>`
+    : it.brand
     ? `<button type="button" class="sugg-item sugg-brand" role="option" data-brand="${enEsc(it.brand)}"><span class="sugg-main"><span class="sugg-house">Brand</span><span class="sugg-name">All ${enEsc(it.brand)}</span></span><span class="sugg-side">See all</span></button>`
     : `<button type="button" class="sugg-item" role="option" data-id="${enEsc(it.listing.id)}"><span class="sugg-main"><span class="sugg-house">${enEsc(it.listing.house)}</span><span class="sugg-name">${enEsc(it.listing.name)}</span></span><span class="sugg-side">${enIsSoldOut(it.listing) ? "Sold out" : enFormatPrice(it.listing.price)}</span></button>`
   ).join("");
@@ -303,7 +293,10 @@ function hideSuggest(){ suggEl.hidden = true; qEl.setAttribute("aria-expanded", 
 function chooseSuggestion(btn){
   if(!btn) return;
   hideSuggest();
-  if(btn.dataset.brand){
+  if(btn.dataset.note){
+    state.q = btn.dataset.note; qEl.value = btn.dataset.note;
+    renderGrid();
+  }else if(btn.dataset.brand){
     state.brand = btn.dataset.brand; state.q = ""; qEl.value = "";
     renderFilters(); renderGrid();
   }else if(btn.dataset.id){
@@ -359,7 +352,7 @@ window.addEventListener("resize", setHeaderHeight);
 
 /* WhatsApp request link */
 document.getElementById("askBtn").href =
-  `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I'm looking for this bottle: ")}`;
+  `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I'm looking for this perfume: ")}`;
 
 document.getElementById("q").value = state.q;
 renderFilters();
@@ -372,6 +365,6 @@ renderRecent();
   if(id && enById(id)) enOpenProductModal(id);
 })();
 </script>
-<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20bottle." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
+<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20perfume." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
 </body>
 </html>

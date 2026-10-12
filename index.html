@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enigma Perfumes — Full-size BNIB and tester bottles</title>
-<meta name="description" content="Full-size sealed perfumes and testers from Afnan, Lattafa, Rasasi and more. Not decants. See exactly how many are left.">
+<title>Enigma Perfumes — BNIB and tester perfumes</title>
+<meta name="description" content="Sealed perfumes and testers from Afnan, Lattafa, Rasasi and more. See exactly how many are left.">
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
     <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
     <nav class="links" aria-label="Main">
       <a href="shop.html">Shop</a>
-      <a href="index.html#brands">Brands</a>
+      <a href="brands.html">Brands</a>
       <a href="about.html">About</a>
     </nav>
     <div class="nav-right">
@@ -29,7 +29,7 @@
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
     <a href="shop.html">Shop</a>
-    <a href="index.html#brands">Brands</a>
+    <a href="brands.html">Brands</a>
     <a href="about.html">About</a>
     <a href="wishlist.html">Wishlist</a>
     <a href="cart.html">Cart</a>
@@ -64,7 +64,7 @@
   <section class="band" id="why">
     <div class="wrap">
       <h2>Why Enigma</h2>
-      <p class="sub">Full-size bottles, with the details spelled out before you order.</p>
+      <p class="sub">The details spelled out before you order.</p>
       <div class="trust">
         <div class="trust-item"><h3>Sealed and boxed</h3><p>Every BNIB bottle comes sealed, in its box.</p></div>
         <div class="trust-item"><h3>Exact stock</h3><p>Each listing shows how many are left, so you know what you're getting.</p></div>
@@ -88,10 +88,9 @@
       <div class="faq">
         <details><summary>What does BNIB mean?</summary><p>Brand new in box. The bottle is sealed and comes with its box.</p></details>
         <details><summary>What is a tester?</summary><p>The bottle a brand supplies for testing. It can come with or without a box, and each tester listing says which, plus its condition.</p></details>
-        <details><summary>Are these decants?</summary><p>No. Every listing is a full-size bottle at its retail size.</p></details>
         <details><summary>How do I order?</summary><p>Add bottles to your cart and check out. Your order opens in WhatsApp, and we confirm availability and next steps there.</p></details>
         <details><summary>What if a bottle sells out while I'm ordering?</summary><p>Most bottles are one or two pieces, so this can happen. If it does, we'll tell you on WhatsApp straight away.</p></details>
-        <details><summary>What are the shipping charges?</summary><p id="faqShip"></p></details>
+        <details><summary>Are there shipping charges?</summary><p>No. Shipping is free on every order.</p></details>
       </div>
     </div>
   </section>
@@ -104,13 +103,13 @@
     <div class="footer-cols">
       <div class="footer-col">
         <h4>Enigma Perfumes</h4>
-        <p>Full-size BNIB and tester bottles. Not decants.</p>
+        <p>BNIB and tester perfumes.</p>
       </div>
       <div class="footer-col">
         <h4>Links</h4>
         <ul>
           <li><a href="shop.html">Shop</a></li>
-          <li><a href="index.html#brands">Brands</a></li>
+          <li><a href="brands.html">Brands</a></li>
           <li><a href="wishlist.html">Wishlist</a></li>
           <li><a href="cart.html">Cart</a></li>
           <li><a href="about.html">About</a></li>
@@ -276,7 +275,9 @@ if(new URLSearchParams(location.search).has("bannercheck")){
 
 /* ---------- Shop by brand ---------- */
 document.getElementById("brandGrid").innerHTML = enBrandSummaries().map(b => {
-  const meta = b.bottles ? `${b.bottles} in stock${b.from !== null ? " · from " + enFormatPrice(b.from) : ""}` : "Sold out";
+  const n = enVisibleListings().filter(f => f.house === b.brand).length;
+  const count = n === 1 ? "1 perfume" : n + " perfumes";
+  const meta = b.bottles ? `${count}${b.from !== null ? " · from " + enFormatPrice(b.from) : ""}` : "Sold out";
   return `<a class="brand-tile${b.image ? " has-img" : ""}" href="${enEsc(enShopLinkForBrand(b.brand))}" data-initial="${enEsc(b.brand.charAt(0).toUpperCase())}">
     ${b.image ? `<img src="${enEsc(b.image)}" alt="" loading="lazy">` : ""}
     <span class="bt-name">${enEsc(b.brand)}</span>
@@ -299,10 +300,6 @@ enWireCards(arrivalsEl, { onWishChange: () => renderArrivals() });
 window.enOnWishlistChange = renderArrivals;
 renderArrivals();
 
-/* ---------- Shipping answer in the FAQ comes from the rates in enigma-store.js ---------- */
-document.getElementById("faqShip").textContent =
-  Object.values(EN_SHIPPING_ZONES).map(z => `${z.label}: ${enFormatPrice(z.flat)}`).join(". ") + ".";
-
 /* ---------- Customer review screenshots: put them in the reviews/ folder as 1.jpg, 2.jpg ...
    Newest first (highest number on top). The section stays hidden until there is at least one. ---------- */
 (async function loadReviewShots(){
@@ -323,6 +320,6 @@ document.getElementById("faqShip").textContent =
   dlg.addEventListener("click", () => dlg.close());
 })();
 </script>
-<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20bottle." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
+<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20perfume." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
 </body>
 </html>

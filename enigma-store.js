@@ -21,7 +21,6 @@ const EN_RECENT_MAX = 8;
 /* Thin bar at the very top of every page. One short line each; edit freely.
    Leave the list empty ([]) to hide the bar. */
 const EN_ANNOUNCEMENTS = [
-  "Full-size bottles, not decants",
   "BNIB bottles are sealed and boxed",
   "Limited stock: most bottles are 1 or 2 pieces"
 ];
@@ -68,12 +67,6 @@ const BANNERS = [
   { brand: "Diptyque",          image: "", mobileImage: "", link: "", theme: 4 },
   { brand: "Dolce & Gabbana",   image: "", mobileImage: "", link: "", theme: 2 }
 ];
-
-/* Shipping at checkout. Change these numbers when you decide your rates. */
-const EN_SHIPPING_ZONES = {
-  ncr:   { label: "Delhi NCR",     flat: 55 },
-  india: { label: "Rest of India", flat: 75 }
-};
 
 /* Optional: a Google Apps Script URL that hands out order numbers (like the
    Liquid Emotions counter). Leave "" to use a date-based code such as
@@ -1344,3 +1337,152 @@ document.addEventListener("DOMContentLoaded", () => {
     }));
   }
 });
+
+
+/* ============================================================
+   SEARCH: one search for brands, perfumes and notes.
+   - enSearch(text) does the matching (used by the header search and the Shop page).
+   - A Search button is added to the header of every page and opens the search panel.
+   ============================================================ */
+function enSearch(text, limits){
+  const lim = Object.assign({ brands: 3, notes: 4, perfumes: 6 }, limits || {});
+  const words = String(text || "").toLowerCase().split(/\s+/).filter(Boolean);
+  if(!words.length) return { words, brands: [], notes: [], perfumes: [] };
+  const all = enVisibleListings();
+  const has = (hay) => words.every(w => hay.includes(w));
+
+  const brandMap = new Map();
+  all.forEach(f => brandMap.set(f.house, (brandMap.get(f.house) || 0) + 1));
+  const brands = Array.from(brandMap.entries())
+    .filter(([b]) => has(b.toLowerCase()))
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, lim.brands).map(([brand, count]) => ({ brand, count }));
+
+  const noteMap = new Map();
+  all.forEach(f => {
+    const n = f.notes || {};
+    new Set([...(n.top || []), ...(n.heart || []), ...(n.base || [])]).forEach(label => {
+      const key = label.toLowerCase();
+      if(!noteMap.has(key)) noteMap.set(key, { note: label, count: 0 });
+      noteMap.get(key).count += 1;
+    });
+  });
+  const notes = Array.from(noteMap.values())
+    .filter(n => has(n.note.toLowerCase()))
+    .sort((a, b) => b.count - a.count || a.note.localeCompare(b.note))
+    .slice(0, lim.notes);
+
+  const perfumes = all.filter(f => {
+    const n = f.notes || {};
+    return has([f.house, f.name, f.gender, f.season, ...(n.top || []), ...(n.heart || []), ...(n.base || [])].join(" ").toLowerCase());
+  }).sort((a, b) => {
+    const sa = enIsSoldOut(a) ? 1 : 0, sb = enIsSoldOut(b) ? 1 : 0;
+    if(sa !== sb) return sa - sb;
+    const na = (a.house + " " + a.name).toLowerCase().includes(words[0]) ? 0 : 1;
+    const nb = (b.house + " " + b.name).toLowerCase().includes(words[0]) ? 0 : 1;
+    return na - nb || a.name.localeCompare(b.name);
+  }).slice(0, lim.perfumes);
+
+  return { words, brands, notes, perfumes };
+}
+
+function enMountSearch(){
+  if(document.getElementById("gs")) return;
+  const right = document.querySelector(".nav-right");
+  if(!right) return;
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "pill gs-open";
+  btn.setAttribute("aria-label", "Search");
+  btn.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><span class="pill-label">Search</span>';
+  right.insertBefore(btn, right.firstChild);
+
+  const box = document.createElement("div");
+  box.className = "gs";
+  box.id = "gs";
+  box.hidden = true;
+  box.innerHTML = `
+    <div class="gs-panel" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="gs-form">
+        <input type="search" id="gsInput" placeholder="Search brands, perfumes or notes" autocomplete="off" enterkeyhint="search" aria-label="Search brands, perfumes or notes">
+        <button type="button" class="gs-close" id="gsClose" aria-label="Close search">✕</button>
+      </div>
+      <div class="gs-results" id="gsResults"></div>
+    </div>`;
+  document.body.appendChild(box);
+
+  const input = box.querySelector("#gsInput");
+  const out = box.querySelector("#gsResults");
+  let idx = -1;
+
+  const shopQ = (q) => "shop.html?q=" + encodeURIComponent(q);
+  const row = (href, kind, main, side) =>
+    `<a class="gs-item" href="${href}"><span class="gs-main"><span class="gs-kind">${kind}</span><span class="gs-name">${main}</span></span><span class="gs-side">${side}</span></a>`;
+
+  function quickPicks(){
+    const brands = enBrandSummaries().filter(b => b.bottles).slice(0, 6);
+    const noteCount = new Map();
+    enVisibleListings().forEach(f => {
+      const n = f.notes || {};
+      new Set([...(n.top || []), ...(n.heart || []), ...(n.base || [])]).forEach(x => noteCount.set(x, (noteCount.get(x) || 0) + 1));
+    });
+    const notes = Array.from(noteCount.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8).map(e => e[0]);
+    out.innerHTML =
+      `<p class="gs-head">Brands</p><div class="gs-chips">${brands.map(b => `<a class="chip" href="${enEsc(enShopLinkForBrand(b.brand))}">${enEsc(b.brand)}</a>`).join("")}<a class="chip" href="brands.html">All brands</a></div>` +
+      (notes.length ? `<p class="gs-head">Popular notes</p><div class="gs-chips">${notes.map(n => `<a class="chip" href="${shopQ(n)}">${enEsc(n)}</a>`).join("")}</div>` : "");
+  }
+
+  function render(){
+    idx = -1;
+    const q = input.value.trim();
+    if(!q){ quickPicks(); return; }
+    const r = enSearch(q);
+    let html = "";
+    if(r.brands.length) html += `<p class="gs-head">Brands</p>` + r.brands.map(b =>
+      row(enEsc(enShopLinkForBrand(b.brand)), "Brand", enEsc(b.brand), b.count === 1 ? "1 perfume" : b.count + " perfumes")).join("");
+    if(r.notes.length) html += `<p class="gs-head">Notes</p>` + r.notes.map(n =>
+      row(shopQ(n.note), "Note", enEsc(n.note), n.count === 1 ? "1 perfume" : n.count + " perfumes")).join("");
+    if(r.perfumes.length) html += `<p class="gs-head">Perfumes</p>` + r.perfumes.map(f =>
+      row("shop.html?open=" + encodeURIComponent(f.id), enEsc(f.house), enEsc(f.name), enIsSoldOut(f) ? "Sold out" : enFormatPrice(f.price))).join("");
+    out.innerHTML = html
+      ? html + `<a class="gs-all" href="${shopQ(q)}">See all results for “${enEsc(q)}”</a>`
+      : `<p class="gs-empty">Nothing found for “${enEsc(q)}”. Try a brand, a perfume name or a note like musk or vanilla.</p>`;
+  }
+
+  function open(){
+    box.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    input.value = "";
+    render();
+    setTimeout(() => input.focus(), 30);
+  }
+  function close(){
+    box.hidden = true;
+    document.documentElement.style.overflow = "";
+    btn.focus();
+  }
+  btn.addEventListener("click", open);
+  box.querySelector("#gsClose").addEventListener("click", close);
+  box.addEventListener("click", (e) => { if(e.target === box) close(); });
+  out.addEventListener("click", () => { document.documentElement.style.overflow = ""; });
+  input.addEventListener("input", render);
+  input.addEventListener("keydown", (e) => {
+    const items = Array.from(out.querySelectorAll(".gs-item, .gs-all"));
+    if((e.key === "ArrowDown" || e.key === "ArrowUp") && items.length){
+      e.preventDefault();
+      idx = (idx + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+      items.forEach((a, i) => a.classList.toggle("on", i === idx));
+      items[idx].scrollIntoView({ block: "nearest" });
+    }else if(e.key === "Enter"){
+      e.preventDefault();
+      if(idx >= 0 && items[idx]) location.href = items[idx].getAttribute("href");
+      else if(input.value.trim()) location.href = shopQ(input.value.trim());
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && !box.hidden) close();
+    if(e.key === "/" && box.hidden && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "")){ e.preventDefault(); open(); }
+  });
+}
+document.addEventListener("DOMContentLoaded", enMountSearch);

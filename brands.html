@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brands — Enigma Perfumes</title>
+<meta name="description" content="Every brand at Enigma Perfumes: sealed and tester perfumes from Afnan, Lattafa, Rasasi and more.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="enigma.css">
+</head>
+<body>
+<div class="announce" id="announce" aria-label="Store notes"></div>
+<header class="site-header">
+  <div class="nav">
+    <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
+    <nav class="links" aria-label="Main">
+      <a href="shop.html">Shop</a>
+      <a href="brands.html" class="active">Brands</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="nav-right">
+      <a class="pill" href="wishlist.html" aria-label="Wishlist"><span>♡<span class="pill-label"> Wishlist</span></span><span class="count" data-wishlist-count>0</span></a>
+      <a class="pill" href="cart.html" aria-label="Cart"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h12l-1 10H5l-1-10Z"/><path d="M7 6.5V5a3 3 0 0 1 6 0v1.5"/></svg><span class="pill-label">Cart</span><span class="count" data-cart-count>0</span></a>
+      <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+    <a href="shop.html">Shop</a>
+    <a href="brands.html">Brands</a>
+    <a href="about.html">About</a>
+    <a href="wishlist.html">Wishlist</a>
+    <a href="cart.html">Cart</a>
+  </nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <span>Brands</span></div>
+    <h1>All brands</h1>
+  </div>
+</div>
+
+<main>
+  <section class="section" style="padding-top:8px">
+    <div class="wrap">
+      <p class="result-count" id="brandCount" aria-live="polite"></p>
+      <div class="brand-grid" id="brandGrid"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Enigma Perfumes</h4>
+        <p>BNIB and tester perfumes.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Links</h4>
+        <ul>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="brands.html">Brands</a></li>
+          <li><a href="wishlist.html">Wishlist</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact us</h4>
+        <div class="contact-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
+        <div class="contact-line">✉️ <a href="mailto:liquidemotions1@gmail.com">liquidemotions1@gmail.com</a></div>
+        <div class="contact-line">💬 <a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Enigma Perfumes.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="enigma-store.js"></script>
+<script>
+/* Brands are built from the listings in enigma-store.js, so a new brand appears here by itself. */
+const brands = enBrandSummaries().sort((a, b) => a.brand.localeCompare(b.brand));
+document.getElementById("brandCount").textContent = brands.length === 1 ? "1 brand" : brands.length + " brands";
+document.getElementById("brandGrid").innerHTML = brands.map(b => {
+  const n = enVisibleListings().filter(f => f.house === b.brand).length;
+  const count = n === 1 ? "1 perfume" : n + " perfumes";
+  const meta = b.bottles
+    ? `${count}${b.from !== null ? " · from " + enFormatPrice(b.from) : ""}`
+    : "Sold out for now";
+  return `<a class="brand-tile${b.image ? " has-img" : ""}" href="${enEsc(enShopLinkForBrand(b.brand))}" data-initial="${enEsc(b.brand.charAt(0).toUpperCase())}">
+    ${b.image ? `<img src="${enEsc(b.image)}" alt="" loading="lazy">` : ""}
+    <span class="bt-name">${enEsc(b.brand)}</span>
+    <span class="bt-meta">${enEsc(meta)}</span>
+  </a>`;
+}).join("");
+</script>
+<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20perfume." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
+</body>
+</html>

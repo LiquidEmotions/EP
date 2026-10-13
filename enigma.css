@@ -432,8 +432,10 @@ dialog.shot-dlg img{max-height:88vh; width:auto; max-width:100%; margin:0 auto; 
 }
 .brand-tile:hover{border-color:var(--seal);}
 .brand-tile img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 55%;}
+.brand-tile .bt-slide{opacity:0; transition:opacity 0.9s ease;}
+.brand-tile .bt-slide.on{opacity:1;}
 .brand-tile.has-img{color:#fff;}
-.brand-tile.has-img::before{content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(33,26,51,0.78), rgba(33,26,51,0.05) 65%);}
+.brand-tile.has-img::before{content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(33,26,51,0.78), rgba(33,26,51,0.05) 65%);}
 .brand-tile.has-img::after{display:none;}
 .bt-name, .bt-meta{position:relative; z-index:1;}
 .bt-name{font-family:var(--display); font-size:1.5rem; line-height:1.1;}

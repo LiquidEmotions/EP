@@ -48,7 +48,7 @@
     <div class="wrap">
       <div class="shop-bar">
         <div class="search-row">
-          <input type="search" id="q" placeholder="Search perfumes" aria-label="Search bottles" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest">
+          <input type="search" id="q" placeholder="Search perfumes" aria-label="Search perfumes" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest">
           <button type="button" class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filters">Filters</button>
           <div class="suggest" id="suggest" role="listbox" hidden></div>
         </div>
@@ -58,7 +58,7 @@
       <p class="result-count" id="resultCount" aria-live="polite"></p>
       <div class="grid" id="grid"></div>
       <div class="ask">
-        <p><strong>Looking for a particular bottle?</strong> Ask us and we'll try to source it.</p>
+        <p><strong>Looking for a particular perfume?</strong> Ask us and we'll try to source it.</p>
         <a class="btn btn-ghost" id="askBtn" href="#" target="_blank" rel="noopener">Ask on WhatsApp</a>
       </div>
     </div>
@@ -85,7 +85,7 @@
       <div class="footer-col">
         <h4>Contact us</h4>
         <div class="contact-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
-        <div class="contact-line">✉️ <a href="mailto:liquidemotions1@gmail.com">liquidemotions1@gmail.com</a></div>
+        <div class="contact-line">✉️ <a href="mailto:enigma6perfumes@gmail.com">enigma6perfumes@gmail.com</a></div>
         <div class="contact-line">💬 <a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a></div>
       </div>
     </div>
@@ -171,7 +171,7 @@ function renderFilters(){
       <option value="az">A to Z</option>
       <option value="za">Z to A</option>
       <option value="value">Best value (price per ml)</option>
-      <option value="size">Bottle size, largest first</option>
+      <option value="size">Perfume size, largest first</option>
     </select>
   </div>`;
   filtersEl.innerHTML = html;
@@ -235,9 +235,9 @@ function renderGrid(){
   updateFilterBadge();
   const list = currentList();
   document.getElementById("resultCount").textContent =
-    list.length === 1 ? "1 bottle" : `${list.length} bottles`;
+    list.length === 1 ? "1 perfume" : `${list.length} perfumes`;
   if(!list.length){
-    const what = state.cond === "Tester" ? "No testers listed right now." : "No bottles match those filters.";
+    const what = state.cond === "Tester" ? "No testers listed right now." : "No perfumes match those filters.";
     gridEl.innerHTML = `<div class="empty" style="grid-column:1/-1">${what} <a href="#" id="clearFilters">Clear filters</a></div>`;
     return;
   }
@@ -359,7 +359,7 @@ renderFilters();
 renderGrid();
 renderRecent();
 
-/* A shared link (shop.html?open=...) opens that bottle straight away. */
+/* A shared link (shop.html?open=...) opens that perfume straight away. */
 (function openSharedBottle(){
   const id = params.get("open");
   if(id && enById(id)) enOpenProductModal(id);

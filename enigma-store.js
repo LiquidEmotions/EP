@@ -7,7 +7,7 @@ const EN_CART_KEY      = "en_cart_v1";
 const EN_WISHLIST_KEY  = "en_wishlist_v1";
 const EN_NEW_DAYS      = 10;   // how long a listing shows the "New" tag
 const EN_LOW_STOCK     = 3;    // show "Only N left" at or below this many
-const EN_SHOW_SOLD_OUT = true; // true = sold-out bottles stay visible (greyed out); false = hide them
+const EN_SHOW_SOLD_OUT = true; // true = sold-out perfumes stay visible (greyed out); false = hide them
 
 const EN_WHATSAPP_NUMBER = "917982410620";
 
@@ -15,14 +15,14 @@ const EN_WHATSAPP_NUMBER = "917982410620";
    links. Leave "" while building: links then point at whatever address the page is opened from. */
 const EN_SITE_URL = "";
 
-const EN_RECENT_KEY = "en_recent_v1";   // "Recently viewed" bottles, kept on the visitor's own device
+const EN_RECENT_KEY = "en_recent_v1";   // "Recently viewed" perfumes, kept on the visitor's own device
 const EN_RECENT_MAX = 8;
 
 /* Thin bar at the very top of every page. One short line each; edit freely.
    Leave the list empty ([]) to hide the bar. */
 const EN_ANNOUNCEMENTS = [
-  "BNIB bottles are sealed and boxed",
-  "Limited stock: most bottles are 1 or 2 pieces"
+  "BNIB perfumes are sealed and boxed",
+  "Limited stock: most perfumes are 1 or 2 pieces"
 ];
 
 /* ============================================================
@@ -32,7 +32,7 @@ const EN_ANNOUNCEMENTS = [
    - brand:        must match the brand name on your listings, e.g. "Afnan".
                    Clicking the banner opens that brand on the Shop page.
    - image:        your finished banner picture, e.g. "banners/afnan.jpg".
-                   Leave "" and the site builds an ad from that brand's bottles.
+                   Leave "" and the site builds an ad from that brand's perfumes.
    - mobileImage:  optional square picture for phones, e.g. "banners/afnan-phone.jpg".
                    Leave "" to use the main picture on phones too.
    - link:         optional. Where a click goes. Leave "" for the brand's Shop page.
@@ -75,16 +75,16 @@ const BANNERS = [
 const EN_ORDER_COUNTER_URL = "";
 
 /* ============================================================
-   LISTINGS — one entry per bottle you sell.
+   LISTINGS — one entry per perfume you sell.
 
-   Add a new bottle by copying one entry below and changing it.
+   Add a new perfume by copying one entry below and changing it.
    Fields:
    - id:            short unique name with no spaces, e.g. "mykonos-reflection"
    - type:          "bnib" (brand new, sealed, with box) or "tester"
    - name, house:   perfume name and brand
    - bottleSize:    full retail size, e.g. "100ml"
    - price:         one price in rupees, numbers only
-   - quantity:      bottles in stock. Drives "Only 1 left" and stops sales at 0.
+   - quantity:      perfumes in stock. Drives "Only 1 left" and stops sales at 0.
                     When one sells, lower this number. At 0 it shows Sold out.
    - dateAdded:     "YYYY-MM-DD", used for the New tag and Newest sort
    - images:        list of photo paths, e.g. ["bottles/reflection-1.jpg", "bottles/reflection-2.jpg"]
@@ -668,6 +668,17 @@ document.addEventListener("error", function(e){
     im.src = m[1] + "." + next;
     return;
   }
+  /* A photo that fails inside a brand tile is simply dropped; the tile keeps its other photos. */
+  if(im.classList.contains("bt-slide")){
+    const bt = im.closest(".brand-tile");
+    im.remove();
+    if(bt){
+      const left = bt.querySelectorAll(".bt-slide");
+      if(!left.length) bt.classList.remove("has-img");
+      else if(!bt.querySelector(".bt-slide.on")) left[0].classList.add("on");
+    }
+    return;
+  }
   const id = m[1].replace(/^bottles\//, "");
   const f = LISTINGS.find(x => x.id === id);
   const tile = document.createElement("span");
@@ -765,7 +776,7 @@ function enNotifyUrl(f){
   const msg = `Hi! Please let me know when ${f.house} ${f.name} (${f.bottleSize}) is back in stock.`;
   return `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 }
-/* A link that opens the shop with this bottle's details already showing. */
+/* A link that opens the shop with this perfume's details already showing. */
 function enBottleLink(f){
   try{ return new URL("shop.html", EN_SITE_URL || location.href).href + "?open=" + encodeURIComponent(f.id); }
   catch(e){ return "shop.html?open=" + encodeURIComponent(f.id); }
@@ -1013,7 +1024,7 @@ function enEnsureModal(){
   if(enModalEl) return enModalEl;
   enModalEl = document.createElement("dialog");
   enModalEl.className = "product";
-  enModalEl.setAttribute("aria-label", "Bottle details");
+  enModalEl.setAttribute("aria-label", "Perfume details");
   enModalEl.addEventListener("click", (e) => {
     if(e.target === enModalEl){ enCloseProductModal(); return; }
     const el = e.target.closest("[data-pm]");
@@ -1117,7 +1128,7 @@ function enCheckoutGuard(redirectUrl){
   redirectUrl = redirectUrl || "cart.html";
   enValidateCart();
   if(enCartCount() === 0){
-    enShowToast("Your cart is empty. Add a bottle first.");
+    enShowToast("Your cart is empty. Add a perfume first.");
     window.location.href = redirectUrl;
     return false;
   }
@@ -1181,8 +1192,8 @@ async function enDiscoverImages(folder){
 /* ============================================================
    Brands and banners (home page)
    ============================================================ */
-/* One summary per brand: listings and bottles in stock, lowest price, and a photo
-   if any of that brand's bottles has one. Most bottles first, then A to Z. */
+/* One summary per brand: listings and perfumes in stock, lowest price, and a photo
+   if any of that brand's perfumes has one. Most perfumes first, then A to Z. */
 function enBrandSummaries(){
   const map = new Map();
   LISTINGS.forEach(f => {
@@ -1195,7 +1206,7 @@ function enBrandSummaries(){
     b.bottles += enStock(f);
     b.from = b.from === null ? f.price : Math.min(b.from, f.price);
   });
-  /* A brand whose bottles have no photo path set uses the first bottle's bottles/<id> photo. */
+  /* A brand whose perfumes have no photo path set uses the first perfume's bottles/<id> photo. */
   map.forEach(b => { if(!b.image) b.image = b.guess; delete b.guess; });
   return Array.from(map.values()).sort((a, b) => (b.bottles - a.bottles) || a.brand.localeCompare(b.brand));
 }
@@ -1217,7 +1228,7 @@ function enBannerModel(b, index){
     text: b.text || (shown.length ? shown.join(", ") + (more > 0 ? ` and ${more} more` : "") : ""),
     image: b.image || "", mobileImage: b.mobileImage || "",
     cta: brand ? `Shop ${brand}` : "Shop now",
-    label: brand ? `${brand} bottles` : (b.headline || "Enigma Perfumes")
+    label: brand ? `${brand} perfumes` : (b.headline || "Enigma Perfumes")
   };
 }
 /* A brand with nothing in stock and no picture would make an empty ad, so it is skipped. */
@@ -1486,3 +1497,52 @@ function enMountSearch(){
   });
 }
 document.addEventListener("DOMContentLoaded", enMountSearch);
+
+
+/* ============================================================
+   BRAND TILES: each tile fades through the photos of that brand's own perfumes.
+   Nothing to set up: add a perfume with a photo and it joins its brand's tile.
+   ============================================================ */
+function enBrandSlides(brand){
+  const list = LISTINGS.filter(f => f.house === brand)
+    .sort((a, b) => (enIsSoldOut(a) ? 1 : 0) - (enIsSoldOut(b) ? 1 : 0));
+  const out = [];
+  list.forEach(f => { const p = enPhotos(f)[0]; if(p && !out.includes(p)) out.push(p); });
+  return out.slice(0, 8);
+}
+function enBrandSlidesHtml(b){
+  const slides = enBrandSlides(b.brand);
+  if(!slides.length && b.image) slides.push(b.image);
+  return slides.map((src, i) =>
+    `<img class="bt-slide${i === 0 ? " on" : ""}" src="${enEsc(src)}" alt="" loading="lazy">`).join("");
+}
+let enRotationStarted = false;
+function enStartBrandRotation(){
+  if(enRotationStarted) return;
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const tiles = Array.from(document.querySelectorAll(".brand-tile")).filter(t => t.querySelectorAll(".bt-slide").length > 1);
+  if(!tiles.length) return;
+  enRotationStarted = true;
+  const visible = new Set();
+  const io = "IntersectionObserver" in window
+    ? new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)))
+    : null;
+  tiles.forEach((tile, i) => {
+    if(io) io.observe(tile); else visible.add(tile);
+    /* Staggered starts so the tiles do not all change at the same moment. */
+    setTimeout(() => setInterval(() => {
+      if(document.hidden || !visible.has(tile)) return;
+      const slides = Array.from(tile.querySelectorAll(".bt-slide"));
+      if(slides.length < 2) return;
+      const cur = slides.findIndex(s => s.classList.contains("on"));
+      if(cur < 0){ slides[0].classList.add("on"); return; }
+      for(let step = 1; step <= slides.length; step++){
+        const next = slides[(cur + step) % slides.length];
+        if(next.complete && next.naturalWidth === 0) continue;   // skip a photo that failed to load
+        slides[cur].classList.remove("on");
+        next.classList.add("on");
+        break;
+      }
+    }, 3500), (i % 6) * 600);
+  });
+}

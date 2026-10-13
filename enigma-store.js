@@ -6,7 +6,8 @@
 const EN_CART_KEY      = "en_cart_v1";
 const EN_WISHLIST_KEY  = "en_wishlist_v1";
 const EN_NEW_DAYS      = 10;   // how long a listing shows the "New" tag
-const EN_LOW_STOCK     = 3;    // show "Only N left" at or below this many
+const EN_LOW_STOCK     = 3;    // not used any more: stock numbers are never shown to customers
+const EN_MAX_PER_ORDER = 1;    // how many of one perfume a single order can hold (real stock is never stored here)
 const EN_SHOW_SOLD_OUT = true; // true = sold-out perfumes stay visible (greyed out); false = hide them
 
 const EN_WHATSAPP_NUMBER = "917982410620";
@@ -22,7 +23,7 @@ const EN_RECENT_MAX = 8;
    Leave the list empty ([]) to hide the bar. */
 const EN_ANNOUNCEMENTS = [
   "BNIB perfumes are sealed and boxed",
-  "Limited stock: most perfumes are 1 or 2 pieces"
+  "Limited stock: popular perfumes sell out fast"
 ];
 
 /* ============================================================
@@ -84,7 +85,9 @@ const EN_ORDER_COUNTER_URL = "";
    - name, house:   perfume name and brand
    - bottleSize:    full retail size, e.g. "100ml"
    - price:         one price in rupees, numbers only
-   - quantity:      perfumes in stock. Drives "Only 1 left" and stops sales at 0.
+   - available:     true while you have it, false when it is sold out. No stock numbers are kept
+                   in this file, so nobody can read them here. Each perfume can be ordered
+                   once per order (EN_MAX_PER_ORDER above); you confirm on WhatsApp.
                     When one sells, lower this number. At 0 it shows Sold out.
    - dateAdded:     "YYYY-MM-DD", used for the New tag and Newest sort
    - images:        list of photo paths, e.g. ["bottles/reflection-1.jpg", "bottles/reflection-2.jpg"]
@@ -108,7 +111,7 @@ const LISTINGS = [
     bottleSize: "60ml",
     price: 3500,
     mrp: 7499,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Marwa-Extrait-142642.html",
@@ -123,7 +126,7 @@ const LISTINGS = [
     bottleSize: "105ml",
     price: 3500,
     mrp: 6999,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Armaf/Club-de-Nuit-Untold-78476.html",
@@ -138,7 +141,7 @@ const LISTINGS = [
     bottleSize: "50ml",
     price: 1850,
     mrp: 3000,
-    quantity: 2,
+    available: true,
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Reflection-121124.html",
@@ -153,7 +156,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2800,
     mrp: 5000,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/California-Blue-120464.html",
@@ -168,7 +171,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2850,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/9pm-65414.html",
@@ -183,7 +186,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2850,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/9-PM-Rebel-99238.html",
@@ -198,7 +201,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3350,
     mrp: 6500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/9-PM-Night-Out-123313.html",
@@ -213,7 +216,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3400,
     mrp: 6500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/Lynked-Freedom-119003.html",
@@ -228,7 +231,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2650,
     mrp: 5000,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/Rare-Reef-106835.html",
@@ -243,7 +246,7 @@ const LISTINGS = [
     bottleSize: "150ml",
     price: 3850,
     mrp: 7500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/Supremacy-Not-Only-Intense-68271.html",
@@ -258,7 +261,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3650,
     mrp: 7500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/Supremacy-Collector-s-Edition-Pour-Homme-98689.html",
@@ -273,7 +276,7 @@ const LISTINGS = [
     bottleSize: "80ml",
     price: 2750,
     mrp: 5000,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Fahad-136650.html",
@@ -288,7 +291,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3200,
     mrp: 6000,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Teriaq-Intense-99586.html",
@@ -303,7 +306,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3050,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Khamrah-Qahwa-88175.html",
@@ -318,7 +321,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2500,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-for-Him-46890.html",
@@ -333,7 +336,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2700,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Ice-89050.html",
@@ -348,7 +351,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2500,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Kobra-112706.html",
@@ -363,7 +366,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2500,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Elixir-110808.html",
@@ -378,7 +381,7 @@ const LISTINGS = [
     bottleSize: "50ml",
     price: 1500,
     mrp: 2500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-09-30",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Fattan-53484.html",
@@ -393,7 +396,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 1450,
     mrp: 2599,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/PARIS-CORNER/Khair-Pistachio-92766.html",
@@ -408,7 +411,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2600,
     mrp: 3499,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/PARIS-CORNER/Mawj-Moscow-Mule-98580.html",
@@ -423,7 +426,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2300,
     mrp: 4500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rayhaan/Cedrus-Blanc-138575.html",
@@ -438,7 +441,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2200,
     mrp: 4500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rayhaan/Lion-105031.html",
@@ -453,7 +456,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3450,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Verde-117625.html",
@@ -468,7 +471,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3550,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Venom-138569.html",
@@ -483,7 +486,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3550,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Sapphire-136382.html",
@@ -498,7 +501,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 3550,
     mrp: 5500,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Fire-101665.html",
@@ -513,7 +516,7 @@ const LISTINGS = [
     bottleSize: "75ml",
     price: 2800,
     mrp: 5750,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Hamdan-The-Sheikh-103400.html",
@@ -527,7 +530,7 @@ const LISTINGS = [
     house: "Dolce & Gabbana",
     bottleSize: "150ml",
     price: 7700,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Dolce-Gabbana/The-One-for-Men-Eau-de-Parfum-31909.html",
@@ -542,7 +545,7 @@ const LISTINGS = [
     bottleSize: "75ml",
     price: 16500,
     mrp: 21950,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Diptyque/Tam-Dao-Eau-de-Parfum-49104.html",
@@ -557,7 +560,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2850,
     mrp: 4399,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Liquid-Brun-94713.html",
@@ -571,7 +574,7 @@ const LISTINGS = [
     house: "French Avenue",
     bottleSize: "150ml",
     price: 3900,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Liquid-Brun-Limited-Edition-123526.html",
@@ -585,7 +588,7 @@ const LISTINGS = [
     house: "French Avenue",
     bottleSize: "100ml",
     price: 3050,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Zenith-Santal-120869.html",
@@ -599,7 +602,7 @@ const LISTINGS = [
     house: "French Avenue",
     bottleSize: "100ml",
     price: 3050,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Zenith-Blue-106865.html",
@@ -614,7 +617,7 @@ const LISTINGS = [
     bottleSize: "80ml",
     price: 2900,
     mrp: 4299,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Spectre-Ghost-94697.html",
@@ -629,7 +632,7 @@ const LISTINGS = [
     bottleSize: "100ml",
     price: 2900,
     mrp: 4699,
-    quantity: 1,
+    available: true,
     dateAdded: "2026-10-12",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Vulcan-Feu-105520.html",
@@ -728,7 +731,7 @@ const enCurrencyFormatter = new Intl.NumberFormat("en-IN", { style:"currency", c
 function enFormatPrice(amount){ return enCurrencyFormatter.format(amount); }
 
 function enConditionLabel(f){ return f.type === "tester" ? "Tester" : "BNIB"; }
-function enStock(f){ return Math.max(0, parseInt(f.quantity, 10) || 0); }
+function enStock(f){ return f.available === false ? 0 : EN_MAX_PER_ORDER; }
 function enIsSoldOut(f){ return enStock(f) <= 0; }
 function enIsNew(f){
   if(!f.dateAdded) return false;
@@ -737,19 +740,13 @@ function enIsNew(f){
   const age = (Date.now() - since.getTime()) / 86400000;
   return age >= 0 && age < EN_NEW_DAYS;
 }
-/* Short note shown on cards: "Sold out", "Only 1 left", or "" when stock is comfortable. */
+/* Short note shown on cards: "Sold out" or nothing. The quantity itself is never shown. */
 function enStockNote(f){
-  const n = enStock(f);
-  if(n <= 0) return "Sold out";
-  if(n <= EN_LOW_STOCK) return `Only ${n} left`;
-  return "";
+  return enStock(f) <= 0 ? "Sold out" : "";
 }
-/* Longer availability text for the detail view. */
+/* Availability text for the detail view: never a number. */
 function enStockText(f){
-  const n = enStock(f);
-  if(n <= 0) return "Sold out";
-  if(n === 1) return "Only 1 left";
-  return `${n} in stock`;
+  return enStock(f) <= 0 ? "Sold out" : "In stock";
 }
 /* Price with optional MRP: add  mrp: 4500  to a listing to show a strike-through
    price and a "% off" tag. Leave mrp out to show the price alone. */
@@ -864,7 +861,7 @@ function enAddToCart(id, qty){
   const existing = cart.find(i => i.id === id);
   const have = existing ? existing.qty : 0;
   if(have >= stock){
-    enShowToast(stock === 1 ? `${f.name} is already in your cart. Only 1 is available.` : `You have all ${stock} of ${f.name} in your cart.`);
+    enShowToast(`${f.name} is already in your cart. No more are available.`);
     return false;
   }
   const next = Math.min(have + qty, stock);
@@ -904,7 +901,7 @@ function enValidateCart(){
     const stock = enStock(f);
     if(stock <= 0){ msgs.push(`${f.name} is sold out and was removed from your cart.`); return; }
     const qty = Math.max(1, parseInt(i.qty, 10) || 1);
-    if(qty > stock){ msgs.push(`Only ${stock} of ${f.name} available. Your cart was updated.`); kept.push({ id: i.id, qty: stock }); }
+    if(qty > stock){ msgs.push(`Some of ${f.name} is no longer available. Your cart was updated.`); kept.push({ id: i.id, qty: stock }); }
     else kept.push({ id: i.id, qty });
   });
   if(JSON.stringify(kept) !== before) enSetCart(kept);

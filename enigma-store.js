@@ -861,7 +861,7 @@ function enAddToCart(id, qty){
   const existing = cart.find(i => i.id === id);
   const have = existing ? existing.qty : 0;
   if(have >= stock){
-    enShowToast(`${f.name} is already in your cart. No more are available.`);
+    enShowToast(`${f.name} is already in your cart.`);
     return false;
   }
   const next = Math.min(have + qty, stock);

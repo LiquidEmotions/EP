@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Enigma Perfumes — BNIB and tester perfumes</title>
-<meta name="description" content="Sealed perfumes and testers from Afnan, Lattafa, Rasasi and more. See exactly how many are left.">
+<meta name="description" content="Sealed perfumes and testers from Afnan, Lattafa, Rasasi and more. Details and condition on every listing.">
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="enigma.css">
+<link rel="stylesheet" href="enigma.css?v=20261013">
 </head>
 <body>
 <div class="announce" id="announce" aria-label="Store notes"></div>
@@ -67,7 +67,7 @@
       <p class="sub">The details spelled out before you order.</p>
       <div class="trust">
         <div class="trust-item"><h3>Sealed and boxed</h3><p>Every BNIB perfume comes sealed, in its box.</p></div>
-        <div class="trust-item"><h3>Exact stock</h3><p>Each listing shows how many are left, so you know what you're getting.</p></div>
+        <div class="trust-item"><h3>Clear availability</h3><p>Sold-out perfumes are marked clearly, so you always know what you can order.</p></div>
         <div class="trust-item"><h3>Testers, described</h3><p>Testers list their box status and condition. No surprises.</p></div>
         <div class="trust-item"><h3>Confirmed on WhatsApp</h3><p>Your order goes straight to us on WhatsApp, and we confirm it there.</p></div>
       </div>
@@ -89,7 +89,7 @@
         <details><summary>What does BNIB mean?</summary><p>Brand new in box. The perfume is sealed and comes with its box.</p></details>
         <details><summary>What is a tester?</summary><p>The perfume a brand supplies for testing. It can come with or without a box, and each tester listing says which, plus its condition.</p></details>
         <details><summary>How do I order?</summary><p>Add perfumes to your cart and check out. Your order opens in WhatsApp, and we confirm availability and next steps there.</p></details>
-        <details><summary>What if a perfume sells out while I'm ordering?</summary><p>Most perfumes are one or two pieces, so this can happen. If it does, we'll tell you on WhatsApp straight away.</p></details>
+        <details><summary>What if a perfume sells out while I'm ordering?</summary><p>Stock is limited, so this can happen. If it does, we'll tell you on WhatsApp straight away.</p></details>
         <details><summary>Are there shipping charges?</summary><p>No. Shipping is free on every order.</p></details>
       </div>
     </div>
@@ -128,7 +128,7 @@
   </div>
 </footer>
 
-<script src="enigma-store.js"></script>
+<script src="enigma-store.js?v=20261013"></script>
 <script>
 /* ---------- Banner carousel ---------- */
 function bannerSlideHtml(m){
@@ -279,12 +279,12 @@ document.getElementById("brandGrid").innerHTML = enBrandSummaries().map(b => {
   const count = n === 1 ? "1 perfume" : n + " perfumes";
   const meta = b.bottles ? `${count}${b.from !== null ? " · from " + enFormatPrice(b.from) : ""}` : "Sold out";
   return `<a class="brand-tile${b.image ? " has-img" : ""}" href="${enEsc(enShopLinkForBrand(b.brand))}" data-initial="${enEsc(b.brand.charAt(0).toUpperCase())}">
-    ${enBrandSlidesHtml(b)}
+    ${typeof enBrandSlidesHtml === "function" ? enBrandSlidesHtml(b) : (b.image ? `<img src="${enEsc(b.image)}" alt="" loading="lazy">` : "")}
     <span class="bt-name">${enEsc(b.brand)}</span>
     <span class="bt-meta">${enEsc(meta)}</span>
   </a>`;
 }).join("");
-enStartBrandRotation();
+if(typeof enStartBrandRotation === "function") enStartBrandRotation();
 
 /* ---------- New arrivals: newest in-stock perfumes ---------- */
 const arrivalsEl = document.getElementById("arrivalsGrid");

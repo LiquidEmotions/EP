@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="enigma.css">
+<link rel="stylesheet" href="enigma.css?v=20261013">
 </head>
 <body>
 <div class="announce" id="announce" aria-label="Store notes"></div>
@@ -75,7 +75,7 @@
   </div>
 </footer>
 
-<script src="enigma-store.js"></script>
+<script src="enigma-store.js?v=20261013"></script>
 <script>
 const root = document.getElementById("cartRoot");
 
@@ -97,7 +97,6 @@ function lineHtml(l){
         <span class="q" aria-live="polite">${l.qty}</span>
         <button type="button" data-act="inc" aria-label="Increase quantity"${atMax ? " disabled" : ""}>+</button>
       </div>
-      ${atMax ? `<span class="max-note">${l.maxQty === 1 ? "Only 1 available" : `All ${l.maxQty} in your cart`}</span>` : ""}
       <button class="link-btn" type="button" data-act="remove">Remove</button>
     </div>
   </div>`;

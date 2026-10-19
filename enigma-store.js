@@ -150,21 +150,6 @@ const LISTINGS = [
     images: ["bottles/mykonos-reflection.png"]
   },
   {
-    id: "mykonos-california-blue",
-    type: "bnib",
-    name: "California Blue",
-    house: "Mykonos",
-    bottleSize: "100ml",
-    price: 2800,
-    mrp: 5000,
-    available: true,
-    dateAdded: "2026-09-29",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/California-Blue-120464.html",
-    notes: { top: ["Lavender", "Grapefruit", "Pear", "Salt"], heart: ["Marine Notes", "Water Flowers", "Rhubarb"], base: ["Caramel", "Woody Notes", "Moss"]},
-    images: ["bottles/mykonos-california-blue.png"]
-  },
-  {
     id: "afnan-9pm",
     type: "bnib",
     name: "9PM",

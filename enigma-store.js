@@ -81,9 +81,9 @@ const EN_ORDER_COUNTER_URL = "";
    Add a new perfume by copying one entry below and changing it.
    Fields:
    - id:            short unique name with no spaces, e.g. "mykonos-reflection"
-   - type:          "bnib" (brand new, sealed, with box) or "tester"
+   - type:          "bnib" (brand new, sealed, with box), "tester", or "vial" (small sample vial)
    - name, house:   perfume name and brand
-   - bottleSize:    full retail size, e.g. "100ml"
+   - bottleSize:    full retail size, e.g. "100ml" (for a vial, the vial size, e.g. "1.5ml")
    - price:         one price in rupees, numbers only
    - available:     true while you have it, false when it is sold out. No stock numbers are kept
                    in this file, so nobody can read them here. Each perfume can be ordered
@@ -94,7 +94,8 @@ const EN_ORDER_COUNTER_URL = "";
                     Leave [] to show a name tile until photos are ready.
 
    Testers only:
-   - boxIncluded:   true or false (BNIB is always boxed, so leave it out)
+   - boxIncluded:   true or false (BNIB is always boxed, so leave it out; leave it out on a tester
+                    too if you have not checked, and the site says "Ask us on WhatsApp")
    - conditionNotes: e.g. "Cap has a small scuff. Fill level about 95%."
 
    Optional on any listing:
@@ -109,7 +110,7 @@ const LISTINGS = [
     name: "Marwa Extrait",
     house: "Arabiyat Prestige",
     bottleSize: "60ml",
-    price: 3500,
+    price: 3550,
     mrp: 7499,
     available: true,
     dateAdded: "2026-09-29",
@@ -124,7 +125,7 @@ const LISTINGS = [
     name: "Club de Nuit Untold",
     house: "Armaf",
     bottleSize: "105ml",
-    price: 3500,
+    price: 3550,
     mrp: 6999,
     available: true,
     dateAdded: "2026-09-29",
@@ -244,7 +245,7 @@ const LISTINGS = [
     name: "Supremacy Not Only Intense",
     house: "Afnan",
     bottleSize: "150ml",
-    price: 3850,
+    price: 3900,
     mrp: 7500,
     available: true,
     dateAdded: "2026-09-30",
@@ -289,7 +290,7 @@ const LISTINGS = [
     name: "Teriaq Intense",
     house: "Lattafa",
     bottleSize: "100ml",
-    price: 3200,
+    price: 3300,
     mrp: 6000,
     available: true,
     dateAdded: "2026-09-30",
@@ -304,7 +305,7 @@ const LISTINGS = [
     name: "Khamrah Qahwa",
     house: "Lattafa",
     bottleSize: "100ml",
-    price: 3050,
+    price: 3100,
     mrp: 5500,
     available: true,
     dateAdded: "2026-09-30",
@@ -394,7 +395,7 @@ const LISTINGS = [
     name: "Khair Pistachio",
     house: "Paris Corner",
     bottleSize: "100ml",
-    price: 1450,
+    price: 1500,
     mrp: 2599,
     available: true,
     dateAdded: "2026-10-12",
@@ -514,7 +515,7 @@ const LISTINGS = [
     name: "Hamdan The Sheikh",
     house: "Arabiyat Prestige",
     bottleSize: "75ml",
-    price: 2800,
+    price: 2850,
     mrp: 5750,
     available: true,
     dateAdded: "2026-10-12",
@@ -558,7 +559,7 @@ const LISTINGS = [
     name: "Liquid Brun",
     house: "French Avenue",
     bottleSize: "100ml",
-    price: 2850,
+    price: 2950,
     mrp: 4399,
     available: true,
     dateAdded: "2026-10-12",
@@ -630,7 +631,7 @@ const LISTINGS = [
     name: "Vulcan Feu",
     house: "French Avenue",
     bottleSize: "100ml",
-    price: 2900,
+    price: 3200,
     mrp: 4699,
     available: true,
     dateAdded: "2026-10-12",
@@ -638,6 +639,432 @@ const LISTINGS = [
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Vulcan-Feu-105520.html",
     notes: { top: ["Mango", "Lemon", "Ginger", "Rhubarb"], heart: ["Pink Pepper", "Jasmine", "Violet", "Praline"], base: ["Tonka Bean", "Cedarwood", "Ambergris", "Moss"] },
     images: ["bottles/french-avenue-vulcan-feu.png"]
+  },
+  {
+    id: "bvlgari-man-in-black-eau-de-parfum-vial",
+    type: "vial",
+    name: "Man in Black Eau de Parfum",
+    house: "Bvlgari",
+    bottleSize: "1.5ml",
+    price: 200,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "creed-aventus-vial",
+    type: "vial",
+    name: "Aventus",
+    house: "Creed",
+    bottleSize: "1.7ml",
+    price: 500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "creed-green-irish-tweed-vial",
+    type: "vial",
+    name: "Green Irish Tweed",
+    house: "Creed",
+    bottleSize: "1.7ml",
+    price: 500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "creed-delphinus-vial",
+    type: "vial",
+    name: "Delphinus",
+    house: "Creed",
+    bottleSize: "1.7ml",
+    price: 500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "creed-centaurus-vial",
+    type: "vial",
+    name: "Centaurus",
+    house: "Creed",
+    bottleSize: "1.7ml",
+    price: 500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "creed-silver-mountain-water-vial",
+    type: "vial",
+    name: "Silver Mountain Water",
+    house: "Creed",
+    bottleSize: "1.7ml",
+    price: 500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "issey-miyake-leau-dissey-pour-homme-sport-tester",
+    type: "tester",
+    name: "L'Eau d'Issey Pour Homme Sport",
+    house: "Issey Miyake",
+    bottleSize: "100ml",
+    price: 2600,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "creed-aventus-tester",
+    type: "tester",
+    name: "Aventus",
+    house: "Creed",
+    bottleSize: "100ml",
+    price: 23500,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Without cap. Plain tester box.",
+    images: []
+  },
+  {
+    id: "dolce-gabbana-light-blue-eau-intense-tester",
+    type: "tester",
+    name: "Light Blue Eau Intense",
+    house: "Dolce & Gabbana",
+    bottleSize: "100ml",
+    price: 9000,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "narciso-rodriguez-for-him-eau-de-toilette-tester",
+    type: "tester",
+    name: "For Him Eau de Toilette",
+    house: "Narciso Rodriguez",
+    bottleSize: "100ml",
+    price: 9500,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Without cap. Plain tester box.",
+    images: []
+  },
+  {
+    id: "narciso-rodriguez-for-him-eau-de-parfum-tester",
+    type: "tester",
+    name: "For Him Eau de Parfum",
+    house: "Narciso Rodriguez",
+    bottleSize: "100ml",
+    price: 10500,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "narciso-rodriguez-for-him-bleu-noir-parfum-tester",
+    type: "tester",
+    name: "For Him Bleu Noir Parfum",
+    house: "Narciso Rodriguez",
+    bottleSize: "100ml",
+    price: 6800,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "montale-arabians-tonka-tester",
+    type: "tester",
+    name: "Arabians Tonka",
+    house: "Montale",
+    bottleSize: "100ml",
+    price: 8000,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "chopard-oud-malaki-tester",
+    type: "tester",
+    name: "Oud Malaki",
+    house: "Chopard",
+    bottleSize: "80ml",
+    price: 4500,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "arabiyat-prestige-marwa-extrait-tester",
+    type: "tester",
+    name: "Marwa Extrait",
+    house: "Arabiyat Prestige",
+    bottleSize: "60ml",
+    price: 3100,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    images: []
+  },
+  {
+    id: "al-nashma-caprice",
+    type: "bnib",
+    name: "Caprice",
+    house: "Al Nashma",
+    bottleSize: "100ml",
+    price: 2350,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "riiffs-momento",
+    type: "bnib",
+    name: "Momento",
+    house: "Riiffs",
+    bottleSize: "100ml",
+    price: 2800,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mykonos-conquer",
+    type: "bnib",
+    name: "Conquer",
+    house: "Mykonos",
+    bottleSize: "100ml",
+    price: 2800,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mykonos-inception",
+    type: "bnib",
+    name: "Inception",
+    house: "Mykonos",
+    bottleSize: "100ml",
+    price: 2900,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mykonos-sorrento",
+    type: "bnib",
+    name: "Sorrento",
+    house: "Mykonos",
+    bottleSize: "100ml",
+    price: 3000,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mykonos-reflection-elixir",
+    type: "bnib",
+    name: "Reflection Elixir",
+    house: "Mykonos",
+    bottleSize: "50ml",
+    price: 1950,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mykonos-slow-living",
+    type: "bnib",
+    name: "Slow Living",
+    house: "Mykonos",
+    bottleSize: "100ml",
+    price: 2900,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mykonos-inferno",
+    type: "bnib",
+    name: "Inferno",
+    house: "Mykonos",
+    bottleSize: "100ml",
+    price: 3550,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "arabiyat-prestige-al-noor",
+    type: "bnib",
+    name: "Al Noor",
+    house: "Arabiyat Prestige",
+    bottleSize: "100ml",
+    price: 2850,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "mancera-cedrat-boise-intense",
+    type: "bnib",
+    name: "Cedrat Boisé Intense",
+    house: "Mancera",
+    bottleSize: "120ml",
+    price: 8500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "rayhaan-italia",
+    type: "bnib",
+    name: "Italia",
+    house: "Rayhaan",
+    bottleSize: "100ml",
+    price: 2200,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "rasasi-shuhrah",
+    type: "bnib",
+    name: "Shuhrah",
+    house: "Rasasi",
+    bottleSize: "90ml",
+    price: 2850,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "azzaro-the-most-wanted-parfum",
+    type: "bnib",
+    name: "The Most Wanted Parfum",
+    house: "Azzaro",
+    bottleSize: "100ml",
+    price: 5600,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "azzaro-wanted-by-night",
+    type: "bnib",
+    name: "Wanted by Night",
+    house: "Azzaro",
+    bottleSize: "100ml",
+    price: 6300,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "ajmal-wave",
+    type: "bnib",
+    name: "Wave",
+    house: "Ajmal",
+    bottleSize: "100ml",
+    price: 1100,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "armaf-club-de-nuit-intense-man-pure-parfum",
+    type: "bnib",
+    name: "Club de Nuit Intense Man Pure Parfum",
+    house: "Armaf",
+    bottleSize: "150ml",
+    price: 3850,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "maison-alhambra-jean-lowe-immortel",
+    type: "bnib",
+    name: "Jean Lowe Immortel",
+    house: "Maison Alhambra",
+    bottleSize: "100ml",
+    price: 2500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "hugo-boss-hugo",
+    type: "bnib",
+    name: "Hugo",
+    house: "Hugo Boss",
+    bottleSize: "200ml",
+    price: 4700,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "guerlain-lhomme-ideal-eau-de-parfum",
+    type: "bnib",
+    name: "L'Homme Idéal Eau de Parfum",
+    house: "Guerlain",
+    bottleSize: "100ml",
+    price: 7600,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "rochas-moustache-eau-de-parfum",
+    type: "bnib",
+    name: "Moustache Eau de Parfum",
+    house: "Rochas",
+    bottleSize: "125ml",
+    price: 4400,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "ahmed-al-maghribi-kaaf",
+    type: "bnib",
+    name: "Kaaf",
+    house: "Ahmed Al Maghribi",
+    bottleSize: "100ml",
+    price: 2500,
+    available: true,
+    dateAdded: "2026-10-19",
+    images: []
+  },
+  {
+    id: "guerlain-habit-rouge-tester",
+    type: "tester",
+    name: "Habit Rouge",
+    house: "Guerlain",
+    bottleSize: "100ml",
+    price: 6800,
+    available: true,
+    dateAdded: "2026-10-19",
+    boxIncluded: false,
+    images: []
   }
 ];
 
@@ -730,7 +1157,8 @@ else enStartBackgroundFix();
 const enCurrencyFormatter = new Intl.NumberFormat("en-IN", { style:"currency", currency:"INR", maximumFractionDigits:0 });
 function enFormatPrice(amount){ return enCurrencyFormatter.format(amount); }
 
-function enConditionLabel(f){ return f.type === "tester" ? "Tester" : "BNIB"; }
+function enConditionLabel(f){ return f.type === "tester" ? "Tester" : f.type === "vial" ? "Vial" : "BNIB"; }
+function enTypeClass(f){ return f.type === "tester" ? "tester" : f.type === "vial" ? "vial" : "bnib"; }
 function enStock(f){ return f.available === false ? 0 : EN_MAX_PER_ORDER; }
 function enIsSoldOut(f){ return enStock(f) <= 0; }
 function enIsNew(f){
@@ -759,7 +1187,8 @@ function enPriceHtml(f){
   return `<span class="price">${enFormatPrice(f.price)}</span>`;
 }
 function enBoxText(f){
-  if(f.type === "tester") return f.boxIncluded ? "With box" : "No box";
+  if(f.type === "vial") return "Vial only";
+  if(f.type === "tester") return f.boxIncluded === true ? "With box" : f.boxIncluded === false ? "No box" : "Ask us on WhatsApp";
   return "Sealed pack, with box";
 }
 function enVisibleListings(){
@@ -949,12 +1378,12 @@ function enUpdateBadges(){
    Shared markup: media tile, badge, product card
    ============================================================ */
 function enBadgeHtml(f){
-  return `<span class="badge badge-${f.type === "tester" ? "tester" : "bnib"}">${enConditionLabel(f)}</span>`;
+  return `<span class="badge badge-${enTypeClass(f)}">${enConditionLabel(f)}</span>`;
 }
 /* Photo if there is one, otherwise a name tile. withSeal adds the size seal. */
 function enMediaHtml(f, withSeal){
   const img = enPhotos(f)[0];
-  const seal = withSeal ? `<span class="seal seal-${f.type === "tester" ? "tester" : "bnib"}" aria-hidden="true">${enEsc(f.bottleSize)}</span>` : "";
+  const seal = withSeal ? `<span class="seal seal-${enTypeClass(f)}" aria-hidden="true">${enEsc(f.bottleSize)}</span>` : "";
   if(img){
     return `<img src="${enEsc(img)}" alt="${enEsc(f.house + " " + f.name)}" loading="lazy">${seal}`;
   }
@@ -1090,7 +1519,7 @@ function enOpenProductModal(id){
     <div class="pm">
       <button class="pm-close" type="button" data-pm="close" aria-label="Close">✕</button>
       <div class="pm-media">
-        <div class="pm-main">${main}<span class="seal seal-${f.type === "tester" ? "tester" : "bnib"}" aria-hidden="true">${enEsc(f.bottleSize)}</span></div>
+        <div class="pm-main">${main}<span class="seal seal-${enTypeClass(f)}" aria-hidden="true">${enEsc(f.bottleSize)}</span></div>
         ${thumbs}
       </div>
       <div class="pm-info">

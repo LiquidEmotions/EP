@@ -12,6 +12,7 @@
   --seal:#8B1E3F;
   --seal-deep:#5F1029;
   --tester:#2C5D63;
+  --vial:#7A5A1E;
   --danger:#9B2C2C;
   --radius:4px;
   --display:'Gloock', Georgia, serif;
@@ -122,6 +123,7 @@ button{cursor:pointer;}
   box-shadow:0 2px 6px rgba(33,26,51,0.3), inset 0 0 0 3px rgba(255,255,255,0.14);
 }
 .seal-tester{color:var(--tester); background:var(--card); border:2px solid var(--tester);}
+.seal-vial{color:var(--vial); background:var(--card); border:2px dashed var(--vial); font-size:0.72rem;}
 .wish-btn{
   position:absolute; top:10px; left:10px; z-index:2; width:36px; height:36px; border-radius:50%;
   border:1px solid var(--line); background:rgba(248,246,251,0.92); font-size:1.1rem; line-height:1;
@@ -151,6 +153,7 @@ button{cursor:pointer;}
 }
 .badge-bnib{background:var(--seal); color:#fff;}
 .badge-tester{border:1px solid var(--tester); color:var(--tester);}
+.badge-vial{border:1px solid var(--vial); color:var(--vial);}
 .empty{padding:40px 20px; text-align:center; color:var(--ink-soft); border:1px dashed var(--line); border-radius:var(--radius);}
 .empty a{color:var(--seal);}
 

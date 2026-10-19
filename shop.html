@@ -106,7 +106,7 @@ const PRICE_BANDS = [
 ];
 (function readAddress(){
   const cond = (params.get("cond") || "").toLowerCase();
-  if(cond === "bnib") state.cond = "BNIB"; else if(cond === "tester") state.cond = "Tester";
+  if(cond === "bnib") state.cond = "BNIB"; else if(cond === "tester") state.cond = "Tester"; else if(cond === "vial") state.cond = "Vial";
   const wantBrand = (params.get("brand") || "").toLowerCase();
   const hit = LISTINGS.find(f => f.house.toLowerCase() === wantBrand);
   if(hit) state.brand = hit.house;
@@ -155,7 +155,7 @@ function renderFilters(){
   const brands = uniq(all.map(f => f.house)).sort((a, b) => a.localeCompare(b));
   const genders = uniq(all.map(f => f.gender));
   const seasons = uniq(all.map(f => f.season));
-  let html = chipRow("Condition", "cond", ["All", "BNIB", "Tester"]);
+  let html = chipRow("Condition", "cond", ["All", "BNIB", "Tester", "Vial"]);
   html += chipRow("Availability", "stock", ["All", "In stock"]);
   if(brands.length > 1) html += chipRow("Brand", "brand", ["All", ...brands]);
   const bands = PRICE_BANDS.filter(b => all.some(f => f.price >= b.min && f.price <= b.max)).map(b => b.label);
@@ -237,7 +237,7 @@ function renderGrid(){
   document.getElementById("resultCount").textContent =
     list.length === 1 ? "1 perfume" : `${list.length} perfumes`;
   if(!list.length){
-    const what = state.cond === "Tester" ? "No testers listed right now." : "No perfumes match those filters.";
+    const what = state.cond === "Tester" ? "No testers listed right now." : state.cond === "Vial" ? "No vials listed right now." : "No perfumes match those filters.";
     gridEl.innerHTML = `<div class="empty" style="grid-column:1/-1">${what} <a href="#" id="clearFilters">Clear filters</a></div>`;
     return;
   }

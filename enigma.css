@@ -304,7 +304,7 @@ footer{border-top:1px solid var(--line); padding:44px 0 30px; background:var(--p
   .card-body{padding:12px 12px 14px;}
   .card-name{font-size:1.08rem;}
   .seal{width:48px; height:48px; font-size:0.7rem; right:8px; bottom:8px;}
-  .mono-tile{padding:12px 12px 62px; font-size:1.25rem;}
+  .mono-tile{padding:54px 12px 62px; font-size:1.25rem;}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}

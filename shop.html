@@ -111,8 +111,10 @@ const PRICE_BANDS = [
   const hit = LISTINGS.find(f => f.house.toLowerCase() === wantBrand);
   if(hit) state.brand = hit.house;
   const gender = (params.get("gender") || "").toLowerCase();
-  const g = LISTINGS.find(f => (f.gender || "").toLowerCase() === gender);
-  if(g) state.gender = g.gender;
+  if(gender){
+    const g = LISTINGS.find(f => (f.gender || "").toLowerCase() === gender);
+    if(g) state.gender = g.gender;
+  }
   const sort = params.get("sort");
   if(["newest", "low", "high", "az", "za", "value", "size"].includes(sort)) state.sort = sort;
   if(params.get("stock") === "in") state.stock = "In stock";

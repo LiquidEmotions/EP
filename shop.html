@@ -158,9 +158,20 @@ function renderFilters(){
   const brands = uniq(all.map(f => f.house)).sort((a, b) => a.localeCompare(b));
   const genders = uniq(all.map(f => f.gender));
   const seasons = uniq(all.map(f => f.season));
-  let html = chipRow("Condition", "cond", ["All", "BNIB", "Tester", "Vial"]);
+  const activeCount = ["cond", "stock", "brand", "gender", "season", "price"].filter(k => state[k] !== "All").length;
+  let html = activeCount ? `<button type="button" class="filter-clear">Clear all filters (${activeCount})</button>` : "";
+  html += chipRow("Condition", "cond", ["All", "BNIB", "Tester", "Vial"]);
   html += chipRow("Availability", "stock", ["All", "In stock"]);
-  if(brands.length > 1) html += chipRow("Brand", "brand", ["All", ...brands]);
+  if(brands.length > 1){
+    const count = b => all.filter(f => f.house === b).length;
+    html += `<div class="filter-row">
+    <label class="filter-label" for="brandSel">Brand</label>
+    <select id="brandSel" class="sort-select">
+      <option value="All">All brands</option>
+      ${brands.map(b => `<option value="${enEsc(b)}"${state.brand === b ? " selected" : ""}>${enEsc(b)} (${count(b)})</option>`).join("")}
+    </select>
+  </div>`;
+  }
   const bands = PRICE_BANDS.filter(b => all.some(f => f.price >= b.min && f.price <= b.max)).map(b => b.label);
   if(bands.length > 1) html += chipRow("Price", "price", ["All", ...bands]);
   if(genders.length > 1) html += chipRow("For", "gender", ["All", ...genders]);
@@ -179,6 +190,17 @@ function renderFilters(){
   </div>`;
   filtersEl.innerHTML = html;
   document.getElementById("sortSel").value = state.sort;
+  scrollActiveChips();
+}
+/* Each chip row scrolls sideways on phones. Bring the chosen chip into view, so a picked brand is never hidden off-screen. */
+function scrollActiveChips(){
+  requestAnimationFrame(() => {
+    filtersEl.querySelectorAll(".chips").forEach(row => {
+      const on = row.querySelector(".chip.active");
+      if(!on || !row.clientWidth) return;
+      row.scrollLeft = Math.max(0, on.offsetLeft - (row.clientWidth - on.offsetWidth) / 2);
+    });
+  });
 }
 
 function matchesQuery(f){
@@ -248,6 +270,11 @@ function renderGrid(){
 }
 
 filtersEl.addEventListener("click", (e) => {
+  if(e.target.closest(".filter-clear")){
+    state.cond = state.brand = state.gender = state.season = state.stock = state.price = "All";
+    renderFilters(); renderGrid();
+    return;
+  }
   const chip = e.target.closest(".chip");
   if(!chip) return;
   state[chip.dataset.key] = chip.dataset.value;
@@ -255,6 +282,7 @@ filtersEl.addEventListener("click", (e) => {
 });
 filtersEl.addEventListener("change", (e) => {
   if(e.target.id === "sortSel"){ state.sort = e.target.value; renderGrid(); }
+  if(e.target.id === "brandSel"){ state.brand = e.target.value; renderFilters(); renderGrid(); }
 });
 gridEl.addEventListener("click", (e) => {
   if(e.target.id === "clearFilters"){
@@ -345,6 +373,7 @@ const filterToggle = document.getElementById("filterToggle");
 filterToggle.addEventListener("click", () => {
   const open = filtersEl.classList.toggle("open");
   filterToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  if(open) scrollActiveChips();
 });
 function setHeaderHeight(){
   const h = document.querySelector(".site-header");

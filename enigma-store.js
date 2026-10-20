@@ -653,6 +653,8 @@ const LISTINGS = [
     price: 500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Aventus-9828.html",
     images: []
   },
   {
@@ -664,6 +666,8 @@ const LISTINGS = [
     price: 500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Green-Irish-Tweed-474.html",
     images: []
   },
   {
@@ -675,6 +679,8 @@ const LISTINGS = [
     price: 500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Delphinus-95970.html",
     images: []
   },
   {
@@ -686,6 +692,8 @@ const LISTINGS = [
     price: 500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Centaurus-95601.html",
     images: []
   },
   {
@@ -697,6 +705,8 @@ const LISTINGS = [
     price: 500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Silver-Mountain-Water-472.html",
     images: []
   },
   {
@@ -723,6 +733,8 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Without cap. Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Aventus-9828.html",
     images: []
   },
   {
@@ -788,6 +800,8 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Montale/Arabians-Tonka-57384.html",
     images: []
   },
   {
@@ -814,6 +828,8 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Marwa-Extrait-142642.html",
     images: []
   },
   {
@@ -918,12 +934,14 @@ const LISTINGS = [
   {
     id: "mancera-cedrat-boise-intense",
     type: "bnib",
-    name: "Cedrat Boisé Intense",
+    name: "Intense Cedrat Boise",
     house: "Mancera",
     bottleSize: "120ml",
     price: 8500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mancera/Intense-Cedrat-Boise-72796.html",
     images: []
   },
   {
@@ -935,6 +953,8 @@ const LISTINGS = [
     price: 2200,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Rayhaan/Italia-120606.html",
     images: []
   },
   {
@@ -946,6 +966,8 @@ const LISTINGS = [
     price: 2850,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Shuhrah-Pour-Homme-53578.html",
     images: []
   },
   {
@@ -957,6 +979,8 @@ const LISTINGS = [
     price: 5600,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Azzaro/The-Most-Wanted-Parfum-73664.html",
     images: []
   },
   {
@@ -968,6 +992,8 @@ const LISTINGS = [
     price: 6300,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Azzaro/Wanted-by-Night-49144.html",
     images: []
   },
   {
@@ -1045,6 +1071,7 @@ const LISTINGS = [
     price: 2500,
     available: true,
     dateAdded: "2026-10-19",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Ahmed-Al-Maghribi/Kaaf-102460.html",
     images: []
   },
   {

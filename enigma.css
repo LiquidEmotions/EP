@@ -611,3 +611,28 @@ a.btn{display:inline-flex; align-items:center; justify-content:center; text-deco
   .filters .chip{flex:0 0 auto; white-space:nowrap; padding:6px 13px; font-size:0.88rem;}
   .filters .sort-select{width:100%;}
 }
+
+
+/* ===== Delivery estimate ===== */
+.delivery{margin-top:14px; padding:12px 14px; border:1px solid var(--line); border-radius:var(--radius); background:var(--card);}
+.delivery-head{font-family:var(--display); font-size:1.02rem; margin-bottom:8px;}
+.delivery-steps{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+.delivery-steps li{display:flex; flex-direction:column; gap:1px; font-size:0.82rem; color:var(--ink-soft); border-top:2px solid var(--seal); padding-top:6px;}
+.delivery-steps li b{color:var(--ink); font-weight:600; font-size:0.84rem;}
+.delivery p{margin:8px 0 0; font-size:0.78rem; color:var(--ink-soft);}
+.pm-order{display:flex; flex-direction:column; gap:0;}
+.btn-wa{display:block; text-align:center; margin-top:10px; padding:11px 16px; border-radius:var(--radius); border:1px solid #1f8f4d; color:#1f8f4d; text-decoration:none; font-weight:600; background:transparent;}
+.btn-wa:hover{background:#1f8f4d; color:#fff;}
+
+/* ===== Shop tabs: BNIB / Tester / Vial ===== */
+.shop-tabs{display:flex; gap:6px; margin:0 0 14px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+.shop-tabs::-webkit-scrollbar{display:none;}
+.shop-tab{flex:1 0 auto; padding:10px 16px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); border-radius:var(--radius); font:inherit; font-weight:600; cursor:pointer; white-space:nowrap; text-align:center;}
+.shop-tab small{font-weight:400; opacity:0.8; margin-left:4px;}
+.shop-tab.active{background:var(--ink); border-color:var(--ink); color:var(--paper);}
+
+/* ===== Home: shop by type and budget ===== */
+a.trust-item{display:block; text-decoration:none; color:inherit;}
+a.trust-item:hover{border-color:var(--seal);}
+.quick-budget{display:flex; flex-wrap:wrap; gap:8px;}
+.quick-budget .chip{text-decoration:none; display:inline-block;}

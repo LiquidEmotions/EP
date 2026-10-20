@@ -46,6 +46,7 @@
 
   <section class="catalogue" id="catalogue">
     <div class="wrap">
+      <div class="shop-tabs" id="shopTabs" role="tablist" aria-label="Type"></div>
       <div class="shop-bar">
         <div class="search-row">
           <input type="search" id="q" placeholder="Search perfumes" aria-label="Search perfumes" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest">
@@ -101,9 +102,11 @@
 const params = new URLSearchParams(location.search);
 const state = { q: params.get("q") || "", stock: "All", cond: "All", brand: "All", gender: "All", season: "All", price: "All", sort: "newest" };
 const PRICE_BANDS = [
-  { key: "u25",    label: "Under ₹2,500",  min: 0,    max: 2499 },
-  { key: "25to35", label: "₹2,500 to ₹3,500", min: 2500, max: 3500 },
-  { key: "35p",    label: "Above ₹3,500",  min: 3501, max: Infinity }
+  { key: "u1",     label: "Under ₹1,000",      min: 0,    max: 999 },
+  { key: "1to25",  label: "₹1,000 to ₹2,500",  min: 1000, max: 2500 },
+  { key: "25to35", label: "₹2,500 to ₹3,500",  min: 2501, max: 3500 },
+  { key: "35to5",  label: "₹3,500 to ₹5,000",  min: 3501, max: 5000 },
+  { key: "5p",     label: "Above ₹5,000",      min: 5001, max: Infinity }
 ];
 (function readAddress(){
   const cond = (params.get("cond") || "").toLowerCase();
@@ -158,9 +161,8 @@ function renderFilters(){
   const brands = uniq(all.map(f => f.house)).sort((a, b) => a.localeCompare(b));
   const genders = uniq(all.map(f => f.gender));
   const seasons = uniq(all.map(f => f.season));
-  const activeCount = ["cond", "stock", "brand", "gender", "season", "price"].filter(k => state[k] !== "All").length;
+  const activeCount = ["stock", "brand", "gender", "season", "price"].filter(k => state[k] !== "All").length;
   let html = activeCount ? `<button type="button" class="filter-clear">Clear all filters (${activeCount})</button>` : "";
-  html += chipRow("Condition", "cond", ["All", "BNIB", "Tester", "Vial"]);
   html += chipRow("Availability", "stock", ["All", "In stock"]);
   if(brands.length > 1){
     const count = b => all.filter(f => f.house === b).length;
@@ -250,8 +252,22 @@ function currentList(){
   return list;
 }
 
+function renderTabs(){
+  const el = document.getElementById("shopTabs");
+  const all = enVisibleListings();
+  const n = t => t === "All" ? all.length : all.filter(f => enConditionLabel(f) === t).length;
+  el.innerHTML = ["All", "BNIB", "Tester", "Vial"]
+    .filter(t => t === "All" || n(t) > 0 || state.cond === t)
+    .map(t => `<button type="button" role="tab" class="shop-tab${state.cond === t ? " active" : ""}" data-cond="${t}" aria-selected="${state.cond === t}">${t === "All" ? "All" : t === "Tester" ? "Testers" : t === "Vial" ? "Vials" : "BNIB"}<small>${n(t)}</small></button>`).join("");
+}
+document.getElementById("shopTabs").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-cond]");
+  if(!b) return;
+  state.cond = b.dataset.cond;
+  renderTabs(); renderGrid();
+});
 function updateFilterBadge(){
-  const n = ["cond", "stock", "brand", "gender", "season", "price"].filter(k => state[k] !== "All").length;
+  const n = ["stock", "brand", "gender", "season", "price"].filter(k => state[k] !== "All").length;
   document.getElementById("filterToggle").textContent = n ? `Filters (${n})` : "Filters";
 }
 
@@ -271,7 +287,7 @@ function renderGrid(){
 
 filtersEl.addEventListener("click", (e) => {
   if(e.target.closest(".filter-clear")){
-    state.cond = state.brand = state.gender = state.season = state.stock = state.price = "All";
+    state.brand = state.gender = state.season = state.stock = state.price = "All";
     renderFilters(); renderGrid();
     return;
   }
@@ -387,6 +403,7 @@ document.getElementById("askBtn").href =
   `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I'm looking for this perfume: ")}`;
 
 document.getElementById("q").value = state.q;
+renderTabs();
 renderFilters();
 renderGrid();
 renderRecent();

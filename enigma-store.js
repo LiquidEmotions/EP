@@ -12,6 +12,14 @@ const EN_SHOW_SOLD_OUT = true; // true = sold-out perfumes stay visible (greyed 
 
 const EN_WHATSAPP_NUMBER = "917982410620";
 
+/* Google Sheet as your stock list (optional). Publish the sheet tab as CSV and paste the link
+   here. Leave "" to keep using the list in this file. Template: enigma-stock-template.csv */
+const EN_SHEET_CSV_URL = "";
+
+/* Delivery estimate shown to customers: calendar days counted from the day they order.
+   [fewest, most]. Change the numbers to match what you can really do. */
+const EN_DELIVERY = { dispatch: [1, 2], delivery: [4, 7] };
+
 /* Your live website address, e.g. "https://enigmaperfumes.in/". Used for the "Share on WhatsApp"
    links. Leave "" while building: links then point at whatever address the page is opened from. */
 const EN_SITE_URL = "";
@@ -1054,6 +1062,101 @@ const LISTINGS = [
 ];
 
 /* ============================================================
+   STOCK FROM A GOOGLE SHEET (optional)
+   Paste the sheet's "Publish to web" CSV link into EN_SHEET_CSV_URL (top of this file)
+   and the sheet becomes your stock list. If the link is empty or the sheet cannot be
+   reached, the built-in list above is used instead, so the site never goes blank.
+   Columns (first row = these headings, in any order):
+     type (BNIB, Tester or Vial) | brand | name | size | price | mrp | in stock (yes/no)
+     date added | for | season | box (yes/no, testers) | condition | fragrantica | top notes
+     heart notes | base notes | id | photos
+   Only brand, name and price are required. Blank size = 100ml; blank type = BNIB; blank
+   in stock = yes. Notes cells: separate with commas.
+   ============================================================ */
+function enParseCsv(text){
+  const rows = []; let row = [], cell = "", q = false;
+  for(let i = 0; i < text.length; i++){
+    const c = text[i];
+    if(q){
+      if(c === '"'){ if(text[i + 1] === '"'){ cell += '"'; i++; } else q = false; }
+      else cell += c;
+    } else if(c === '"') q = true;
+    else if(c === ","){ row.push(cell); cell = ""; }
+    else if(c === "\n" || c === "\r"){
+      if(c === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); cell = ""; rows.push(row); row = [];
+    } else cell += c;
+  }
+  if(cell !== "" || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x.trim() !== ""));
+}
+function enRowsToListings(rows){
+  if(rows.length < 2) return [];
+  const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
+  const head = rows[0].map(norm);
+  const col = (...names) => { for(const n of names){ const i = head.indexOf(n); if(i >= 0) return i; } return -1; };
+  const C = {
+    type: col("type"), house: col("brand", "house"), name: col("name", "perfume"),
+    size: col("size", "bottlesize"), price: col("price"), mrp: col("mrp"), stock: col("instock", "available"),
+    date: col("dateadded", "date"), gender: col("for", "gender"), season: col("season"), box: col("box", "boxincluded"),
+    cond: col("condition", "conditionnotes"), frag: col("fragrantica", "fragranticaurl"),
+    top: col("topnotes"), heart: col("heartnotes"), base: col("basenotes"), id: col("id"), photos: col("photos", "images")
+  };
+  const slug = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, "")
+    .replace(/['\u2019]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const yes = v => /^(y|yes|true|1)$/i.test(v.trim());
+  const no  = v => /^(n|no|false|0)$/i.test(v.trim());
+  const out = [], seen = new Set();
+  for(const r of rows.slice(1)){
+    const get = k => (C[k] >= 0 && r[C[k]] !== undefined) ? r[C[k]].trim() : "";
+    const house = get("house"), name = get("name");
+    const price = parseFloat(get("price").replace(/[^0-9.]/g, ""));
+    if(!house || !name || !(price > 0)) continue;
+    const t = get("type").toLowerCase();
+    const type = t.startsWith("test") ? "tester" : t.startsWith("vial") ? "vial" : "bnib";
+    let id = get("id") || slug(house + " " + name) + (type === "tester" ? "-tester" : type === "vial" ? "-vial" : "");
+    for(let n = 2; seen.has(id); n++) id = id.replace(/-\d+$/, "") + "-" + n;
+    seen.add(id);
+    const f = { id, type, name, house, bottleSize: get("size") || "100ml", price,
+      available: !no(get("stock")), dateAdded: get("date") || "2026-01-01" };
+    const mrp = parseFloat(get("mrp").replace(/[^0-9.]/g, "")); if(mrp > price) f.mrp = mrp;
+    if(get("gender")) f.gender = get("gender");
+    if(get("season")) f.season = get("season");
+    if(type === "tester" && get("box")) f.boxIncluded = yes(get("box"));
+    if(get("cond")) f.conditionNotes = get("cond");
+    if(get("frag")) f.fragranticaUrl = get("frag");
+    const list = k => get(k).split(",").map(x => x.trim()).filter(Boolean);
+    if(list("top").length || list("heart").length || list("base").length)
+      f.notes = { top: list("top"), heart: list("heart"), base: list("base") };
+    f.images = get("photos") ? get("photos").split("|").map(x => x.trim()).filter(Boolean) : [];
+    out.push(f);
+  }
+  return out;
+}
+(function enLoadSheet(){
+  if(!EN_SHEET_CSV_URL) return;
+  const KEY = "en_sheet_cache_v1";
+  const apply = text => {
+    const list = enRowsToListings(enParseCsv(text));
+    if(list.length) LISTINGS.splice(0, LISTINGS.length, ...list);
+    return list.length > 0;
+  };
+  let cached = ""; try{ cached = localStorage.getItem(KEY) || ""; }catch(e){}
+  let used = false;
+  if(cached){ try{ used = apply(cached); }catch(e){} }
+  /* First visit (nothing cached yet): load the sheet before the page draws. After that the
+     saved copy is used straight away and refreshed quietly in the background. */
+  const url = EN_SHEET_CSV_URL + (EN_SHEET_CSV_URL.includes("?") ? "&" : "?") + "t=" + Math.floor(Date.now() / 60000);
+  try{
+    const x = new XMLHttpRequest();
+    x.open("GET", url, !used);
+    x.onload = () => { if(x.status === 200 && x.responseText){ try{ localStorage.setItem(KEY, x.responseText); }catch(e){} if(!used) try{ apply(x.responseText); }catch(e){} } };
+    x.send();
+    if(!used && x.status === 200 && x.responseText){ try{ localStorage.setItem(KEY, x.responseText); apply(x.responseText); }catch(e){} }
+  }catch(e){ /* keep the built-in list */ }
+})();
+
+/* ============================================================
    Small helpers
    ============================================================ */
 function enEsc(s){
@@ -1187,6 +1290,33 @@ function enNotifyUrl(f){
   const msg = `Hi! Please let me know when ${f.house} ${f.name} (${f.bottleSize}) is back in stock.`;
   return `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 }
+function enOrderUrl(f){
+  const msg = `Hi! I'd like to order ${f.house} ${f.name} (${f.bottleSize}, ${enConditionLabel(f)}) for ${enFormatPrice(f.price)}.`;
+  return `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+/* Delivery estimate: dates are worked out from the customer's own date, so they never go stale. */
+function enDeliveryDate(days){
+  const d = new Date(); d.setDate(d.getDate() + days);
+  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+}
+function enDeliveryDaysText(){ return `${EN_DELIVERY.delivery[0]} to ${EN_DELIVERY.delivery[1]} days`; }
+function enDeliveryHtml(){
+  const a = EN_DELIVERY.dispatch, b = EN_DELIVERY.delivery;
+  return `<div class="delivery">
+    <div class="delivery-head">Delivery in about ${enDeliveryDaysText()}</div>
+    <ol class="delivery-steps">
+      <li><b>Ordered</b><span>Today</span></li>
+      <li><b>Dispatched</b><span>${enDeliveryDate(a[0])} to ${enDeliveryDate(a[1])}</span></li>
+      <li><b>Delivered</b><span>${enDeliveryDate(b[0])} to ${enDeliveryDate(b[1])}</span></li>
+    </ol>
+    <p>An estimate. We confirm the exact timing on WhatsApp.</p>
+  </div>`;
+}
+function enFillDelivery(){
+  document.querySelectorAll("[data-delivery-days]").forEach(el => { el.textContent = enDeliveryDaysText(); });
+  document.querySelectorAll("[data-delivery-box]").forEach(el => { el.innerHTML = enDeliveryHtml(); });
+}
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", enFillDelivery); else enFillDelivery();
 /* A link that opens the shop with this perfume's details already showing. */
 function enBottleLink(f){
   try{ return new URL("shop.html", EN_SITE_URL || location.href).href + "?open=" + encodeURIComponent(f.id); }
@@ -1482,6 +1612,9 @@ function enModalActionsHtml(f){
       : `<button class="btn" type="button" data-pm="add">Add to cart</button>`}
     <button class="btn btn-ghost" type="button" data-pm="wish" aria-pressed="${wished}">${wished ? "♥ Saved" : "♡ Save"}</button>`;
 }
+function enModalOrderHtml(f){
+  return enIsSoldOut(f) ? "" : `<a class="btn btn-wa" href="${enEsc(enOrderUrl(f))}" target="_blank" rel="noopener">Order on WhatsApp</a>${enDeliveryHtml()}`;
+}
 function enNotesRow(label, list){
   return list && list.length ? `<li><span>${label}</span><span>${list.map(enEsc).join(", ")}</span></li>` : "";
 }
@@ -1523,6 +1656,7 @@ function enOpenProductModal(id){
         ${f.type === "tester" && f.conditionNotes ? `<p class="pm-notes-text"><strong>Condition:</strong> ${enEsc(f.conditionNotes)}</p>` : ""}
         ${f.fragranticaUrl ? `<a class="pm-link" href="${enEsc(f.fragranticaUrl)}" target="_blank" rel="noopener">View on Fragrantica</a>` : ""}
         <div class="pm-actions">${enModalActionsHtml(f)}</div>
+        <div class="pm-order" id="pmOrder">${enModalOrderHtml(f)}</div>
         <button class="pm-share" type="button" data-pm="share">Share on WhatsApp</button>
       </div>
     </div>`;

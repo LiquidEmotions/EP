@@ -636,12 +636,15 @@ const LISTINGS = [
   {
     id: "bvlgari-man-in-black-eau-de-parfum-vial",
     type: "vial",
-    name: "Man in Black Eau de Parfum",
+    name: "Man In Black Eau de Parfum",
     house: "Bvlgari",
     bottleSize: "1.5ml",
     price: 200,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Bvlgari/Bvlgari-Man-In-Black-26358.html",
+    notes: { top: ["Rum", "Spices"], heart: ["Tuberose", "Iris", "Leather"], base: ["Benzoin", "Tonka Bean", "Guaiac Wood"] },
     images: []
   },
   {
@@ -720,6 +723,9 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Issey-Miyake/L-Eau-d-Issey-Pour-Homme-Sport-14185.html",
+    notes: { top: ["Bergamot", "Grapefruit"], heart: ["Leather", "Nutmeg"], base: ["Vetiver", "Cedar"] },
     images: []
   },
   {
@@ -738,9 +744,9 @@ const LISTINGS = [
     images: []
   },
   {
-    id: "dolce-gabbana-light-blue-eau-intense-tester",
+    id: "dolce-gabbana-light-blue-eau-intense-pour-homme-tester",
     type: "tester",
-    name: "Light Blue Eau Intense",
+    name: "Light Blue Eau Intense Pour Homme",
     house: "Dolce & Gabbana",
     bottleSize: "100ml",
     price: 9000,
@@ -748,6 +754,9 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Dolce-Gabbana/Light-Blue-Eau-Intense-Pour-Homme-44035.html",
+    notes: { top: ["Grapefruit", "Mandarin Orange"], heart: ["Sea Water", "Juniper"], base: ["Musk", "Amberwood"] },
     images: []
   },
   {
@@ -761,12 +770,14 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Without cap. Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Narciso-Rodriguez/Narciso-Rodriguez-for-Him-1063.html",
     images: []
   },
   {
     id: "narciso-rodriguez-for-him-eau-de-parfum-tester",
     type: "tester",
-    name: "For Him Eau de Parfum",
+    name: "For Him Eau de Parfum Intense",
     house: "Narciso Rodriguez",
     bottleSize: "100ml",
     price: 10500,
@@ -774,6 +785,8 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Narciso-Rodriguez/Narciso-Rodriguez-For-Him-Eau-de-Parfum-Intense-14741.html",
     images: []
   },
   {
@@ -787,6 +800,9 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Narciso-Rodriguez/Narciso-Rodriguez-for-Him-Bleu-Noir-Parfum-71783.html",
+    notes: { top: ["Bergamot", "Mandarin", "Cypress", "Cardamom"], heart: ["Iris", "Suede", "Musk"], base: ["Leather", "Tonka Bean", "Vetiver", "Sandalwood", "Blue Cedar"] },
     images: []
   },
   {
@@ -815,6 +831,9 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     boxIncluded: true,
     conditionNotes: "Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Chopard/Oud-Malaki-17184.html",
+    notes: { top: ["Grapefruit", "Artemisia", "Lavender"], heart: ["Leather", "Tobacco", "Spices"], base: ["Oud", "Ambergris", "Dark Wood"] },
     images: []
   },
   {
@@ -833,14 +852,17 @@ const LISTINGS = [
     images: []
   },
   {
-    id: "al-nashma-caprice",
+    id: "lattafa-al-nashama-caprice",
     type: "bnib",
-    name: "Caprice",
-    house: "Al Nashma",
+    name: "Al Nashama Caprice",
+    house: "Lattafa",
     bottleSize: "100ml",
     price: 2350,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Al-Nashama-Caprice-89764.html",
+    notes: { top: ["Cardamom", "Ginger", "Bergamot", "Lemon"], heart: ["Lavender", "Geranium", "Mint"], base: ["Amber", "Cedarwood", "Patchouli", "Vetiver"] },
     images: []
   },
   {
@@ -850,8 +872,11 @@ const LISTINGS = [
     house: "Riiffs",
     bottleSize: "100ml",
     price: 2800,
+    mrp: 5399,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Riiffs-Perfumes/Momento-103346.html",
     images: []
   },
   {
@@ -863,6 +888,8 @@ const LISTINGS = [
     price: 2800,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Conquer-139182.html",
     images: []
   },
   {
@@ -874,6 +901,8 @@ const LISTINGS = [
     price: 2900,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Inception-121107.html",
     images: []
   },
   {
@@ -885,6 +914,8 @@ const LISTINGS = [
     price: 3000,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Sorrento-121134.html",
     images: []
   },
   {
@@ -896,6 +927,8 @@ const LISTINGS = [
     price: 1950,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Reflection-Elixir-139183.html",
     images: []
   },
   {
@@ -907,6 +940,9 @@ const LISTINGS = [
     price: 2900,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Slow-Living-121132.html",
+    notes: { top: ["Lemon", "Orange", "Bergamot", "Fruity Notes", "Grapefruit"], heart: ["White Flowers", "Lily", "Jasmine", "Raspberry", "Tea Rose"], base: ["Musk", "Amber", "Cedarwood", "Vanilla", "Sandalwood"] },
     images: []
   },
   {
@@ -918,6 +954,8 @@ const LISTINGS = [
     price: 3550,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Inferno-139841.html",
     images: []
   },
   {
@@ -929,6 +967,8 @@ const LISTINGS = [
     price: 2850,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Al-Noor-115515.html",
     images: []
   },
   {
@@ -1003,6 +1043,7 @@ const LISTINGS = [
     house: "Ajmal",
     bottleSize: "100ml",
     price: 1100,
+    mrp: 1500,
     available: true,
     dateAdded: "2026-10-19",
     images: []
@@ -1014,8 +1055,11 @@ const LISTINGS = [
     house: "Armaf",
     bottleSize: "150ml",
     price: 3850,
+    mrp: 7000,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Armaf/Club-de-Nuit-Intense-Man-Parfum-72842.html",
     images: []
   },
   {
@@ -1027,17 +1071,22 @@ const LISTINGS = [
     price: 2500,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Maison-Alhambra/Jean-Lowe-Immortal-83666.html",
+    notes: { top: ["Grapefruit", "Ginger", "Bergamot"], heart: ["Rosemary", "Water Notes", "Sage", "Geranium"], base: ["Ambroxan", "Amber", "Labdanum"] },
     images: []
   },
   {
     id: "hugo-boss-hugo",
     type: "bnib",
-    name: "Hugo",
+    name: "Hugo Man",
     house: "Hugo Boss",
     bottleSize: "200ml",
     price: 4700,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Hugo-Boss/Hugo-Man-64606.html",
     images: []
   },
   {
@@ -1049,6 +1098,9 @@ const LISTINGS = [
     price: 7600,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Guerlain/L-Homme-Ideal-Eau-de-Parfum-37735.html",
+    notes: { top: ["Almond", "Spices", "Lavender", "Bergamot", "Rosemary", "Thyme"], heart: ["Cherry", "Vanilla", "Incense", "Bulgarian Rose"], base: ["Tonka Bean", "Leather", "Sandalwood"] },
     images: []
   },
   {
@@ -1060,6 +1112,9 @@ const LISTINGS = [
     price: 4400,
     available: true,
     dateAdded: "2026-10-19",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Rochas/Moustache-Eau-de-Parfum-52350.html",
+    notes: { top: ["Pink Pepper", "Mandarin Orange"], heart: ["Atlas Cedar", "Bulgarian Rose"], base: ["Benzoin", "Vanilla", "Patchouli"] },
     images: []
   },
   {
@@ -1075,15 +1130,17 @@ const LISTINGS = [
     images: []
   },
   {
-    id: "guerlain-habit-rouge-tester",
+    id: "guerlain-habit-rouge-eau-de-parfum-tester",
     type: "tester",
-    name: "Habit Rouge",
+    name: "Habit Rouge Eau de Parfum",
     house: "Guerlain",
     bottleSize: "100ml",
     price: 6800,
     available: true,
     dateAdded: "2026-10-19",
     boxIncluded: false,
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Guerlain/Habit-Rouge-Eau-de-Parfum-25313.html",
     images: []
   }
 ];

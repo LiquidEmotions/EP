@@ -658,6 +658,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Aventus-9828.html",
+    notes: { top: ["Pineapple", "Bergamot", "Black Currant", "Apple"], heart: ["Birch", "Patchouli", "Moroccan Jasmine", "Rose"], base: ["Musk", "Oakmoss", "Ambergris", "Vanilla"] },
     images: []
   },
   {
@@ -671,6 +672,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Green-Irish-Tweed-474.html",
+    notes: { top: ["Lemon Verbena", "Peppermint"], heart: ["Iris", "Violet Leaf"], base: ["Ambergris", "Sandalwood"] },
     images: []
   },
   {
@@ -684,6 +686,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Delphinus-95970.html",
+    notes: { top: ["Black Pepper", "Incense", "Almond", "Pink Pepper"], heart: ["Heliotrope", "Orchid", "Orris Butter"], base: ["Patchouli", "Tonka Bean", "Amberwood", "Leather", "Bourbon Vanilla"] },
     images: []
   },
   {
@@ -697,6 +700,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Centaurus-95601.html",
+    notes: { top: ["Cardamom", "Cinnamon", "Tobacco", "Pink Pepper"], heart: ["Geranium", "Sandalwood", "Heliotrope", "Jasmine", "Patchouli"], base: ["Benzoin", "Tolu Balsam", "Tonka Bean", "Ambroxan", "Bourbon Vanilla"] },
     images: []
   },
   {
@@ -710,6 +714,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Silver-Mountain-Water-472.html",
+    notes: { top: ["Bergamot", "Mandarin Orange"], heart: ["Green Tea", "Black Currant"], base: ["Musk", "Petitgrain", "Sandalwood", "Galbanum"] },
     images: []
   },
   {
@@ -741,6 +746,7 @@ const LISTINGS = [
     conditionNotes: "Without cap. Plain tester box.",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Aventus-9828.html",
+    notes: { top: ["Pineapple", "Bergamot", "Black Currant", "Apple"], heart: ["Birch", "Patchouli", "Moroccan Jasmine", "Rose"], base: ["Musk", "Oakmoss", "Ambergris", "Vanilla"] },
     images: []
   },
   {
@@ -772,6 +778,7 @@ const LISTINGS = [
     conditionNotes: "Without cap. Plain tester box.",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Narciso-Rodriguez/Narciso-Rodriguez-for-Him-1063.html",
+    notes: { top: ["Violet Leaf"], heart: ["Musk"], base: ["Patchouli", "Amber"] },
     images: []
   },
   {
@@ -787,6 +794,7 @@ const LISTINGS = [
     conditionNotes: "Plain tester box.",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Narciso-Rodriguez/Narciso-Rodriguez-For-Him-Eau-de-Parfum-Intense-14741.html",
+    notes: { top: ["Pink Pepper"], heart: ["Iris"], base: ["Musk"] },
     images: []
   },
   {
@@ -818,6 +826,7 @@ const LISTINGS = [
     conditionNotes: "Plain tester box.",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Montale/Arabians-Tonka-57384.html",
+    notes: { top: ["Saffron", "Bergamot"], heart: ["Agarwood (Oud)", "Bulgarian Rose"], base: ["Sugar Cane", "Tonka Bean", "Amber", "White Musk", "Oakmoss"] },
     images: []
   },
   {
@@ -849,6 +858,7 @@ const LISTINGS = [
     conditionNotes: "Plain tester box.",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Marwa-Extrait-142642.html",
+    notes: { top: ["Ginger", "Bergamot", "Petitgrain"], heart: ["Incense", "Floral Notes", "Tea"], base: ["Ambroxan", "Musk", "Guaiac Wood"]},
     images: []
   },
   {
@@ -858,6 +868,7 @@ const LISTINGS = [
     house: "Lattafa",
     bottleSize: "100ml",
     price: 2350,
+    mrp: 5000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
@@ -877,6 +888,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Riiffs-Perfumes/Momento-103346.html",
+    notes: { top: ["Saffron", "Mandarin Orange", "Sugar"], heart: ["Damask Rose", "Tonka Bean", "Oud"], base: ["Caramel", "Amberwood", "Cedarwood"] },
     images: []
   },
   {
@@ -886,10 +898,12 @@ const LISTINGS = [
     house: "Mykonos",
     bottleSize: "100ml",
     price: 2800,
+    mrp: 5000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Conquer-139182.html",
+    notes: { top: ["Cardamom", "Bergamot", "Ginger"], heart: ["Orris", "Orange Blossom"], base: ["Vanilla", "Musk", "Patchouli", "Amber"] },
     images: []
   },
   {
@@ -899,10 +913,12 @@ const LISTINGS = [
     house: "Mykonos",
     bottleSize: "100ml",
     price: 2900,
+    mrp: 5000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Inception-121107.html",
+    notes: { top: ["Lemon", "Bergamot", "Ginger", "Orange"], heart: ["Black Tea", "Neroli", "Cinnamon"], base: ["Musk", "Lorenox", "Guaiac Wood", "Cedarwood"] },
     images: []
   },
   {
@@ -912,10 +928,12 @@ const LISTINGS = [
     house: "Mykonos",
     bottleSize: "100ml",
     price: 3000,
+    mrp: 5000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Sorrento-121134.html",
+    notes: { top: ["Ginger", "Grapefruit", "Bergamot", "Mandarin", "Magnolia"], heart: ["Grapefruit", "Ginger", "Watery Notes", "Powdery Notes", "Neroli"], base: ["Grapefruit", "Cedarwood", "Musk", "Amber", "Patchouli", "Orris Root"] },
     images: []
   },
   {
@@ -925,10 +943,12 @@ const LISTINGS = [
     house: "Mykonos",
     bottleSize: "50ml",
     price: 1950,
+    mrp: 3000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Reflection-Elixir-139183.html",
+    notes: { top: ["Grapefruit", "Ginger", "Bergamot"], heart: ["Peach", "Ylang-Ylang", "Magnolia"], base: ["Ambroxan", "Musk", "Chypre Notes"] },
     images: []
   },
   {
@@ -938,6 +958,7 @@ const LISTINGS = [
     house: "Mykonos",
     bottleSize: "100ml",
     price: 2900,
+    mrp: 5000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
@@ -952,6 +973,7 @@ const LISTINGS = [
     house: "Mykonos",
     bottleSize: "100ml",
     price: 3550,
+    mrp: 5000,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
@@ -965,10 +987,12 @@ const LISTINGS = [
     house: "Arabiyat Prestige",
     bottleSize: "100ml",
     price: 2850,
+    mrp: 4999,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Al-Noor-115515.html",
+    notes: { top: ["Cardamom", "Black Tea", "Fig"], heart: ["Iris", "Vetiver", "Cistus", "Labdanum"], base: ["Sandalwood", "Vanilla", "Tonka Bean"] },
     images: []
   },
   {
@@ -982,6 +1006,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mancera/Intense-Cedrat-Boise-72796.html",
+    notes: { top: ["Sicilian Citruses", "Spices", "Black Currant"], heart: ["Leather", "Cambodian Oud", "White Sandalwood", "Patchouli Leaf", "Jasmine"], base: ["White Musk", "Oakmoss", "Ambergris", "Vanilla"] },
     images: []
   },
   {
@@ -991,10 +1016,12 @@ const LISTINGS = [
     house: "Rayhaan",
     bottleSize: "100ml",
     price: 2200,
+    mrp: 4500,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rayhaan/Italia-120606.html",
+    notes: { top: ["Lavender", "Bergamot", "Lemon"], heart: ["Honey", "Cinnamon", "Cashmeran", "Jasmine"], base: ["Tobacco Leaf", "Vanilla", "Tonka Bean"] },
     images: []
   },
   {
@@ -1004,10 +1031,12 @@ const LISTINGS = [
     house: "Rasasi",
     bottleSize: "90ml",
     price: 2850,
+    mrp: 3799,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Shuhrah-Pour-Homme-53578.html",
+    notes: { top: ["Tomato Leaf", "Freesia", "Rose"], heart: ["Rose", "Sandalwood", "Jasmine", "Cedar"], base: ["Leather", "Amber", "Oud", "Musk"] },
     images: []
   },
   {
@@ -1021,6 +1050,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Azzaro/The-Most-Wanted-Parfum-73664.html",
+    notes: { top: ["Ginger"], heart: ["Woodsy Notes"], base: ["Bourbon Vanilla"] },
     images: []
   },
   {
@@ -1034,6 +1064,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Azzaro/Wanted-by-Night-49144.html",
+    notes: { top: ["Cinnamon", "Mandarin Orange"], heart: ["Red Cedar", "Incense", "Cumin"], base: ["Tobacco", "Cypress", "Cedar"] },
     images: []
   },
   {
@@ -1060,6 +1091,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Armaf/Club-de-Nuit-Intense-Man-Parfum-72842.html",
+    notes: { top: ["Lemon", "Bergamot", "Pineapple", "Apple", "Blackcurrant"], heart: ["Birch", "Rose", "Jasmine"], base: ["Ambergris", "Musk", "Vanilla", "Patchouli"] },
     images: []
   },
   {
@@ -1069,6 +1101,7 @@ const LISTINGS = [
     house: "Maison Alhambra",
     bottleSize: "100ml",
     price: 2500,
+    mrp: 4600,
     available: true,
     dateAdded: "2026-10-19",
     gender: "Men",
@@ -1087,6 +1120,7 @@ const LISTINGS = [
     dateAdded: "2026-10-19",
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Hugo-Boss/Hugo-Man-64606.html",
+    notes: { top: ["Green Apple"], heart: ["Lavender"], base: ["Pine", "Woody Notes", "Balsam Fir"] },
     images: []
   },
   {
@@ -1124,9 +1158,12 @@ const LISTINGS = [
     house: "Ahmed Al Maghribi",
     bottleSize: "100ml",
     price: 2500,
+    mrp: 4500,
     available: true,
     dateAdded: "2026-10-19",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Ahmed-Al-Maghribi/Kaaf-102460.html",
+    gender: "Unisex",
+    notes: { top: ["Watermelon", "Red Fruits", "Lavender", "Sicilian Orange"], heart: ["Lotus", "Jasmine", "Lily of the Valley"], base: ["White Musk", "Sandalwood", "Ambroxan"] },
     images: []
   },
   {
@@ -1141,6 +1178,7 @@ const LISTINGS = [
     boxIncluded: false,
     gender: "Men",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Guerlain/Habit-Rouge-Eau-de-Parfum-25313.html",
+    notes: { top: ["Bitter Orange"], heart: ["Neroli", "Spices"], base: ["Leather", "Oud Wood", "Vanilla", "Amber"] },
     images: []
   }
 ];
@@ -1174,6 +1212,17 @@ function enParseCsv(text){
   if(cell !== "" || row.length){ row.push(cell); rows.push(row); }
   return rows.filter(r => r.some(x => x.trim() !== ""));
 }
+/* Sheets may show the date as 2026-10-19 or as 19/10/2026. Both end up as 2026-10-19. */
+function enSheetDate(v){
+  if(/^\d{4}-\d{2}-\d{2}/.test(v)) return v.slice(0, 10);
+  const m = v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  if(m){
+    let d = +m[1], mo = +m[2];
+    if(mo > 12 && d <= 12){ const t = d; d = mo; mo = t; }
+    return m[3] + "-" + String(mo).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+  }
+  return "2026-01-01";
+}
 function enRowsToListings(rows){
   if(rows.length < 2) return [];
   const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
@@ -1192,7 +1241,8 @@ function enRowsToListings(rows){
   const no  = v => /^(n|no|false|0)$/i.test(v.trim());
   const out = [], seen = new Set();
   for(const r of rows.slice(1)){
-    const get = k => (C[k] >= 0 && r[C[k]] !== undefined) ? r[C[k]].trim() : "";
+    /* A leading ' is only there to stop Sheets turning "9PM" into a time, so it is dropped here. */
+    const get = k => (C[k] >= 0 && r[C[k]] !== undefined) ? r[C[k]].trim().replace(/^'+/, "").trim() : "";
     const house = get("house"), name = get("name");
     const price = parseFloat(get("price").replace(/[^0-9.]/g, ""));
     if(!house || !name || !(price > 0)) continue;
@@ -1202,7 +1252,7 @@ function enRowsToListings(rows){
     for(let n = 2; seen.has(id); n++) id = id.replace(/-\d+$/, "") + "-" + n;
     seen.add(id);
     const f = { id, type, name, house, bottleSize: get("size") || "100ml", price,
-      available: !no(get("stock")), dateAdded: get("date") || "2026-01-01" };
+      available: !no(get("stock")), dateAdded: enSheetDate(get("date")) };
     const mrp = parseFloat(get("mrp").replace(/[^0-9.]/g, "")); if(mrp > price) f.mrp = mrp;
     if(get("gender")) f.gender = get("gender");
     if(get("season")) f.season = get("season");

@@ -14,7 +14,7 @@ const EN_WHATSAPP_NUMBER = "917982410620";
 
 /* Google Sheet as your stock list (optional). Publish the sheet tab as CSV and paste the link
    here. Leave "" to keep using the list in this file. Template: enigma-stock-template.csv */
-const EN_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/15O6258_gN3cltwloD1HHj1SIMBwhMwV732r6qk4X114/export?format=csv&gid=0";
+const EN_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTPdgz9IT8mFiKoaq6wBxf4jw99uhBXNuAaqBPOrRrpRHz1Fh6qYBLcJZzFm4n2H1sJAM5cg8Wq2UNK/pub?output=csv";
 
 /* Delivery estimate shown to customers: calendar days counted from the day they order.
    [fewest, most]. Change the numbers to match what you can really do. */
@@ -1409,6 +1409,17 @@ function enSheetDate(v){
   }
   return "2026-01-01";
 }
+/* If accents were scrambled when the CSV was imported (IdÃ©al instead of Idéal), put them back. */
+const EN_CP1252 = {0x20AC:0x80,0x201A:0x82,0x0192:0x83,0x201E:0x84,0x2026:0x85,0x2020:0x86,0x2021:0x87,0x02C6:0x88,0x2030:0x89,0x0160:0x8A,0x2039:0x8B,0x0152:0x8C,0x017D:0x8E,0x2018:0x91,0x2019:0x92,0x201C:0x93,0x201D:0x94,0x2022:0x95,0x2013:0x96,0x2014:0x97,0x02DC:0x98,0x2122:0x99,0x0161:0x9A,0x203A:0x9B,0x0153:0x9C,0x017E:0x9E,0x0178:0x9F};
+function enFixText(s){
+  s = s.replace(/Ã(?=lectrique)/g, "\u00C9");
+  if(!/[\u00C2-\u00F4]/.test(s)) return s;
+  try{
+    const bytes = [];
+    for(const ch of s){ const c = ch.codePointAt(0); if(c < 256) bytes.push(c); else if(EN_CP1252[c]) bytes.push(EN_CP1252[c]); else return s; }
+    return new TextDecoder("utf-8", { fatal: true }).decode(new Uint8Array(bytes));
+  }catch(e){ return s; }
+}
 function enRowsToListings(rows){
   if(rows.length < 2) return [];
   const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
@@ -1429,7 +1440,7 @@ function enRowsToListings(rows){
   window.EN_DEBUG = window.EN_DEBUG || {}; window.EN_DEBUG.rows = rows.length - 1; window.EN_DEBUG.skipped = skipped;
   for(const r of rows.slice(1)){
     /* A leading ' is only there to stop Sheets turning "9PM" into a time, so it is dropped here. */
-    const get = k => (C[k] >= 0 && r[C[k]] !== undefined) ? r[C[k]].trim().replace(/^'+/, "").trim() : "";
+    const get = k => (C[k] >= 0 && r[C[k]] !== undefined) ? enFixText(r[C[k]].trim().replace(/^'+/, "").trim()) : "";
     const house = get("house"), name = get("name");
     const price = parseFloat(get("price").replace(/[^0-9.]/g, ""));
     if(!house || !name || !(price > 0)){
@@ -1473,7 +1484,7 @@ function enRowsToListings(rows){
   const url = EN_SHEET_CSV_URL + (EN_SHEET_CSV_URL.includes("?") ? "&" : "?") + "t=" + Math.floor(Date.now() / 60000);
   try{
     const x = new XMLHttpRequest();
-    x.open("GET", url, !used);
+    x.open("GET", url, used);
     x.onerror = () => { (window.EN_DEBUG = window.EN_DEBUG || {}).fetch = "failed to load the sheet"; };
     x.onload = () => { (window.EN_DEBUG = window.EN_DEBUG || {}).fetch = "status " + x.status + ", " + (x.responseText || "").length + " characters, starts: " + (x.responseText || "").slice(0, 60).replace(/\s+/g, " "); if(x.status === 200 && x.responseText){ try{ localStorage.setItem(KEY, x.responseText); }catch(e){} if(!used) try{ apply(x.responseText); }catch(e){} } };
     x.send();

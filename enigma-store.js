@@ -124,7 +124,7 @@ const LISTINGS = [
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Marwa-Extrait-142642.html",
-    notes: { top: ["Ginger", "Bergamot", "Petitgrain"], heart: ["Incense", "Floral Notes", "Tea"], base: ["Ambroxan", "Musk", "Guaiac Wood"]},
+    notes: { top: ["Ginger", "Bergamot", "Petitgrain"], heart: ["Incense", "Floral Notes", "Tea"], base: ["Ambroxan", "Musk", "Guaiac Wood"] },
     images: ["bottles/arabiyat-prestige-marwa-extrait.jpg"]
   },
   {
@@ -139,7 +139,7 @@ const LISTINGS = [
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Armaf/Club-de-Nuit-Untold-78476.html",
-    notes: { top: ["Saffron", "Jasmine"], heart: ["Amberwood", "Ambergris"], base: ["Fir Resin", "Cedar"]},
+    notes: { top: ["Saffron", "Jasmine"], heart: ["Amberwood", "Ambergris"], base: ["Fir Resin", "Cedar"] },
     images: ["bottles/armaf-club-de-nuit-untold.png"]
   },
   {
@@ -154,7 +154,7 @@ const LISTINGS = [
     dateAdded: "2026-09-29",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Reflection-121124.html",
-    notes: { top: ["Grapefruit", "Ginger", "Bergamot"], heart: ["Marine Notes", "Cardamom", "Lily of the Valley"], base: ["Musk", "Patchouli", "Amber", "Ambroxan"]},
+    notes: { top: ["Grapefruit", "Ginger", "Bergamot"], heart: ["Marine Notes", "Cardamom", "Lily of the Valley"], base: ["Musk", "Patchouli", "Amber", "Ambroxan"] },
     images: ["bottles/mykonos-reflection.png"]
   },
   {
@@ -186,36 +186,6 @@ const LISTINGS = [
     fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/9-PM-Rebel-99238.html",
     notes: { top: ["Pineapple", "Granny Smith Apple", "Mandarin"], heart: ["Oakmoss", "Cedarwood", "Vanilla"], base: ["Ambergris", "Dry Wood", "Musk", "Caramel"] },
     images: ["bottles/afnan-9pm-rebel.jpg"]
-  },
-  {
-    id: "afnan-9pm-nightout",
-    type: "bnib",
-    name: "9PM Nightout",
-    house: "Afnan",
-    bottleSize: "100ml",
-    price: 3350,
-    mrp: 6500,
-    available: true,
-    dateAdded: "2026-09-30",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/9-PM-Night-Out-123313.html",
-    notes: { top: ["Dragon Fruit", "Bergamot", "Cognac", "Lavender", "Apple"], heart: ["Cardamom", "Mahonial", "Suede", "Toffee", "Cedar"], base: ["Tonka Bean", "Akigalawood", "Ambrofix", "Patchouli"] },
-    images: ["bottles/afnan-9pm-nightout.jpg"]
-  },
-  {
-    id: "afnan-lynked-freedom",
-    type: "bnib",
-    name: "Lynked Freedom",
-    house: "Afnan",
-    bottleSize: "100ml",
-    price: 3400,
-    mrp: 6500,
-    available: true,
-    dateAdded: "2026-09-30",
-    gender: "Men",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Afnan/Lynked-Freedom-119003.html",
-    notes: { top: ["Bergamot", "Grapefruit", "Sage"], heart: ["Lavender", "Cardamom", "Juniper Berry"], base: ["Caramel", "Oriental Notes", "Vetiver"] },
-    images: ["bottles/afnan-lynked-freedom.png"]
   },
   {
     id: "afnan-rare-reef",
@@ -263,36 +233,6 @@ const LISTINGS = [
     images: ["bottles/afnan-supremacy-collectors-edition.png"]
   },
   {
-    id: "lattafa-fahad",
-    type: "bnib",
-    name: "Fahad",
-    house: "Lattafa",
-    bottleSize: "80ml",
-    price: 2750,
-    mrp: 5000,
-    available: true,
-    dateAdded: "2026-09-30",
-    gender: "Men",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Fahad-136650.html",
-    notes: { top: ["Mandarin", "Black Pepper", "Pineapple"], heart: ["Orange Blossom", "Lavender", "Artemisia"], base: ["Patchouli", "Cedarwood", "Ambroxan", "Incense"] },
-    images: ["bottles/lattafa-fahad.png"]
-  },
-  {
-    id: "lattafa-teriaq-intense",
-    type: "bnib",
-    name: "Teriaq Intense",
-    house: "Lattafa",
-    bottleSize: "100ml",
-    price: 3300,
-    mrp: 6000,
-    available: true,
-    dateAdded: "2026-09-30",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Teriaq-Intense-99586.html",
-    notes: { top: ["Saffron", "Bergamot"], heart: ["Plum Liquor", "Cinnamon"], base: ["Amber", "Tonka Bean", "Benzoin"] },
-    images: ["bottles/lattafa-teriaq-intense.png"]
-  },
-  {
     id: "lattafa-khamrah-qahwa",
     type: "bnib",
     name: "Khamrah Qahwa",
@@ -336,21 +276,6 @@ const LISTINGS = [
     fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Ice-89050.html",
     notes: { top: ["Apple", "Italian Lemon", "Sicilian Bergamot", "Star Anise"], heart: ["Plum", "Orange Blossom", "Cardamom"], base: ["Musk", "Amber", "Driftwood", "Moss"] },
     images: ["bottles/rasasi-hawas-ice.png"]
-  },
-  {
-    id: "rasasi-hawas-kobra",
-    type: "bnib",
-    name: "Hawas Kobra",
-    house: "Rasasi",
-    bottleSize: "100ml",
-    price: 2500,
-    mrp: 5500,
-    available: true,
-    dateAdded: "2026-09-30",
-    gender: "Men",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Rasasi/Hawas-Kobra-112706.html",
-    notes: { top: ["Ginger", "Bergamot", "Tangerine"], heart: ["Green Tea", "Cinnamon", "Neroli"], base: ["Musk", "Woody Notes", "Amber"] },
-    images: ["bottles/rasasi-hawas-kobra.png"]
   },
   {
     id: "rasasi-hawas-elixir",
@@ -576,34 +501,6 @@ const LISTINGS = [
     images: ["bottles/french-avenue-liquid-brun-limited-edition.png"]
   },
   {
-    id: "french-avenue-zenith-santal",
-    type: "bnib",
-    name: "Zenith Santal",
-    house: "French Avenue",
-    bottleSize: "100ml",
-    price: 3050,
-    available: true,
-    dateAdded: "2026-10-12",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Zenith-Santal-120869.html",
-    notes: { top: ["Saffron"], heart: ["Chestnut", "Lavender"], base: ["Sandalwood", "Vanilla", "Cedarwood"] },
-    images: ["bottles/french-avenue-zenith-santal.png"]
-  },
-  {
-    id: "french-avenue-zenith-blue",
-    type: "bnib",
-    name: "Zenith Blue",
-    house: "French Avenue",
-    bottleSize: "100ml",
-    price: 3050,
-    available: true,
-    dateAdded: "2026-10-12",
-    gender: "Men",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Zenith-Blue-106865.html",
-    notes: { top: ["Bergamot", "Elemi"], heart: ["Pepper", "Lavender", "Geranium"], base: ["Ambroxan", "Vetiver", "Patchouli"] },
-    images: ["bottles/french-avenue-zenith-blue.png"]
-  },
-  {
     id: "french-avenue-spectre-ghost",
     type: "bnib",
     name: "Spectre Ghost",
@@ -617,21 +514,6 @@ const LISTINGS = [
     fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Spectre-Ghost-94697.html",
     notes: { top: ["Ginger", "Cardamom", "Bergamot"], heart: ["Pink Pepper", "Blackcurrant", "Rose"], base: ["Vanilla", "Cedarwood", "Patchouli"] },
     images: ["bottles/french-avenue-spectre-ghost.png"]
-  },
-  {
-    id: "french-avenue-vulcan-feu",
-    type: "bnib",
-    name: "Vulcan Feu",
-    house: "French Avenue",
-    bottleSize: "100ml",
-    price: 3200,
-    mrp: 4699,
-    available: true,
-    dateAdded: "2026-10-12",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/French-Avenue/Vulcan-Feu-105520.html",
-    notes: { top: ["Mango", "Lemon", "Ginger", "Rhubarb"], heart: ["Pink Pepper", "Jasmine", "Violet", "Praline"], base: ["Tonka Bean", "Cedarwood", "Ambergris", "Moss"] },
-    images: ["bottles/french-avenue-vulcan-feu.png"]
   },
   {
     id: "bvlgari-man-in-black-eau-de-parfum-vial",
@@ -734,22 +616,6 @@ const LISTINGS = [
     images: []
   },
   {
-    id: "creed-aventus-tester",
-    type: "tester",
-    name: "Aventus",
-    house: "Creed",
-    bottleSize: "100ml",
-    price: 23500,
-    available: true,
-    dateAdded: "2026-10-19",
-    boxIncluded: true,
-    conditionNotes: "Without cap. Plain tester box.",
-    gender: "Men",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Creed/Aventus-9828.html",
-    notes: { top: ["Pineapple", "Bergamot", "Black Currant", "Apple"], heart: ["Birch", "Patchouli", "Moroccan Jasmine", "Rose"], base: ["Musk", "Oakmoss", "Ambergris", "Vanilla"] },
-    images: []
-  },
-  {
     id: "dolce-gabbana-light-blue-eau-intense-pour-homme-tester",
     type: "tester",
     name: "Light Blue Eau Intense Pour Homme",
@@ -830,22 +696,6 @@ const LISTINGS = [
     images: []
   },
   {
-    id: "chopard-oud-malaki-tester",
-    type: "tester",
-    name: "Oud Malaki",
-    house: "Chopard",
-    bottleSize: "80ml",
-    price: 4500,
-    available: true,
-    dateAdded: "2026-10-19",
-    boxIncluded: true,
-    conditionNotes: "Plain tester box.",
-    gender: "Men",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Chopard/Oud-Malaki-17184.html",
-    notes: { top: ["Grapefruit", "Artemisia", "Lavender"], heart: ["Leather", "Tobacco", "Spices"], base: ["Oud", "Ambergris", "Dark Wood"] },
-    images: []
-  },
-  {
     id: "arabiyat-prestige-marwa-extrait-tester",
     type: "tester",
     name: "Marwa Extrait",
@@ -858,7 +708,7 @@ const LISTINGS = [
     conditionNotes: "Plain tester box.",
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Arabiyat-Prestige/Marwa-Extrait-142642.html",
-    notes: { top: ["Ginger", "Bergamot", "Petitgrain"], heart: ["Incense", "Floral Notes", "Tea"], base: ["Ambroxan", "Musk", "Guaiac Wood"]},
+    notes: { top: ["Ginger", "Bergamot", "Petitgrain"], heart: ["Incense", "Floral Notes", "Tea"], base: ["Ambroxan", "Musk", "Guaiac Wood"] },
     images: []
   },
   {
@@ -904,66 +754,6 @@ const LISTINGS = [
     gender: "Unisex",
     fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Conquer-139182.html",
     notes: { top: ["Cardamom", "Bergamot", "Ginger"], heart: ["Orris", "Orange Blossom"], base: ["Vanilla", "Musk", "Patchouli", "Amber"] },
-    images: []
-  },
-  {
-    id: "mykonos-inception",
-    type: "bnib",
-    name: "Inception",
-    house: "Mykonos",
-    bottleSize: "100ml",
-    price: 2900,
-    mrp: 5000,
-    available: true,
-    dateAdded: "2026-10-19",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Inception-121107.html",
-    notes: { top: ["Lemon", "Bergamot", "Ginger", "Orange"], heart: ["Black Tea", "Neroli", "Cinnamon"], base: ["Musk", "Lorenox", "Guaiac Wood", "Cedarwood"] },
-    images: []
-  },
-  {
-    id: "mykonos-sorrento",
-    type: "bnib",
-    name: "Sorrento",
-    house: "Mykonos",
-    bottleSize: "100ml",
-    price: 3000,
-    mrp: 5000,
-    available: true,
-    dateAdded: "2026-10-19",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Sorrento-121134.html",
-    notes: { top: ["Ginger", "Grapefruit", "Bergamot", "Mandarin", "Magnolia"], heart: ["Grapefruit", "Ginger", "Watery Notes", "Powdery Notes", "Neroli"], base: ["Grapefruit", "Cedarwood", "Musk", "Amber", "Patchouli", "Orris Root"] },
-    images: []
-  },
-  {
-    id: "mykonos-reflection-elixir",
-    type: "bnib",
-    name: "Reflection Elixir",
-    house: "Mykonos",
-    bottleSize: "50ml",
-    price: 1950,
-    mrp: 3000,
-    available: true,
-    dateAdded: "2026-10-19",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Reflection-Elixir-139183.html",
-    notes: { top: ["Grapefruit", "Ginger", "Bergamot"], heart: ["Peach", "Ylang-Ylang", "Magnolia"], base: ["Ambroxan", "Musk", "Chypre Notes"] },
-    images: []
-  },
-  {
-    id: "mykonos-slow-living",
-    type: "bnib",
-    name: "Slow Living",
-    house: "Mykonos",
-    bottleSize: "100ml",
-    price: 2900,
-    mrp: 5000,
-    available: true,
-    dateAdded: "2026-10-19",
-    gender: "Unisex",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Mykonos/Slow-Living-121132.html",
-    notes: { top: ["Lemon", "Orange", "Bergamot", "Fruity Notes", "Grapefruit"], heart: ["White Flowers", "Lily", "Jasmine", "Raspberry", "Tea Rose"], base: ["Musk", "Amber", "Cedarwood", "Vanilla", "Sandalwood"] },
     images: []
   },
   {
@@ -1152,21 +942,6 @@ const LISTINGS = [
     images: []
   },
   {
-    id: "ahmed-al-maghribi-kaaf",
-    type: "bnib",
-    name: "Kaaf",
-    house: "Ahmed Al Maghribi",
-    bottleSize: "100ml",
-    price: 2500,
-    mrp: 4500,
-    available: true,
-    dateAdded: "2026-10-19",
-    fragranticaUrl: "https://www.fragrantica.com/perfume/Ahmed-Al-Maghribi/Kaaf-102460.html",
-    gender: "Unisex",
-    notes: { top: ["Watermelon", "Red Fruits", "Lavender", "Sicilian Orange"], heart: ["Lotus", "Jasmine", "Lily of the Valley"], base: ["White Musk", "Sandalwood", "Ambroxan"] },
-    images: []
-  },
-  {
     id: "guerlain-habit-rouge-eau-de-parfum-tester",
     type: "tester",
     name: "Habit Rouge Eau de Parfum",
@@ -1180,8 +955,419 @@ const LISTINGS = [
     fragranticaUrl: "https://www.fragrantica.com/perfume/Guerlain/Habit-Rouge-Eau-de-Parfum-25313.html",
     notes: { top: ["Bitter Orange"], heart: ["Neroli", "Spices"], base: ["Leather", "Oud Wood", "Vanilla", "Amber"] },
     images: []
+  },
+  {
+    id: "issey-miyake-leau-dissey-pour-homme-intense-tester",
+    type: "tester",
+    name: "L'Eau d'Issey Pour Homme Intense",
+    house: "Issey Miyake",
+    bottleSize: "125ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "givenchy-gentleman-reserve-privee-tester",
+    type: "tester",
+    name: "Gentleman Réserve Privée",
+    house: "Givenchy",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "carolina-herrera-bad-boy-cobalt-eau-de-parfum-electrique-tester",
+    type: "tester",
+    name: "Bad Boy Cobalt Eau de Parfum Électrique",
+    house: "Carolina Herrera",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "lalique-encre-noire-a-lextreme-tester",
+    type: "tester",
+    name: "Encre Noire À L'Extrême",
+    house: "Lalique",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "giorgio-armani-acqua-di-gio-elixir-tester",
+    type: "tester",
+    name: "Acqua di Giò Elixir",
+    house: "Giorgio Armani",
+    bottleSize: "50ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "ralph-lauren-ralphs-club-parfum-tester",
+    type: "tester",
+    name: "Ralph's Club Parfum",
+    house: "Ralph Lauren",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "azzaro-wanted-by-night-tester",
+    type: "tester",
+    name: "Wanted by Night",
+    house: "Azzaro",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    boxIncluded: true,
+    conditionNotes: "Plain tester box.",
+    gender: "Men",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Azzaro/Wanted-by-Night-49144.html",
+    notes: { top: ["Cinnamon", "Mandarin Orange"], heart: ["Red Cedar", "Incense", "Cumin"], base: ["Tobacco", "Cypress", "Cedar"] },
+    images: []
+  },
+  {
+    id: "carolina-herrera-good-girl-vial",
+    type: "vial",
+    name: "Good Girl",
+    house: "Carolina Herrera",
+    bottleSize: "1.5ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Women",
+    images: []
+  },
+  {
+    id: "paco-rabanne-invictus-parfum-vial",
+    type: "vial",
+    name: "Invictus Parfum",
+    house: "Paco Rabanne",
+    bottleSize: "1.5ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "paco-rabanne-invictus-victory-elixir-vial",
+    type: "vial",
+    name: "Invictus Victory Elixir",
+    house: "Paco Rabanne",
+    bottleSize: "1.5ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "nishane-wulong-cha-x",
+    type: "bnib",
+    name: "Wulong Cha X",
+    house: "Nishane",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Unisex",
+    images: []
+  },
+  {
+    id: "dunhill-indian-sandalwood",
+    type: "bnib",
+    name: "Indian Sandalwood",
+    house: "Dunhill",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "giorgio-armani-emporio-armani-stronger-with-you-intensely",
+    type: "bnib",
+    name: "Emporio Armani Stronger With You Intensely",
+    house: "Giorgio Armani",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "lalique-encre-noire",
+    type: "bnib",
+    name: "Encre Noire",
+    house: "Lalique",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "swiss-arabian-essence-of-casablanca",
+    type: "bnib",
+    name: "Essence of Casablanca",
+    house: "Swiss Arabian",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "swiss-arabian-incense-01",
+    type: "bnib",
+    name: "Incense 01",
+    house: "Swiss Arabian",
+    bottleSize: "50ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "arabiyat-prestige-noire-absolu",
+    type: "bnib",
+    name: "Noire Absolu",
+    house: "Arabiyat Prestige",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "arabiyat-prestige-aristo",
+    type: "bnib",
+    name: "Aristo",
+    house: "Arabiyat Prestige",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "al-wataniah-kayaan-classic",
+    type: "bnib",
+    name: "Kayaan Classic",
+    house: "Al Wataniah",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "nusuk-ateeq",
+    type: "bnib",
+    name: "Ateeq",
+    house: "Nusuk",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "french-avenue-marmara",
+    type: "bnib",
+    name: "Marmara",
+    house: "French Avenue",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "lattafa-musamam-black-intense",
+    type: "bnib",
+    name: "Musamam Black Intense",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "lattafa-asad-elixir",
+    type: "bnib",
+    name: "Asad Elixir",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "lattafa-asad",
+    type: "bnib",
+    name: "Asad",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "lattafa-asad-bourbon",
+    type: "bnib",
+    name: "Asad Bourbon",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
+  },
+  {
+    id: "lattafa-angham",
+    type: "bnib",
+    name: "Angham",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "lattafa-jasoor",
+    type: "bnib",
+    name: "Jasoor",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "lattafa-badee-al-oud-amethyst",
+    type: "bnib",
+    name: "Bade'e Al Oud Amethyst",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "lattafa-atheeri",
+    type: "bnib",
+    name: "Atheeri",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "lattafa-khamrah",
+    type: "bnib",
+    name: "Khamrah",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "rasasi-hawas-boa",
+    type: "bnib",
+    name: "Hawas Boa",
+    house: "Rasasi",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "rue-broca-theoreme",
+    type: "bnib",
+    name: "Théorème",
+    house: "Rue Broca",
+    bottleSize: "90ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "afnan-turathi-blue",
+    type: "bnib",
+    name: "Turathi Blue",
+    house: "Afnan",
+    bottleSize: "90ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    images: []
+  },
+  {
+    id: "afnan-9pm-elixir",
+    type: "bnib",
+    name: "9PM Elixir",
+    house: "Afnan",
+    bottleSize: "100ml",
+    price: null,
+    available: true,
+    dateAdded: "2026-10-29",
+    gender: "Men",
+    images: []
   }
 ];
+
+/* A perfume with no price yet stays hidden everywhere (shop, brands, search, banners) until you
+   add its price. Fill price: null and it goes live on its own. */
+for(let i = LISTINGS.length - 1; i >= 0; i--){ if(!(Number(LISTINGS[i].price) > 0)) LISTINGS.splice(i, 1); }
 
 /* ============================================================
    STOCK FROM A GOOGLE SHEET (optional)

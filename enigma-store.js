@@ -14,7 +14,7 @@ const EN_WHATSAPP_NUMBER = "917982410620";
 
 /* Google Sheet as your stock list (optional). Publish the sheet tab as CSV and paste the link
    here. Leave "" to keep using the list in this file. Template: enigma-stock-template.csv */
-const EN_SHEET_CSV_URL = "";
+const EN_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/15O6258_gN3cltwloD1HHj1SIMBwhMwV732r6qk4X114/gviz/tq?tqx=out:csv";
 
 /* Delivery estimate shown to customers: calendar days counted from the day they order.
    [fewest, most]. Change the numbers to match what you can really do. */

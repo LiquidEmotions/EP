@@ -14,7 +14,7 @@ const EN_WHATSAPP_NUMBER = "917982410620";
 
 /* Google Sheet as your stock list (optional). Publish the sheet tab as CSV and paste the link
    here. Leave "" to keep using the list in this file. Template: enigma-stock-template.csv */
-const EN_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/15O6258_gN3cltwloD1HHj1SIMBwhMwV732r6qk4X114/gviz/tq?tqx=out:csv";
+const EN_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/15O6258_gN3cltwloD1HHj1SIMBwhMwV732r6qk4X114/export?format=csv&gid=0";
 
 /* Delivery estimate shown to customers: calendar days counted from the day they order.
    [fewest, most]. Change the numbers to match what you can really do. */
@@ -1425,13 +1425,17 @@ function enRowsToListings(rows){
     .replace(/['\u2019]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const yes = v => /^(y|yes|true|1)$/i.test(v.trim());
   const no  = v => /^(n|no|false|0)$/i.test(v.trim());
-  const out = [], seen = new Set();
+  const out = [], seen = new Set(), skipped = [];
+  window.EN_DEBUG = window.EN_DEBUG || {}; window.EN_DEBUG.rows = rows.length - 1; window.EN_DEBUG.skipped = skipped;
   for(const r of rows.slice(1)){
     /* A leading ' is only there to stop Sheets turning "9PM" into a time, so it is dropped here. */
     const get = k => (C[k] >= 0 && r[C[k]] !== undefined) ? r[C[k]].trim().replace(/^'+/, "").trim() : "";
     const house = get("house"), name = get("name");
     const price = parseFloat(get("price").replace(/[^0-9.]/g, ""));
-    if(!house || !name || !(price > 0)) continue;
+    if(!house || !name || !(price > 0)){
+      skipped.push((house || "?") + " " + (name || "?") + " [" + (!house ? "no brand" : !name ? "no name" : "price: '" + get("price") + "'") + "]");
+      continue;
+    }
     const t = get("type").toLowerCase();
     const type = t.startsWith("test") ? "tester" : t.startsWith("vial") ? "vial" : "bnib";
     let id = get("id") || slug(house + " " + name) + (type === "tester" ? "-tester" : type === "vial" ? "-vial" : "");
@@ -1470,7 +1474,8 @@ function enRowsToListings(rows){
   try{
     const x = new XMLHttpRequest();
     x.open("GET", url, !used);
-    x.onload = () => { if(x.status === 200 && x.responseText){ try{ localStorage.setItem(KEY, x.responseText); }catch(e){} if(!used) try{ apply(x.responseText); }catch(e){} } };
+    x.onerror = () => { (window.EN_DEBUG = window.EN_DEBUG || {}).fetch = "failed to load the sheet"; };
+    x.onload = () => { (window.EN_DEBUG = window.EN_DEBUG || {}).fetch = "status " + x.status + ", " + (x.responseText || "").length + " characters, starts: " + (x.responseText || "").slice(0, 60).replace(/\s+/g, " "); if(x.status === 200 && x.responseText){ try{ localStorage.setItem(KEY, x.responseText); }catch(e){} if(!used) try{ apply(x.responseText); }catch(e){} } };
     x.send();
     if(!used && x.status === 200 && x.responseText){ try{ localStorage.setItem(KEY, x.responseText); apply(x.responseText); }catch(e){} }
   }catch(e){ /* keep the built-in list */ }
@@ -2410,4 +2415,17 @@ function enStartBrandRotation(){
       }
     }, 3500), (i % 6) * 600);
   });
+}
+
+/* Add ?debug=1 to any page address to see what the sheet gave the site. */
+if(/[?&]debug=1/.test(location.search)){
+  window.addEventListener("load", () => setTimeout(() => {
+    const d = window.EN_DEBUG || {}, el = document.createElement("pre");
+    const cnt = t => LISTINGS.filter(l => l.type === t).length;
+    el.style.cssText = "position:fixed;left:0;right:0;bottom:0;max-height:55vh;overflow:auto;margin:0;padding:10px;background:#000;color:#0f0;font:12px/1.4 monospace;z-index:99999;white-space:pre-wrap";
+    el.textContent = "SHEET URL set: " + !!EN_SHEET_CSV_URL + "\nfetch: " + (d.fetch || "no response yet (using saved copy or built-in list)") +
+      "\nsheet rows: " + (d.rows === undefined ? "n/a" : d.rows) + "\nshowing: BNIB " + cnt("bnib") + ", Tester " + cnt("tester") + ", Vial " + cnt("vial") +
+      "\nskipped (" + ((d.skipped || []).length) + "):\n" + (d.skipped || []).join("\n");
+    document.body.appendChild(el);
+  }, 1500));
 }

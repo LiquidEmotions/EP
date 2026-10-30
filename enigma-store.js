@@ -1362,6 +1362,36 @@ const LISTINGS = [
     dateAdded: "2026-10-29",
     gender: "Men",
     images: []
+  },
+  {
+    id: "lattafa-teriaq-intense",
+    type: "bnib",
+    name: "Teriaq Intense",
+    house: "Lattafa",
+    bottleSize: "100ml",
+    price: null,
+    mrp: 6000,
+    available: true,
+    dateAdded: "2026-09-30",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Lattafa-Perfumes/Teriaq-Intense-99586.html",
+    notes: { top: ["Saffron", "Bergamot"], heart: ["Plum Liquor", "Cinnamon"], base: ["Amber", "Tonka Bean", "Benzoin"] },
+    images: ["bottles/lattafa-teriaq-intense.png"]
+  },
+  {
+    id: "ahmed-al-maghribi-kaaf",
+    type: "bnib",
+    name: "Kaaf",
+    house: "Ahmed Al Maghribi",
+    bottleSize: "100ml",
+    price: null,
+    mrp: 4500,
+    available: true,
+    dateAdded: "2026-10-19",
+    gender: "Unisex",
+    fragranticaUrl: "https://www.fragrantica.com/perfume/Ahmed-Al-Maghribi/Kaaf-102460.html",
+    notes: { top: ["Watermelon", "Red Fruits", "Lavender", "Sicilian Orange"], heart: ["Lotus", "Jasmine", "Lily of the Valley"], base: ["White Musk", "Sandalwood", "Ambroxan"] },
+    images: []
   }
 ];
 

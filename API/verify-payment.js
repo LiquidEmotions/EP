@@ -3,13 +3,12 @@
          or { recover:true, razorpay_order_id } when the customer returns after paying in another app
    1. checks Razorpay's signature (proves the payment is real)
    2. asks Razorpay for the payment, to confirm status and card type
-   3. gives the order its LE number (only now, so failed payments never use a number) */
+   3. gives the order its EP number (only now, so failed payments never use a number) */
 
 const crypto = require("crypto");
 
 const RZP = "https://api.razorpay.com/v1";
-const COUNTER_URL = process.env.ORDER_COUNTER_URL ||
-  "https://script.google.com/macros/s/AKfycbx-DJzp1TAsu4U8Ha9bGrP0BB8j_WR3iL2bG1SyuKZQAgt0QH8-5RqGCyfx3RoKZa2N/exec";
+const COUNTER_URL = process.env.ORDER_COUNTER_URL || "";   // set ORDER_COUNTER_URL in Vercel to the EP order-counter web app
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
@@ -77,6 +76,7 @@ module.exports = async (req, res) => {
     let orderNumber = notes.le_order || null;
     if(!orderNumber){
       try{
+        if(!COUNTER_URL) throw new Error("no counter");
         const r = await fetch(COUNTER_URL, { method: "POST" });
         const j = await r.json();
         orderNumber = j.orderNumber || null;

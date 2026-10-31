@@ -4,42 +4,204 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout — Enigma Perfumes</title>
-<meta name="description" content="Place your Enigma Perfumes order.">
-<meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#ECE8F1; --ink-deep:#211A33; --parchment:#211A33; --parchment-dim:#5B5470;
+    --amber:#A64A66; --amber-bright:#8B1E3F; --brass:#A64A66; --line:rgba(91,84,112,0.35);
+    --moss:#FFFFFF; --burgundy:#211A33; --radius:2px; --blush:#CDC6DA; --taupe:#5B5470;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--ink); color:var(--parchment); font-family:'Source Serif 4', serif; font-size:17px; line-height:1.55; overflow-x:hidden;}
+  h1,h2,h3,.display{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+  a{color:inherit;}
+  /* ---------- Background: champagne gold + light rose gold (static, minimal) ---------- */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.55) 50%, transparent 62%),
+      radial-gradient(1100px 720px at 0% 0%, rgba(233,212,160,0.42), transparent 62%),
+      radial-gradient(1000px 760px at 100% 100%, rgba(232,184,166,0.36), transparent 62%),
+      linear-gradient(160deg, #FBF8F0 0%, #ECE8F1 50%, #F9EEE9 100%);
+  }
+  img,svg{display:block;max-width:100%;}
+  button, input, select{font-family:inherit;}
+  button{cursor:pointer;}
+  :focus-visible{outline:2px solid var(--amber-bright); outline-offset:3px;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  header{position:sticky; top:0; z-index:20; background:rgba(250,246,242,0.85); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 28px;}
+  .wordmark{font-size:1.15rem; display:flex; align-items:baseline; gap:8px; text-decoration:none;}
+  .wordmark .mono{font-size:0.62rem; color:var(--amber-bright); letter-spacing:0.14em;}
+  .progress{display:flex; align-items:center; gap:10px; font-size:0.72rem; color:var(--parchment-dim);}
+  .progress .step{display:flex; align-items:center; gap:8px;}
+  .progress .dot{width:7px; height:7px; border-radius:50%; background:var(--parchment-dim);}
+  .progress .step.done .dot{background:var(--amber-bright);}
+  .progress .step.done{color:var(--parchment);}
+  .progress .step.current .dot{background:var(--amber-bright);}
+  .progress .step.current{color:var(--amber-bright);}
+  .progress .sep{width:20px; height:1px; background:var(--line);}
+  .page-head{padding:52px 28px 30px; border-bottom:1px solid var(--line);}
+  .breadcrumb{font-size:0.7rem; color:var(--parchment-dim); margin-bottom:18px;}
+  .breadcrumb a{text-decoration:none; color:var(--parchment-dim);}
+  .breadcrumb a:hover{color:var(--amber-bright);}
+  .page-head h1{font-size:clamp(1.9rem, 4vw, 2.6rem); margin:0;}
+  main{padding:52px 28px 100px;}
+  .checkout-layout{display:grid; grid-template-columns:1.5fr 1fr; gap:56px; align-items:start;}
+  .form-section{padding-bottom:38px; margin-bottom:38px; border-bottom:1px solid var(--line);}
+  .form-section:last-child{border-bottom:none; margin-bottom:0;}
+  .form-section h2{font-size:1.05rem; display:flex; align-items:center; gap:10px; margin:0 0 22px;}
+  .form-section h2 .num{font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--amber-bright); border:1px solid var(--brass); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .field{display:flex; flex-direction:column; gap:7px; margin-bottom:16px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{font-size:0.7rem; color:var(--parchment-dim); text-transform:uppercase; letter-spacing:0.08em;}
+  .field input, .field select, .field textarea{background:var(--moss); border:1px solid var(--line); color:var(--parchment); padding:12px 13px; font-size:0.92rem; border-radius:var(--radius); font-family:inherit;}
+  .field textarea{resize:vertical;}
+  .field input::placeholder, .field textarea::placeholder{color:var(--parchment-dim);}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--amber);}
+  .summary{background:var(--moss); border:1px solid var(--line); border-radius:var(--radius); padding:26px 24px; position:sticky; top:100px;}
+  .summary h2{font-size:1.05rem; margin:0 0 20px;}
+  .mini-item{display:flex; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid var(--line);}
+  .mini-item:first-of-type{padding-top:0;}
+  .mini-vial{width:34px; flex-shrink:0;}
+  .mini-info{flex:1; min-width:0;}
+  .mini-name{font-size:0.88rem; margin:0;}
+  .mini-meta{font-size:0.7rem; color:var(--parchment-dim);}
+  .mini-price{font-family:'IBM Plex Mono', monospace; font-size:0.82rem; white-space:nowrap;}
+  .summary-row{display:flex; justify-content:space-between; font-size:0.86rem; color:var(--parchment-dim); padding:9px 0;}
+  .summary-row .mono{color:var(--parchment);}
+  .summary-row.total{border-top:1px solid var(--line); margin-top:6px; padding-top:16px; color:var(--parchment); font-size:1rem;}
+  .summary-row.total .mono{color:var(--amber-bright); font-size:1.15rem;}
+  .zone-tabs{display:flex; gap:6px; margin:4px 0 14px;}
+  .zone-tab{
+    flex:1;
+    background:transparent;
+    border:1px solid var(--brass);
+    color:var(--parchment-dim);
+    padding:8px 6px;
+    font-size:0.68rem;
+    border-radius:var(--radius);
+    text-align:center;
+  }
+  .zone-tab.active{
+    background:var(--amber);
+    border-color:var(--amber);
+    color:var(--ink-deep);
+    font-weight:600;
+  }
+  .zone-tab:hover:not(.active){border-color:var(--amber-bright); color:var(--parchment);}
+  .btn-primary{display:block; width:100%; text-align:center; background:var(--amber); color:var(--ink-deep); border:1px solid var(--amber); padding:15px 22px; font-size:0.9rem; border-radius:var(--radius); font-weight:600; margin-top:20px;}
+  .btn-primary:hover{background:var(--amber-bright); border-color:var(--amber-bright); color:var(--ink);}
+  .btn-primary:disabled{background:transparent; color:var(--parchment-dim); border-color:var(--line); cursor:not-allowed;}
+  .lock-note{font-size:0.68rem; color:var(--parchment-dim); text-align:center; margin-top:12px; display:flex; align-items:center; justify-content:center; gap:6px;}
+  .empty-note{color:var(--parchment-dim); font-size:0.85rem; text-align:center; padding:20px 0;}
+  .upi-panel{display:none; max-width:520px; margin:0 auto; text-align:center; padding:56px 24px 90px;}
+  .upi-panel.show{display:block;}
+  .upi-panel h1{font-size:1.8rem; margin:0 0 6px;}
+  .upi-panel .upi-sub{font-size:0.88rem; color:var(--parchment-dim); margin:0 0 22px;}
+  .upi-amount{font-size:2rem; color:var(--amber-bright); margin:4px 0 2px;}
+  .upi-order{font-size:0.8rem; color:var(--parchment-dim); margin-bottom:20px;}
+  .upi-qr-box{display:inline-block; background:#fff; padding:14px; border:1px solid var(--line); border-radius:var(--radius);}
+  .upi-qr-box canvas, .upi-qr-box img{display:block; margin:0 auto;}
+  .upi-id-row{display:flex; align-items:center; justify-content:center; gap:10px; margin:16px 0 4px; font-size:0.85rem; flex-wrap:wrap;}
+  .upi-id-row button{background:transparent; border:1px solid var(--line); color:var(--parchment); padding:5px 12px; font-size:0.72rem; border-radius:var(--radius); cursor:pointer;}
+  .upi-apps{display:none; margin-bottom:6px;}
+  .upi-panel.is-mobile .upi-apps{display:block;}
+  .upi-app-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px;}
+  .upi-app{display:block; text-align:center; text-decoration:none; padding:13px 6px; background:var(--moss); border:1px solid var(--line); border-radius:var(--radius); font-size:0.82rem; font-weight:600; color:var(--parchment);}
+  .upi-app:hover, .upi-app:active{border-color:var(--amber-bright); color:var(--amber-bright);}
+  .upi-apps .upi-sub{margin:10px 0 0; font-size:0.74rem;}
+  .upi-panel.is-mobile .upi-qr-wrap{margin-top:18px;}
+  .upi-warn{background:var(--moss); border:1px solid var(--amber-bright); border-radius:var(--radius); padding:10px 12px; font-size:0.78rem; line-height:1.45; text-align:left; margin:0 0 12px;}
+  .upi-step{text-align:left; margin-top:28px; padding-top:22px; border-top:1px solid var(--line);}
+  .upi-step h2{font-size:1rem; margin:0 0 6px;}
+  .upi-step p{font-size:0.8rem; color:var(--parchment-dim); margin:0 0 12px;}
+  .upi-back{display:inline-block; margin-top:18px; font-size:0.8rem; color:var(--parchment-dim); background:none; border:none; text-decoration:underline; cursor:pointer;}
+  .confirm-panel{display:none; text-align:center; padding:80px 28px 100px;}
+  .confirm-panel.show{display:block;}
+  .confirm-panel .seal{width:64px; height:64px; margin:0 auto 26px; border:1px solid var(--amber); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--amber-bright); font-size:1.6rem;}
+  .confirm-panel h1{font-size:2rem; margin:0 0 12px;}
+  .confirm-panel p{color:var(--parchment-dim); max-width:44ch; margin:0 auto 8px;}
+  .confirm-order-id{display:inline-block; margin-top:18px; font-size:0.8rem; color:var(--amber-bright); border:1px solid var(--brass); padding:8px 16px; border-radius:var(--radius);}
+  .confirm-panel .btn-primary{width:auto; display:inline-block; margin-top:36px; padding:14px 28px;}
+  .pay-options{display:grid; gap:10px;}
+  .pay-option{display:flex; gap:12px; align-items:flex-start; padding:14px 15px; background:var(--moss); border:1px solid var(--line); border-radius:var(--radius); cursor:pointer;}
+  .pay-option:has(input:checked){border-color:var(--amber-bright); box-shadow:inset 0 0 0 1px var(--amber-bright);}
+  .pay-option input{margin-top:5px; accent-color:var(--amber-bright);}
+  .pay-text{flex:1; min-width:0;}
+  .pay-title{display:block; font-size:0.95rem; color:var(--parchment);}
+  .pay-sub{display:block; font-size:0.78rem; color:var(--parchment-dim); margin-top:3px; line-height:1.45;}
+  .pay-tag{font-family:'IBM Plex Mono', monospace; font-size:0.74rem; color:var(--amber-bright); white-space:nowrap; padding-top:2px;}
+  .pay-error{display:none; margin:14px 0 0; padding:11px 13px; font-size:0.8rem; color:#7A2E22; background:#F7E4DF; border:1px solid #D9A89D; border-radius:var(--radius);}
+  .pay-error.show{display:block;}
+
+  /* editable order summary */
+  .mini-size{background:var(--moss); border:1px solid var(--line); color:var(--parchment-dim); font-size:0.74rem; padding:5px 8px; border-radius:var(--radius); max-width:100%;}
+  .mini-size:focus{border-color:var(--amber); color:var(--parchment);}
+  .mini-qty{display:flex; align-items:center; gap:6px; margin-top:7px;}
+  .mini-qty button{border:1px solid var(--taupe); background:transparent; color:var(--parchment); width:28px; height:28px; border-radius:50%; font-size:1rem; line-height:1; padding:0; display:flex; align-items:center; justify-content:center;}
+  .mini-qty button:hover{border-color:var(--amber-bright); color:var(--amber-bright);}
+  .mini-qty .mini-qty-n{min-width:20px; text-align:center; font-size:0.85rem;}
+  .mini-qty .mini-rm{width:auto; height:auto; border:0; border-radius:0; margin-left:6px; padding:4px 2px; font-size:0.7rem; color:var(--parchment-dim); text-decoration:underline;}
+  .mini-qty .mini-rm:hover{color:#B23B2E;}
+  .mini-actions{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:12px 0 6px; font-size:0.78rem;}
+  .add-more{color:var(--amber-bright); text-decoration:none; font-weight:600;}
+  .add-more:hover{text-decoration:underline;}
+  .ship-nudge{color:var(--parchment-dim); font-size:0.72rem;}
+  .ship-nudge.done{color:var(--amber-bright);}
+  footer{border-top:1px solid var(--line); padding:44px 28px 36px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; font-size:0.8rem; color:var(--parchment-dim);}
+  @media (max-width: 880px){ .checkout-layout{grid-template-columns:1fr;} .summary{position:static;} }
+  @media (max-width: 620px){ .field-grid{grid-template-columns:1fr;} .progress{display:none;} }  .wa-float{
+    position:fixed; bottom:24px; right:24px; z-index:50;
+    width:56px; height:56px; border-radius:50%;
+    background:#25D366; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(33,26,51,0.3);
+    text-decoration:none;
+    transition:transform .15s ease;
+  }
+  .wa-float:hover{transform:scale(1.07);}
+  .wa-float svg{width:28px; height:28px; display:block;}
+  @media (max-width:620px){
+    .wa-float{bottom:18px; right:18px; width:50px; height:50px;}
+    .wa-float svg{width:25px; height:25px;}
+  }
+  @media (max-width:480px){
+    .nav{padding:14px 16px; gap:8px;}
+    .wordmark .mono{display:none;}
+    .wordmark{font-size:1rem;}
+  }
+</style>
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="enigma.css">
+<link rel="stylesheet" href="ep-chrome.css">
+<link rel="stylesheet" href="ep-theme.css">
 </head>
-<body>
-<div class="announce" id="announce" aria-label="Store notes"></div>
-<header class="site-header">
+<body data-page="checkout">
+
+<header>
   <div class="nav">
-    <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
-    <nav class="links" aria-label="Main">
-      <a href="shop.html">Shop</a>
-      <a href="brands.html">Brands</a>
-      <a href="about.html">About</a>
-    </nav>
-    <div class="nav-right">
-      <a class="pill" href="wishlist.html" aria-label="Wishlist"><span>♡<span class="pill-label"> Wishlist</span></span><span class="count" data-wishlist-count>0</span></a>
-      <a class="pill" href="cart.html" aria-label="Cart"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h12l-1 10H5l-1-10Z"/><path d="M7 6.5V5a3 3 0 0 1 6 0v1.5"/></svg><span class="pill-label">Cart</span><span class="count" data-cart-count>0</span></a>
-      <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a class="wordmark" href="index.html">
+      <span>Enigma Perfumes</span>
+    </a>
+    <div class="progress">
+      <span class="step done"><span class="dot"></span>Cart</span>
+      <span class="sep"></span>
+      <span class="step current"><span class="dot"></span>Checkout</span>
+      <span class="sep"></span>
+      <span class="step"><span class="dot"></span>Confirmation</span>
     </div>
   </div>
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-    <a href="shop.html">Shop</a>
-    <a href="brands.html">Brands</a>
-    <a href="about.html">About</a>
-    <a href="wishlist.html">Wishlist</a>
-    <a href="cart.html">Cart</a>
-  </nav>
 </header>
 
 <div id="checkoutView">
   <div class="page-head">
     <div class="wrap">
-      <div class="breadcrumb"><a href="shop.html">Shop</a> / <a href="cart.html">Cart</a> / <span>Checkout</span></div>
+      <div class="breadcrumb"><a href="index.html">Catalogue</a> / <a href="cart.html">Cart</a> / <span>Checkout</span></div>
       <h1>Checkout</h1>
     </div>
   </div>
@@ -48,186 +210,761 @@
     <div class="checkout-layout">
       <form id="checkoutForm">
         <div class="form-section">
-          <h2>Contact</h2>
+          <h2><span class="num">1</span>Contact</h2>
           <div class="field-grid">
-            <div class="field full"><label for="email">Email</label><input type="email" id="email" placeholder="you@email.com" autocomplete="email" required></div>
-            <div class="field full"><label for="phone">Phone</label><input type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel" required></div>
+            <div class="field full">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required>
+            </div>
+            <div class="field full">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" required>
+            </div>
           </div>
         </div>
+
         <div class="form-section">
-          <h2>Shipping address</h2>
+          <h2><span class="num">2</span>Shipping address</h2>
           <div class="field-grid">
-            <div class="field"><label for="fname">First name</label><input type="text" id="fname" autocomplete="given-name" required></div>
-            <div class="field"><label for="lname">Last name</label><input type="text" id="lname" autocomplete="family-name" required></div>
-            <div class="field full"><label for="addr">Address</label><input type="text" id="addr" placeholder="House no., street, area" autocomplete="street-address" required></div>
-            <div class="field"><label for="city">City</label><input type="text" id="city" autocomplete="address-level2" required></div>
-            <div class="field"><label for="state">State</label><input type="text" id="state" autocomplete="address-level1" required></div>
-            <div class="field"><label for="pin">PIN code</label><input type="text" id="pin" placeholder="110001" inputmode="numeric" autocomplete="postal-code" required></div>
-            <div class="field"><label for="country">Country</label>
-              <select id="country" autocomplete="country-name" required>
-                <option>India</option><option>United States</option><option>United Kingdom</option><option>United Arab Emirates</option><option>Other</option>
+            <div class="field">
+              <label for="fname">First name</label>
+              <input type="text" id="fname" name="fname" placeholder="First name" autocomplete="given-name" autocapitalize="words" required>
+            </div>
+            <div class="field">
+              <label for="lname">Last name</label>
+              <input type="text" id="lname" name="lname" placeholder="Last name" autocomplete="family-name" autocapitalize="words" required>
+            </div>
+            <div class="field full">
+              <label for="addr">Address</label>
+              <input type="text" id="addr" name="addr" placeholder="House no., street, area" autocomplete="address-line1" autocapitalize="words" required>
+            </div>
+            <div class="field">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" placeholder="City" autocomplete="address-level2" autocapitalize="words" required>
+            </div>
+            <div class="field">
+              <label for="state">State</label>
+              <input type="text" id="state" name="state" placeholder="State" autocomplete="address-level1" autocapitalize="words" required>
+            </div>
+            <div class="field">
+              <label for="pin">PIN code</label>
+              <input type="text" id="pin" name="pin" placeholder="110001" autocomplete="postal-code" inputmode="numeric" required>
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <select id="country" name="country" autocomplete="country-name" required>
+                <option>India</option>
+                <option>United States</option>
+                <option>United Kingdom</option>
+                <option>United Arab Emirates</option>
+                <option>Other</option>
               </select>
             </div>
           </div>
         </div>
+
+        <div class="form-section">
+          <h2><span class="num">3</span>Payment</h2>
+          <div class="pay-options" id="payOptions" role="radiogroup" aria-label="Payment method">
+            <label class="pay-option">
+              <input type="radio" name="payMethod" value="upi" checked>
+              <span class="pay-text">
+                <span class="pay-title">UPI (GPay, PhonePe, Paytm, any UPI app)</span>
+                <span class="pay-sub">Pay straight to our UPI ID. No extra charge.</span>
+              </span>
+              <span class="pay-tag">No fee</span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payMethod" value="card">
+              <span class="pay-text">
+                <span class="pay-title">Credit or debit card, EMI</span>
+                <span class="pay-sub">Razorpay adds a small payment fee at the payment step.</span>
+              </span>
+              <span class="pay-tag">+ gateway fee</span>
+            </label>
+          </div>
+        </div>
+
       </form>
 
       <aside class="summary">
         <h2>Order summary</h2>
+        <div class="zone-tabs" id="zoneTabs">
+          <button class="zone-tab" data-zone="ncr">Delhi NCR</button>
+          <button class="zone-tab" data-zone="india">Rest of India</button>
+        </div>
         <div id="miniItems"></div>
-        <div class="summary-row"><span id="miniCountLabel">0 perfumes</span><span id="miniSubtotal">₹0</span></div>
-        <div class="summary-row"><span>Shipping</span><span>Free</span></div>
-        <div class="summary-row total"><span>Total due</span><span id="miniTotal">₹0</span></div>
-        <button type="submit" form="checkoutForm" class="btn btn-block" id="placeOrderBtn">Place order via WhatsApp</button>
-        <div data-delivery-box></div>
-        <p class="note">Opens WhatsApp with your order filled in. Stock is limited, so we confirm availability there.</p>
+        <div class="mini-actions" id="miniActions">
+          <a class="add-more" href="shop.html">＋ Add more perfumes</a>
+          <span class="ship-nudge mono" id="shipNudge"></span>
+        </div>
+        <div class="summary-row">
+          <span id="miniCountLabel">0 items</span>
+          <span class="mono" id="miniSubtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="mono" id="miniShipping">₹0</span>
+        </div>
+        <div class="summary-row" id="feeRow" style="display:none;">
+          <span>Card fee (2.6%)</span>
+          <span class="mono" id="miniFee">₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total due</span>
+          <span class="mono" id="miniTotal">₹0</span>
+        </div>
+        <button type="submit" form="checkoutForm" class="btn-primary" id="placeOrderBtn">Pay now</button>
+        <p class="pay-error" id="payError" role="alert"></p>
+        <p class="lock-note" id="lockNote">Pay by UPI to our UPI ID. After you pay, send your order on WhatsApp.</p>
       </aside>
     </div>
   </main>
 </div>
 
-<div class="confirm-panel" id="confirmPanel">
-  <span class="seal seal-bnib seal-static" aria-hidden="true">✓</span>
-  <h1>Almost there.</h1>
-  <p>We've opened WhatsApp with your order filled in. Hit send in that chat and we'll confirm availability and next steps.</p>
-  <div class="confirm-id" id="orderId"></div>
-  <a class="btn" href="shop.html">Back to the shop</a>
+<div class="upi-panel" id="upiPanel">
+  <h1>Pay by UPI</h1>
+  <p class="upi-sub">Your order is saved. Pay by scanning the QR below, or copy the UPI ID and amount into any UPI app. Add your order number in the note.</p>
+  <div class="upi-amount mono" id="upiAmount"></div>
+  <div class="upi-order mono" id="upiOrder"></div>
+  <div class="upi-warn" id="upiInAppWarn" style="display:none;">This page is open inside another app's browser (Instagram, Facebook etc.), which blocks UPI apps. Tap ⋮ or ⋯ and choose "Open in Chrome" or "Open in Safari", or pay using the QR or UPI ID below.</div>
+  <div class="upi-qr-wrap">
+    <div class="upi-qr-box"><div id="upiQr"></div></div>
+    <p class="upi-sub" style="margin:10px 0 0;">Scan with any UPI app. The amount is filled in; check it matches the amount above.</p>
+    <p class="upi-sub" style="margin:8px 0 0;">Paying from this phone? Tap Save QR, then in GPay or PhonePe choose scan from gallery or photos.</p>
+    <button type="button" class="btn-primary" id="upiSaveQrBtn" style="max-width:260px; margin:12px auto 0;">Save QR</button>
+  </div>
+  <div class="upi-id-row">
+    <span>UPI ID: <b class="mono" id="upiIdText"></b></span>
+    <button type="button" id="upiCopyBtn">Copy</button>
+  </div>
+  <div class="upi-id-row">
+    <span>Amount: <b class="mono" id="upiAmtText"></b></span>
+    <button type="button" id="upiCopyAmtBtn">Copy</button>
+  </div>
+  <div class="upi-apps" style="margin-top:22px;">
+    <p class="upi-sub" style="margin:0 0 10px;">Or open your UPI app. Your UPI ID is copied for you.</p>
+    <div class="upi-app-grid">
+      <a class="upi-app" id="upiGpay" href="#">Google Pay</a>
+      <a class="upi-app" id="upiPhonepe" href="#">PhonePe</a>
+      <a class="upi-app" id="upiPaytm" href="#">Paytm</a>
+    </div>
+    <p class="upi-sub">In the app, choose "Pay UPI ID" (or "To mobile number or UPI ID"), paste the ID, enter the amount shown above, and add your order number in the note.</p>
+    <div class="upi-warn" id="upiNoOpenHint" style="display:none;">App not opening? Open your UPI app yourself, paste the copied UPI ID, enter the amount shown above, and put the order number in the note. Or use the QR.</div>
+  </div>
+  <div class="upi-step">
+    <h2>After you've paid</h2>
+    <p>Your order is already with us, so there's nothing else you must do. If you like, send the details on WhatsApp too; it helps us match your payment faster.</p>
+    <button type="button" class="btn-primary" id="upiDoneBtn">Send order on WhatsApp (optional)</button>
+  </div>
+  <button type="button" class="upi-back" id="upiBackBtn">← Back to checkout</button>
 </div>
 
-<footer>
-  <div class="wrap">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <h4>Enigma Perfumes</h4>
-        <p>BNIB and tester perfumes.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Links</h4>
-        <ul>
-          <li><a href="shop.html">Shop</a></li>
-          <li><a href="brands.html">Brands</a></li>
-          <li><a href="wishlist.html">Wishlist</a></li>
-          <li><a href="cart.html">Cart</a></li>
-          <li><a href="about.html">About</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Contact us</h4>
-        <div class="contact-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
-        <div class="contact-line">✉️ <a href="mailto:enigma6perfumes@gmail.com">enigma6perfumes@gmail.com</a></div>
-        <div class="contact-line">💬 <a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a></div>
-        <div class="contact-line">👥 <a href="https://chat.whatsapp.com/B5WdEerbCnMCQhUUtj97U0" target="_blank" rel="noopener">Join our WhatsApp community</a></div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© Enigma Perfumes.</span>
-    </div>
-  </div>
-</footer>
+<div class="confirm-panel" id="confirmPanel">
+  <div class="seal">✓</div>
+  <h1 id="confirmTitle">Payment received.</h1>
+  <p id="confirmText">Your payment went through. WhatsApp should open with your order details. If it doesn't, tap the button below and hit send.</p>
+  <div class="confirm-order-id mono" id="orderId"></div>
+  <br>
+  <a class="btn-primary" id="waSendBtn" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
+  <p style="margin-top:18px;">Want updates on new decants and offers? <a href="https://chat.whatsapp.com/BDzNrJFW8PXB9tdmqReyhZ" target="_blank" rel="noopener" style="text-decoration:underline;">Join our WhatsApp community</a></p>
+  <br>
+  <a href="index.html" style="display:inline-block; margin-top:22px; font-size:0.85rem; color:var(--parchment-dim);">Back to the catalogue</a>
+</div>
 
-<script src="enigma-store.js?v=20261030c"></script>
+<div id="epFooter"></div>
+
+<script src="store.js?v=1"></script>
+<script src="ep-chrome.js?v=1"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-function totals(){
-  const lines = enCartLines();
+function miniVial(fragrance){
+  if(fragrance.image){
+    return `<img src="${fragrance.image}" alt="${fragrance.name}" class="mini-vial" style="width:34px;height:64px;object-fit:contain;border-radius:4px;">`;
+  }
+  return `
+  <svg class="mini-vial" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M38 10 H62 V38 C62 42 66 44 72 52 C82 64 84 78 84 100 V172 C84 182 76 190 66 190 H34 C24 190 16 182 16 172 V100 C16 78 18 64 28 52 C34 44 38 42 38 38 Z"
+          stroke="#A64A66" stroke-width="4"/>
+    <rect x="14" y="70" width="72" height="118" fill="${fragrance.color}" opacity="0.9"/>
+  </svg>`;
+}
+
+function currency(n){ return leFormatPrice(n); }
+
+/* Shipping — mirrors the zone the customer picked on the cart page,
+   so the total here matches what they already saw there. */
+const SHIPPING_ZONES = {
+  ncr:   { label: "Delhi NCR", flat: 55 },
+  india: { label: "Rest of India",      flat: 75 }
+};
+const FREE_SHIP_QTY = 4;
+const ZONE_KEY = "le_ship_zone";
+let currentZone = localStorage.getItem(ZONE_KEY) || "ncr";
+if(!SHIPPING_ZONES[currentZone]) currentZone = "ncr";
+
+const CARD_FEE_RATE = 0;   // Razorpay now adds its fee itself (customer fee bearer); keep in step with api/_pricing.js
+let busy = false;
+let confirming = false;
+
+function currentMethod(){
+  const el = document.querySelector('input[name="payMethod"]:checked');
+  return el ? el.value : "upi";
+}
+
+function calcTotals(){
+  const lines = leCartLines();
+  const count = leCartCount();
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-  return { lines, subtotal, total: subtotal };
+  const zone = SHIPPING_ZONES[currentZone];
+  const hasPartial = lines.some(l => leIsPartial(l.size) || leIsBottle(l.size));   // a partial's price already includes shipping
+  const shipping = subtotal === 0 ? 0 : ((count >= FREE_SHIP_QTY || hasPartial) ? 0 : zone.flat);
+  const base = subtotal + shipping;
+  const fee = currentMethod() === "card" ? Math.round(base * CARD_FEE_RATE) : 0;
+  return { lines, count, subtotal, shipping, base, fee, total: base + fee, zone };
 }
 
 function renderSummary(){
-  const t = totals();
-  const items = document.getElementById("miniItems");
-  const btn = document.getElementById("placeOrderBtn");
-  if(!t.lines.length){
-    items.innerHTML = `<p class="note">Your cart is empty. <a href="shop.html" style="color:var(--seal)">Browse the perfumes</a> first.</p>`;
-    btn.disabled = true;
+  const t = calcTotals();
+  const lines = t.lines;
+  const miniItems = document.getElementById("miniItems");
+  const placeOrderBtn = document.getElementById("placeOrderBtn");
+
+  if(lines.length === 0){
+    miniItems.innerHTML = `<p class="empty-note">Your cart is empty. <a href="shop.html" style="color:var(--amber-bright);">Browse the catalogue</a> first.</p>`;
   }else{
-    items.innerHTML = t.lines.map(l => `
+    miniItems.innerHTML = lines.map(line => `
       <div class="mini-item">
-        ${enThumbHtml(l.listing)}
-        <div>
-          <p class="mini-name">${enEsc(l.listing.house)} ${enEsc(l.listing.name)}</p>
-          <div class="mini-meta">${enConditionLabel(l.listing)}, ${enEsc(l.listing.bottleSize)} × ${l.qty}</div>
+        <div>${miniVial(line.fragrance)}</div>
+        <div class="mini-info">
+          <p class="mini-name">${line.fragrance.name}</p>
+          <select class="mini-size" data-id="${line.id}" data-size="${line.size}" aria-label="Size for ${line.fragrance.name}">
+            ${Object.keys(line.fragrance.prices).filter(sz => leIsPartial(line.size) ? sz === line.size : leSizeKind(sz) === leSizeKind(line.size)).map(sz => `<option value="${sz}"${sz === line.size ? " selected" : ""}>${leSizeLabel(sz, line.id)} · ${currency(line.fragrance.prices[sz])}</option>`).join("")}
+          </select>
+          <div class="mini-qty" data-id="${line.id}" data-size="${line.size}">
+            ${leIsPartial(line.size) ? "" : `<button type="button" data-act="dec" aria-label="Decrease quantity">−</button>`}
+            <span class="mini-qty-n mono">${line.qty}</span>
+            ${leIsPartial(line.size) ? "" : `<button type="button" data-act="inc" aria-label="Increase quantity">+</button>`}
+            <button type="button" class="mini-rm" data-act="rm" aria-label="Remove ${line.fragrance.name} ${leSizeLabel(line.size, line.id)}">Remove</button>
+          </div>
         </div>
-        <div class="price">${enFormatPrice(l.lineTotal)}</div>
-      </div>`).join("");
-    btn.disabled = false;
+        <div class="mini-price mono">${currency(line.lineTotal)}</div>
+      </div>
+    `).join("");
   }
-  const count = enCartCount();
-  document.getElementById("miniCountLabel").textContent = count === 1 ? "1 perfume" : count + " perfumes";
-  document.getElementById("miniSubtotal").textContent = enFormatPrice(t.subtotal);
-  document.getElementById("miniTotal").textContent = enFormatPrice(t.total);
+
+  document.getElementById("miniActions").style.display = lines.length ? "flex" : "none";
+  const left = FREE_SHIP_QTY - t.count;
+  const nudge = document.getElementById("shipNudge");
+  nudge.textContent = t.count === 0 ? "" : (t.lines.some(l => leIsPartial(l.size) || leIsBottle(l.size)) ? "✓ Free shipping with your bottle" : left > 0 ? `Add ${left} more for free shipping` : "✓ Free shipping unlocked");
+  nudge.classList.toggle("done", t.count > 0 && left <= 0);
+
+  document.getElementById("miniCountLabel").textContent = t.count === 1 ? "1 item" : `${t.count} items`;
+  document.getElementById("miniSubtotal").textContent = currency(t.subtotal);
+  document.getElementById("miniShipping").textContent = t.shipping === 0 ? "Free" : currency(t.shipping);
+  document.getElementById("feeRow").style.display = t.fee > 0 ? "flex" : "none";
+  document.getElementById("miniFee").textContent = currency(t.fee);
+  document.getElementById("miniTotal").textContent = currency(t.total);
+
+  if(!busy){
+    placeOrderBtn.disabled = lines.length === 0;
+    placeOrderBtn.textContent = lines.length ? "Pay " + currency(t.total) : "Pay now";
+  }
+
+  document.querySelectorAll(".zone-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.zone === currentZone);
+  });
 }
 
-function buildMessage(id){
-  const t = totals();
-  const v = (x) => document.getElementById(x).value.trim();
-  const name = `${v("fname")} ${v("lname")}`.trim();
-  const itemLines = t.lines.map(l =>
-    `• ${l.listing.house} ${l.listing.name} (${enConditionLabel(l.listing)}, ${l.listing.bottleSize}) x${l.qty} — ${enFormatPrice(l.lineTotal)}`).join("\n");
-  return `New order: ${id}
-
-*Customer*
-${name}
-${v("phone")}
-${v("email")}
-
-*Shipping to*
-${v("addr")}
-${v("city")}, ${v("state")} ${v("pin")}
-${v("country")}
-
-*Items*
-${itemLines}
-
-Subtotal: ${enFormatPrice(t.subtotal)}
-Shipping: Free
-Total: ${enFormatPrice(t.total)}
-
-Please confirm availability.`;
+function setBusy(on, label){
+  busy = on;
+  const btn = document.getElementById("placeOrderBtn");
+  if(on){ btn.disabled = true; btn.textContent = label || "Please wait..."; }
+  else renderSummary();
 }
 
-/* Remember the last address used on this device */
-const ADDRESS_KEY = "en_last_address";
-const ADDRESS_FIELDS = ["email","phone","fname","lname","addr","city","state","pin","country"];
-try{
-  const saved = JSON.parse(localStorage.getItem(ADDRESS_KEY) || "{}");
-  ADDRESS_FIELDS.forEach(id => { if(saved[id]) document.getElementById(id).value = saved[id]; });
-}catch(e){ /* ignore */ }
+function showPayError(msg){
+  const el = document.getElementById("payError");
+  el.textContent = msg || "";
+  el.classList.toggle("show", !!msg);
+}
+
+const WHATSAPP_NUMBER = "917982410620";
+const UPI_ID = "enigmaperfumes1@naviaxis";
+const UPI_NAME = "Liquid Emotions";
+const UPI_KEY = "le_pending_upi";
+const PENDING_KEY = "le_pending_payment";
+
+/* ---------- Save every order to the Orders sheet (Apps Script web app) ---------- */
+const ORDERS_API_URL = "https://script.google.com/macros/s/AKfycbzuqXm7-A2d9fPnI3QiflfmUfEemj44Iq6nJKEoAwWEN90iO_yBBwrb6aABrt09QdO2/exec";
+
+function orderItemsText(s){
+  return s.lines.slice().sort((a, b) =>
+    (a.house || "").localeCompare(b.house || "") ||
+    a.name.localeCompare(b.name) ||
+    parseInt(a.size, 10) - parseInt(b.size, 10))
+    .map(l => `${l.name} (${leSizeLabel(l.size, l.id)}) x${l.qty}`).join("; ");
+}
+
+/* Fire and forget: a slow or failed save never blocks the customer, and a network failure is retried. */
+async function sendOrderToSheet(payload, tries){
+  if(!ORDERS_API_URL || ORDERS_API_URL.indexOf("PASTE_") === 0) return;
+  tries = tries || 1;
+  try{
+    await fetch(ORDERS_API_URL, {
+      method: "POST", mode: "no-cors", keepalive: true,
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+  }catch(e){
+    if(tries < 3) setTimeout(() => sendOrderToSheet(payload, tries + 1), 3000 * tries);
+  }
+}
+
+function orderPayload(snap, extra){
+  const c = snap.customer;
+  return Object.assign({
+    action: "save",
+    method: snap.method === "card" ? "Card" : "UPI",
+    name: c.name, phone: c.phone, email: c.email,
+    addr: c.addr, city: c.city, state: c.state, pin: c.pin, country: c.country,
+    items: orderItemsText(snap),
+    subtotal: snap.subtotal, shipping: snap.shipping, total: snap.total
+  }, extra);
+}
+
+/* Everything the WhatsApp message needs, captured at the moment of paying
+   (so it still works if the page reloads while the customer is in a UPI app). */
+function snapshotOrder(t, method){
+  const val = id => document.getElementById(id).value;
+  return {
+    method,
+    zoneLabel: t.zone.label,
+    lines: t.lines.map(l => ({ house: l.fragrance.house, name: l.fragrance.name, id: l.id, size: l.size, qty: l.qty, lineTotal: l.lineTotal })),
+    subtotal: t.subtotal, shipping: t.shipping, fee: t.fee, total: t.total,
+    customer: {
+      name: `${val("fname")} ${val("lname")}`.trim(), email: val("email"), phone: val("phone"),
+      addr: val("addr"), city: val("city"), state: val("state"), pin: val("pin"), country: val("country")
+    }
+  };
+}
+
+function buildWhatsAppMessage(id, s, pay){
+  const c = s.customer;
+  const sortedLines = s.lines.slice().sort((a, b) =>
+    (a.house || "").localeCompare(b.house || "") ||
+    a.name.localeCompare(b.name) ||
+    parseInt(a.size, 10) - parseInt(b.size, 10));
+  const itemLines = sortedLines.map(l => `• ${l.name} (${leSizeLabel(l.size, l.id)}) x${l.qty} — ${currency(l.lineTotal)}`).join("\n");
+  const rows = [
+    pay.upi ? `New order: ${id} (UPI — PAYMENT NOT YET VERIFIED)` : `New order: ${id} (PAID ONLINE)`,
+    ``,
+    `*Customer*`, c.name, c.phone, c.email,
+    ``,
+    `*Shipping to*`, c.addr, `${c.city}, ${c.state} ${c.pin}`, c.country,
+    ``,
+    `*Items*`, itemLines,
+    ``,
+    `Subtotal: ${currency(s.subtotal)}`,
+    `Shipping (${s.zoneLabel}): ${s.shipping === 0 ? "Free" : currency(s.shipping)}`
+  ];
+  if(pay.feeKept > 0) rows.push(`Gateway fee: ${currency(pay.feeKept)}`);
+  if(pay.upi){
+    rows.push(`Amount to verify: ${currency(pay.paid)}`);
+    rows.push(`Customer says paid to: ${UPI_ID} (note: ${id})`);
+  }else{
+    rows.push(`Total paid: ${currency(pay.paid)}`);
+  }
+  if(!pay.upi) rows.push(`Payment ID: ${pay.paymentId}`);
+  return rows.join("\n");
+}
+
+function showConfirm(o){
+  document.getElementById("confirmTitle").textContent = o.title;
+  document.getElementById("confirmText").textContent = o.text;
+  document.getElementById("orderId").textContent = o.orderLabel;
+  const b = document.getElementById("waSendBtn");
+  b.style.display = o.waUrl ? "" : "none";
+  if(o.waUrl){ b.href = o.waUrl; b.textContent = o.btnLabel; }
+  document.getElementById("checkoutView").style.display = "none";
+  document.getElementById("confirmPanel").classList.add("show");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* Payment is confirmed by the server — now give the order its number and hand it to WhatsApp. */
+function finishPaid(snap, v, rzpOrderId){
+  const id = v.orderNumber || leFallbackOrderNumber();
+  const paid = v.paidPaise / 100;
+  if(rzpOrderId) sendOrderToSheet({ action: "attachNumber", razorpayOrderId: rzpOrderId, orderNo: id });
+  /* Razorpay adds its own gateway fee on top of the order total; show it if the customer paid more. */
+  const feeKept = snap.method === "card" ? Math.max(0, Math.round(paid - snap.total)) : 0;
+  const message = buildWhatsAppMessage(id, snap, { paymentId: v.paymentId, paid, feeKept });
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  try{ localStorage.removeItem(PENDING_KEY); }catch(e){}
+  leClearCart();
+  showConfirm({
+    title: "Payment received.",
+    text: "Your payment went through. WhatsApp should open with your order details. If it doesn't, tap the button below and hit send, and we'll start decanting your bottles by hand.",
+    orderLabel: "Order " + id + " · Paid " + currency(paid),
+    waUrl, btnLabel: "Send order on WhatsApp"
+  });
+  /* Open WhatsApp straight away. Browsers often block pop-ups that aren't tied to a tap,
+     so if it was blocked, move to WhatsApp in this tab after a moment instead. */
+  let opened = null;
+  try{ opened = window.open(waUrl, "_blank"); }catch(e){}
+  if(!opened){ setTimeout(() => { window.location.href = waUrl; }, 1500); }
+}
+
+/* Paid, but we couldn't reach our server to confirm. Never leave the customer stranded. */
+function showPaidUnconfirmed(paymentId){
+  const msg = `Hi! I paid for a Liquid Emotions order but the page didn't confirm it. Payment ID: ${paymentId}`;
+  showConfirm({
+    title: "Payment received, one more step.",
+    text: "Your payment went through, but we couldn't confirm it automatically. Message us on WhatsApp with this payment ID and we'll complete your order.",
+    orderLabel: "Payment ID " + paymentId,
+    waUrl: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,
+    btnLabel: "Message us on WhatsApp"
+  });
+}
+
+async function postJson(url, payload){
+  const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+  const data = await r.json().catch(() => ({}));
+  return { status: r.status, ok: r.ok, data };
+}
+
+async function onPaid(resp, snap){
+  confirming = true;
+  setBusy(true, "Confirming payment...");
+  let v;
+  try{
+    const r = await postJson("/api/verify-payment", resp);
+    if(!r.ok || !r.data.ok) throw new Error(r.data.error || "not confirmed");
+    v = r.data;
+  }catch(err){
+    showPaidUnconfirmed(resp.razorpay_payment_id);
+    return;
+  }
+  finishPaid(snap, v, resp.razorpay_order_id);
+}
+
+/* If the customer paid in another app and the page reloaded, pick the order back up. */
+async function recoverPendingPayment(){
+  let p = null;
+  try{ p = JSON.parse(localStorage.getItem(PENDING_KEY) || "null"); }catch(e){}
+  if(!p || !p.orderId || !p.snap) return;
+  if(Date.now() - p.at > 2 * 3600 * 1000){ try{ localStorage.removeItem(PENDING_KEY); }catch(e){} return; }
+  try{
+    const r = await postJson("/api/verify-payment", { recover: true, razorpay_order_id: p.orderId });
+    if(r.ok && r.data.ok) finishPaid(p.snap, r.data, p.orderId);
+  }catch(e){ /* try again next visit */ }
+}
+
+/* ---------- Direct UPI payment (own UPI ID, no gateway fee) ---------- */
+const IS_MOBILE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+let upiOrder = null;   // { id, snap, amount, at }
+
+/* Prefilled amount, marked editable: "mam" (minimum amount) equal to the order total asks the
+   UPI app to let the customer edit the amount upward but not pay less. Support varies by app,
+   and apps may apply stricter limits to prefilled payments to a personal UPI ID, so the amount
+   is also copied to the clipboard. No note ("tn") is sent. */
+function upiQuery(amount, orderId){
+  const a = amount.toFixed(2);
+  return "pa=" + UPI_ID +
+    "&pn=" + encodeURIComponent(UPI_NAME) +
+    "&am=" + a + "&mam=" + a + "&cu=INR";
+}
+function upiLink(amount, orderId){ return "upi://pay?" + upiQuery(amount, orderId); }
+/* App buttons: payee only, no prefilled amount (the QR keeps its prefilled amount). The amount is
+   copied to the clipboard when a button is tapped, for the customer to paste. */
+function upiAppQuery(){
+  return "pa=" + UPI_ID + "&pn=" + encodeURIComponent(UPI_NAME);
+}
+const IS_IOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const IN_APP_BROWSER = /Instagram|FBAN|FBAV|FB_IAB|Snapchat|Line\/|Twitter|LinkedInApp|GSA\//i.test(navigator.userAgent);
+function upiAppLinks(){
+  /* Open-app links only: no payment request, so nothing for the "risk policy" check to block. */
+  return {
+    upiGpay:    IS_IOS ? "gpay://" : "intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=com.google.android.apps.nbu.paisa.user;end",
+    upiPhonepe: "phonepe://",
+    upiPaytm:   "paytmmp://"
+  };
+}
+
+function showUpiPanel(o){
+  upiOrder = o;
+  const link = upiLink(o.amount, o.id);
+  document.getElementById("upiAmount").textContent = currency(o.amount);
+  document.getElementById("upiOrder").textContent = "Order " + o.id;
+  document.getElementById("upiIdText").textContent = UPI_ID;
+  const apps = upiAppLinks();
+  Object.keys(apps).forEach(id => { document.getElementById(id).href = apps[id]; });
+  const qr = document.getElementById("upiQr");
+  qr.innerHTML = "";
+  if(typeof QRCode !== "undefined"){
+    new QRCode(qr, { text: link, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
+  }else{
+    qr.textContent = "QR couldn't load. Use the UPI ID above.";
+  }
+  document.getElementById("upiAmtText").textContent = o.amount.toFixed(2);
+  document.getElementById("upiInAppWarn").style.display = IN_APP_BROWSER ? "block" : "none";
+  document.getElementById("upiNoOpenHint").style.display = "none";
+  const panel = document.getElementById("upiPanel");
+  panel.classList.toggle("is-mobile", IS_MOBILE || IS_IOS);
+  panel.classList.add("show");
+  document.getElementById("checkoutView").style.display = "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function hideUpiPanel(){
+  document.getElementById("upiPanel").classList.remove("show");
+  document.getElementById("checkoutView").style.display = "";
+  upiOrder = null;
+  try{ localStorage.removeItem(UPI_KEY); }catch(e){}
+  setBusy(false);
+}
+
+async function startUpiPayment(t, method){
+  setBusy(true, "Preparing payment...");
+  saveAddress();
+  const snap = snapshotOrder(t, method);
+  let id = await leGetNextOrderNumber();
+  if(!id) id = leFallbackOrderNumber();
+  const o = { id, snap, amount: t.total, at: Date.now() };
+  try{ localStorage.setItem(UPI_KEY, JSON.stringify(o)); }catch(e){}
+  try{ sendOrderToSheet(orderPayload(snap, { orderNo: id })); }catch(e){}   // saved before the UPI app even opens; can never block payment
+  showUpiPanel(o);
+}
+
+function recoverPendingUpi(){
+  let o = null;
+  try{ o = JSON.parse(localStorage.getItem(UPI_KEY) || "null"); }catch(e){}
+  if(!o || !o.id || !o.snap) return;
+  const clear = () => { try{ localStorage.removeItem(UPI_KEY); }catch(e){} };
+  if(Date.now() - o.at > 2 * 3600 * 1000 || leCartCount() === 0){ clear(); return; }
+  /* Only bring the pay screen back when the page was reloaded / returned to (e.g. after
+     switching to a UPI app) AND the cart still matches. Arriving fresh from the shop
+     always starts at the normal checkout form. */
+  const nav = (performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {};
+  const returning = nav.type === "reload" || nav.type === "back_forward";
+  if(!returning || o.amount !== calcTotals().total){ clear(); return; }
+  showUpiPanel(o);
+}
+
+function finishUpi(){
+  const o = upiOrder;
+  const message = buildWhatsAppMessage(o.id, o.snap, { upi: true, paid: o.amount, feeKept: 0 });
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  try{ localStorage.removeItem(UPI_KEY); }catch(e){}
+  leClearCart();
+  document.getElementById("upiPanel").classList.remove("show");
+  showConfirm({
+    title: "Order received.",
+    text: "Thanks! WhatsApp should open with your order details. If it doesn't, tap the button below and hit send. Your order is confirmed once we see the payment in our account, and then we start decanting your bottles by hand.",
+    orderLabel: "Order " + o.id + " · UPI " + currency(o.amount) + " · awaiting verification",
+    waUrl, btnLabel: "Send order on WhatsApp"
+  });
+  let opened = null;
+  try{ opened = window.open(waUrl, "_blank"); }catch(e){}
+  if(!opened){ setTimeout(() => { window.location.href = waUrl; }, 1500); }
+}
+
+document.getElementById("upiDoneBtn").addEventListener("click", finishUpi);
+function copyUpiId(){
+  const btn = document.getElementById("upiCopyBtn");
+  try{
+    navigator.clipboard.writeText(UPI_ID).then(() => {
+      btn.textContent = "Copied";
+      setTimeout(() => { btn.textContent = "Copy"; }, 1800);
+    }).catch(() => {});
+  }catch(e){}
+}
+/* If tapping a UPI app link doesn't take the customer out of the browser, show the manual-pay hint. */
+["upiGpay","upiPhonepe","upiPaytm"].forEach(id => {
+  document.getElementById(id).addEventListener("click", () => {
+    copyUpiId();
+    const hint = document.getElementById("upiNoOpenHint");
+    hint.style.display = "none";
+    setTimeout(() => { if(!document.hidden) hint.style.display = "block"; }, 2200);
+  });
+});
+document.getElementById("upiCopyAmtBtn").addEventListener("click", async (e) => {
+  const amt = upiOrder ? upiOrder.amount.toFixed(2) : "";
+  try{ await navigator.clipboard.writeText(amt); e.target.textContent = "Copied"; }
+  catch(err){ e.target.textContent = amt; }
+  setTimeout(() => { e.target.textContent = "Copy"; }, 1800);
+});
+document.getElementById("upiBackBtn").addEventListener("click", hideUpiPanel);
+/* Save the QR as an image (white border added so it scans), via the phone's share sheet when available. */
+document.getElementById("upiSaveQrBtn").addEventListener("click", async (e) => {
+  const btn = e.currentTarget;
+  const src = document.querySelector("#upiQr canvas") || document.querySelector("#upiQr img");
+  if(!src) return;
+  const size = 600, pad = 40;
+  const c = document.createElement("canvas");
+  c.width = c.height = size + pad * 2;
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(src, pad, pad, size, size);
+  const blob = await new Promise(r => c.toBlob(r, "image/png"));
+  if(!blob) return;
+  const name = "liquid-emotions-upi-" + (upiOrder ? upiOrder.id : "qr") + ".png";
+  const file = new File([blob], name, { type: "image/png" });
+  if(navigator.canShare && navigator.canShare({ files: [file] })){
+    try{ await navigator.share({ files: [file] }); return; }
+    catch(err){ if(err && err.name === "AbortError") return; }
+  }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  btn.textContent = "Saved";
+  setTimeout(() => { btn.textContent = "Save QR"; }, 1800);
+});
+document.getElementById("upiCopyBtn").addEventListener("click", async (e) => {
+  try{ await navigator.clipboard.writeText(UPI_ID); e.target.textContent = "Copied"; }
+  catch(err){ e.target.textContent = UPI_ID; }
+  setTimeout(() => { e.target.textContent = "Copy"; }, 1800);
+});
+
+/* ---------- Remember last-used shipping details ---------- */
+const ADDRESS_KEY = "le_last_address";
+const ADDRESS_FIELDS = ["email", "phone", "fname", "lname", "addr", "city", "state", "pin", "country"];
+
+function loadSavedAddress(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(ADDRESS_KEY) || "{}");
+    ADDRESS_FIELDS.forEach(id => {
+      if(saved[id]) document.getElementById(id).value = saved[id];
+    });
+  }catch(e){ /* ignore malformed/missing saved data */ }
+}
+
 function saveAddress(){
   const data = {};
   ADDRESS_FIELDS.forEach(id => { data[id] = document.getElementById(id).value; });
-  try{ localStorage.setItem(ADDRESS_KEY, JSON.stringify(data)); }catch(e){ /* ignore */ }
+  try{ localStorage.setItem(ADDRESS_KEY, JSON.stringify(data)); }catch(e){ /* storage unavailable */ }
 }
+
+loadSavedAddress();
 
 document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  /* Re-check stock right before the order goes out */
-  const msgs = enValidateCart();
-  if(msgs.length){
-    msgs.forEach(m => enShowToast(m, 4500));
-    renderSummary();
-    return;
-  }
-  if(enCartCount() === 0) return;
+  if(busy || leCartCount() === 0) return;
+  showPayError("");
 
-  const btn = document.getElementById("placeOrderBtn");
-  btn.disabled = true;
-  btn.textContent = "Placing order...";
+  const method = currentMethod();
+  const t = calcTotals();
+  if(method === "upi"){ startUpiPayment(t, method); return; }
+  setBusy(true, "Preparing payment...");
   saveAddress();
 
-  const id = (await enGetNextOrderNumber()) || enFallbackOrderNumber();
-  const url = `https://wa.me/${EN_WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(id))}`;
-  window.open(url, "_blank");
+  if(typeof Razorpay === "undefined"){
+    showPayError("The payment window couldn't load. Check your connection and try again.");
+    setBusy(false);
+    return;
+  }
 
-  document.getElementById("orderId").textContent = "Order " + id;
-  document.getElementById("checkoutView").style.display = "none";
-  document.getElementById("confirmPanel").classList.add("show");
-  enClearCart();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  const snap = snapshotOrder(t, method);
+  let order;
+  try{
+    const r = await postJson("/api/create-order", {
+      items: leGetCart().map(i => ({ id: i.id, size: i.size, qty: i.qty })),
+      zone: currentZone,
+      method,
+      expectedTotal: t.total,
+      customer: snap.customer
+    });
+    if(r.status === 409){
+      showPayError("Prices were just updated. Reloading so you can review your total.");
+      setTimeout(() => location.reload(), 1800);
+      return;
+    }
+    if(!r.ok) throw new Error(r.data.message || r.data.error || "Could not start the payment.");
+    order = r.data;
+  }catch(err){
+    showPayError(err.message || "Could not start the payment. Please try again.");
+    setBusy(false);
+    return;
+  }
+
+  try{ localStorage.setItem(PENDING_KEY, JSON.stringify({ orderId: order.orderId, snap, at: Date.now() })); }catch(err){}
+  try{ sendOrderToSheet(orderPayload(snap, { razorpayOrderId: order.orderId })); }catch(e){}   // saved as "Card - pending"; the webhook marks it Paid; can never block payment
+
+  const rzp = new Razorpay({
+    key: order.keyId,
+    order_id: order.orderId,
+    amount: order.amount,
+    currency: order.currency,
+    name: "Liquid Emotions",
+    description: "Perfume decants",
+    prefill: { name: snap.customer.name, email: snap.customer.email, contact: snap.customer.phone },
+    theme: { color: "#8B1E3F" },
+    method: { card: true, netbanking: false, upi: false, wallet: false, emi: true, paylater: false },
+    modal: { ondismiss: () => { if(!confirming) setBusy(false); } },
+    handler: (resp) => onPaid(resp, snap)
+  });
+  rzp.on("payment.failed", (resp) => {
+    const d = resp && resp.error && resp.error.description;
+    showPayError((d ? d + " " : "") + "You haven't been charged for this attempt. Please try again.");
+  });
+  rzp.open();
+});
+
+function updateLockNote(){
+  document.getElementById("lockNote").textContent = currentMethod() === "card"
+    ? "Secure card payment by Razorpay. Your order is confirmed automatically once the payment goes through."
+    : "Your order is saved when you tap Pay. We dispatch once the UPI payment shows in our account.";
+}
+document.getElementById("payOptions").addEventListener("change", () => { renderSummary(); updateLockNote(); });
+
+/* Change quantity / remove right here, so the separate cart page isn't needed. */
+document.getElementById("miniItems").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-act]");
+  if(!b || busy || confirming) return;
+  const box = b.closest(".mini-qty");
+  const id = box.dataset.id, size = box.dataset.size;
+  const cur = leCartQtyFor(id, size);
+  if(b.dataset.act === "inc") leUpdateQty(id, size, cur + 1);
+  else if(b.dataset.act === "dec") leUpdateQty(id, size, cur - 1);
+  else leRemoveFromCart(id, size);
+  /* leSetCart() fires leOnCartChanged, which redraws the summary. */
+});
+/* Switch a line to another size (merges with the same size if it's already in the cart). */
+document.getElementById("miniItems").addEventListener("change", (e) => {
+  const sel = e.target.closest("select.mini-size");
+  if(!sel || busy || confirming) return;
+  leUpdateSize(sel.dataset.id, sel.dataset.size, sel.value);
+});
+window.leOnCartChanged = renderSummary;
+
+document.getElementById("zoneTabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".zone-tab");
+  if(!btn) return;
+  currentZone = btn.dataset.zone;
+  localStorage.setItem(ZONE_KEY, currentZone);
+  renderSummary();
+});
+
+window.addEventListener("storage", (e) => {
+  if(e.key === ZONE_KEY){
+    currentZone = localStorage.getItem(ZONE_KEY) || "ncr";
+    if(!SHIPPING_ZONES[currentZone]) currentZone = "ncr";
+    renderSummary();
+  }
 });
 
 renderSummary();
+updateLockNote();
+recoverPendingPayment();
+recoverPendingUpi();
+window.addEventListener("le-data-updated", () => { leValidateCart(); renderSummary(); });
 </script>
-<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20perfume." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
+
+<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I'd%20like%20to%20place%20a%20decant%20order." target="_blank" rel="noopener" aria-label="Order via WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg>
+</a>
 </body>
 </html>

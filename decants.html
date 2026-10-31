@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decants — Enigma Perfumes</title>
+<meta name="description" content="Perfume decants from 3ml, decanted by syringe and sealed by hand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="enigma.css">
+<link rel="stylesheet" href="ep.css">
+</head>
+<body data-page="decants" data-mode="decants">
+<div id="epHeader"></div>
+<main class="wrap">
+  <div class="page-head" style="padding:22px 0 8px"><h1>Decants</h1><p style="color:var(--ink-soft);margin:6px 0 0">Try before you buy the bottle. Decanted by syringe, sealed by hand.</p></div>
+  <section class="rb" id="banners" aria-label="Featured decants"></section>
+  <div class="band-note">Some of these perfumes are available as <b>decants only</b>. Looking for a full bottle? See <a href="bottles.html" style="color:var(--seal)">Full Bottles</a>.</div>
+  <section class="catalogue" id="catalogue">
+    
+    <div class="search-row" style="margin-top:12px"><input type="search" id="q" placeholder="Search perfumes" aria-label="Search perfumes" autocomplete="off"></div>
+    <div class="cat-row" id="catRow"></div>
+    <div class="filter-row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+      <select id="brandSel" class="sort-select" aria-label="Brand"></select>
+      <select id="sortSel" class="sort-select" aria-label="Sort"><option value="new">Newest first</option><option value="plow">Price: low to high</option><option value="phigh">Price: high to low</option><option value="az">A to Z</option></select>
+    </div>
+    <p class="result-count" id="resultCount" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+<div id="epFooter"></div>
+<script src="store.js?v=1"></script>
+<script src="ep-ui.js?v=1"></script>
+</body>
+</html>

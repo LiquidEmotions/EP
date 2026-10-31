@@ -3,142 +3,481 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cart — Enigma Perfumes</title>
-<meta name="description" content="Your Enigma Perfumes cart.">
-<meta name="robots" content="index, follow">
+<title>Your Cart — Enigma Perfumes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#ECE8F1; --ink-deep:#211A33; --parchment:#211A33; --parchment-dim:#5B5470;
+    --amber:#A64A66; --amber-bright:#8B1E3F; --brass:#A64A66; --line:rgba(91,84,112,0.35);
+    --moss:#FFFFFF; --burgundy:#211A33; --radius:2px; --blush:#CDC6DA; --taupe:#5B5470;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--ink); color:var(--parchment); font-family:'Source Serif 4', serif; font-size:17px; line-height:1.55; overflow-x:hidden;}
+  h1,h2,h3,.display{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+  a{color:inherit;}
+  /* ---------- Background: champagne gold + light rose gold (static, minimal) ---------- */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.55) 50%, transparent 62%),
+      radial-gradient(1100px 720px at 0% 0%, rgba(233,212,160,0.42), transparent 62%),
+      radial-gradient(1000px 760px at 100% 100%, rgba(232,184,166,0.36), transparent 62%),
+      linear-gradient(160deg, #FBF8F0 0%, #ECE8F1 50%, #F9EEE9 100%);
+  }
+  img,svg{display:block;max-width:100%;}
+  button, input{font-family:inherit;}
+  button{cursor:pointer;}
+  :focus-visible{outline:2px solid var(--amber-bright); outline-offset:3px;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  header{position:sticky; top:0; z-index:20; background:rgba(250,246,242,0.85); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 28px;}
+  .wordmark{font-size:1.15rem; display:flex; align-items:baseline; gap:8px; text-decoration:none;}
+  .wordmark .mono{font-size:0.62rem; color:var(--amber-bright); letter-spacing:0.14em;}
+  nav.links{display:flex; gap:26px; font-size:0.85rem;}
+  nav.links a{text-decoration:none; color:var(--parchment-dim); border-bottom:1px solid transparent; padding-bottom:2px; transition:color .2s, border-color .2s;}
+  nav.links a:hover{color:var(--parchment); border-color:var(--amber);}
+  .cart-pill{display:flex; align-items:center; gap:8px; font-size:0.78rem; padding:9px 16px; border:1px solid var(--brass); color:var(--amber-bright); border-radius:var(--radius); text-decoration:none; white-space:nowrap;}
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .hamburger-btn{
+    display:none; flex-direction:column; justify-content:center; gap:4px;
+    width:32px; height:32px; background:none; border:none; cursor:pointer; padding:0;
+  }
+  .hamburger-btn span{display:block; width:100%; height:2px; background:var(--parchment); border-radius:2px;}
+  .mobile-menu{
+    display:none; flex-direction:column;
+    border-top:1px solid var(--line);
+    background:var(--ink);
+    padding:6px 28px 14px;
+  }
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{
+    text-decoration:none; color:var(--parchment-dim);
+    padding:13px 0; border-bottom:1px solid var(--line);
+    font-size:0.9rem;
+  }
+  .mobile-menu a:last-child{border-bottom:none;}
+  .mobile-menu a:hover{color:var(--amber-bright);}
+  .cart-pill:hover{background:var(--amber); color:var(--ink-deep); border-color:var(--amber);}
+  .cart-count{background:var(--amber-bright); color:var(--ink); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; font-weight:600; padding:1px 6px; border-radius:100px;}
+  .cart-pill:hover .cart-count{background:var(--ink-deep); color:var(--amber);}
+  .page-head{padding:56px 28px 36px; border-bottom:1px solid var(--line);}
+  .breadcrumb{font-size:0.7rem; color:var(--parchment-dim); margin-bottom:18px;}
+  .breadcrumb a{text-decoration:none; color:var(--parchment-dim);}
+  .breadcrumb a:hover{color:var(--amber-bright);}
+  .page-head h1{font-size:clamp(1.9rem, 4vw, 2.6rem); margin:0 0 6px;}
+  .page-head .sub{color:var(--parchment-dim); font-size:0.92rem;}
+  main{padding:52px 28px 100px;}
+  .cart-layout{display:grid; grid-template-columns:1.7fr 1fr; gap:56px; align-items:start;}
+  .line-list{display:flex; flex-direction:column;}
+  .line-item{display:grid; grid-template-columns:64px 1fr auto; gap:22px; padding:26px 0; border-bottom:1px solid var(--line);}
+  .line-item:first-child{padding-top:0;}
+  .vial{width:56px;}
+  .liquid-fill{transition:height .3s ease, y .3s ease;}
+  .li-main{min-width:0;}
+  .li-house{font-size:0.66rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--parchment-dim);}
+  .li-name{font-size:1.25rem; margin:4px 0 8px;}
+  .li-notes{font-size:0.78rem; color:var(--parchment-dim); margin-bottom:16px;}
+  .li-controls{display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:14px;}
+  .li-wishlist{background:none; border:none; color:var(--parchment-dim); font-size:0.72rem; padding:0; text-decoration:underline; text-underline-offset:3px;}
+  .li-wishlist:hover{color:var(--amber-bright);}
+  .li-wishlist.active{color:var(--amber-bright); text-decoration:none;}
+  .size-table{display:flex; flex-direction:column; border-top:1px solid var(--line);}
+  .size-table-row{display:flex; align-items:center; justify-content:space-between; width:100%; border-bottom:1px solid var(--line); padding:10px 2px; color:var(--parchment); font-size:0.85rem;}
+  .size-table-row:last-child{border-bottom:none;}
+  .size-table-right{display:flex; align-items:center; gap:12px;}
+  .size-table-size{color:var(--parchment-dim);}
+  .size-table-price{color:var(--amber-bright); font-size:0.92rem; font-weight:600; min-width:52px; text-align:right;}
+  .size-table-price small{font-size:0.7rem; font-weight:400; color:var(--parchment-dim); margin-left:4px;}
+  .li-add-size{background:none; border:none; padding:12px 2px 0; font-size:0.78rem; color:var(--amber-bright); text-decoration:underline; text-underline-offset:3px;}
+  .li-add-size:hover{color:var(--parchment);}
+  .size-table.other{margin-top:10px;}
+  .size-table.other .size-table-price{color:var(--parchment-dim); font-weight:400;}
+  .recently-viewed{padding:44px 28px; border-top:1px solid var(--line);}
+  .recently-viewed h2{font-size:1.15rem; margin:0 0 20px;}
+  .rv-grid{display:flex; gap:16px; overflow-x:auto; padding-bottom:6px;}
+  .rv-card{flex-shrink:0; width:120px; cursor:pointer;}
+  .rv-swatch{width:100%; aspect-ratio:1; border-radius:var(--radius); border:1px solid var(--line);}
+  .rv-house{font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--parchment-dim); margin-top:8px;}
+  .rv-name{font-size:0.85rem; margin-top:2px;}
+  .rv-card:hover .rv-name{color:var(--amber-bright);}
+  .li-price{text-align:right; white-space:nowrap;}
+  .li-price .total{font-family:'IBM Plex Mono', monospace; font-size:1.05rem; font-weight:600; color:var(--amber-bright);}
+  .empty-state{padding:60px 0; text-align:center; border-bottom:1px solid var(--line);}
+  .empty-state .vial{margin:0 auto 22px;}
+  .empty-state h3{font-size:1.3rem; margin:0 0 10px;}
+  .empty-state p{color:var(--parchment-dim); font-size:0.9rem; margin:0 0 26px;}
+  .summary{background:var(--moss); border:1px solid var(--line); border-radius:var(--radius); padding:28px 26px; position:sticky; top:100px;}
+  .summary h2{font-size:1.15rem; margin:0 0 22px;}
+  .ship-progress{margin-bottom:22px;}
+  .ship-progress-track{
+    height:6px;
+    background:#CDC6DA;
+    border-radius:100px;
+    overflow:hidden;
+  }
+  .ship-progress-fill{
+    height:100%;
+    background:var(--amber);
+    border-radius:100px;
+    width:0%;
+    transition:width .35s ease, background .35s ease;
+  }
+  .ship-progress-fill.complete{background:var(--amber-bright);}
+  .ship-progress-label{
+    font-size:0.74rem;
+    color:var(--parchment-dim);
+    margin:10px 0 0;
+  }
+  .ship-progress-label.complete{color:var(--amber-bright);}
+  .summary-row{display:flex; justify-content:space-between; font-size:0.88rem; color:var(--parchment-dim); padding:10px 0;}
+  .summary-row.total{border-top:1px solid var(--line); margin-top:8px; padding-top:18px; color:var(--parchment); font-size:1rem;}
+  .summary-row .mono{color:var(--parchment);}
+  .summary-row.total .mono{color:var(--amber-bright); font-size:1.15rem;}
+  .btn-primary{display:block; width:100%; text-align:center; background:var(--amber); color:var(--ink-deep); border:1px solid var(--amber); padding:15px 22px; font-size:0.9rem; border-radius:var(--radius); text-decoration:none; font-weight:600; margin-top:22px;}
+  .btn-primary:hover{background:var(--amber-bright); border-color:var(--amber-bright); color:var(--ink);}
+  .note-line{font-size:0.7rem; color:var(--parchment-dim); text-align:center; margin-top:14px;}
+  .continue-link{display:block; text-align:center; margin-top:16px; font-size:0.78rem; color:var(--parchment-dim); text-decoration:none;}
+  .continue-link:hover{color:var(--amber-bright);}
+  footer{border-top:1px solid var(--line); padding:44px 28px 36px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; font-size:0.8rem; color:var(--parchment-dim);}
+  .summary-row.zone-row{padding-bottom:0;}
+  .zone-tabs{display:flex; gap:6px; margin-bottom:14px;}
+  .zone-tab{
+    flex:1;
+    background:transparent;
+    border:1px solid var(--brass);
+    color:var(--parchment-dim);
+    padding:8px 6px;
+    font-size:0.68rem;
+    border-radius:var(--radius);
+    text-align:center;
+  }
+  .zone-tab.active{
+    background:var(--amber);
+    border-color:var(--amber);
+    color:var(--ink-deep);
+    font-weight:600;
+  }
+  .zone-tab:hover:not(.active){border-color:var(--amber-bright); color:var(--parchment);}
+  @media (max-width: 880px){ .cart-layout{grid-template-columns:1fr;} .summary{position:static;} }
+  @media (max-width: 560px){
+    nav.links{display:none;}
+    .hamburger-btn{display:flex;}
+    .line-item{grid-template-columns:48px 1fr;}
+    .li-price{grid-column:1 / -1; text-align:left; margin-top:8px;}
+  }  .wa-float{
+    position:fixed; bottom:24px; right:24px; z-index:50;
+    width:56px; height:56px; border-radius:50%;
+    background:#25D366; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(33,26,51,0.3);
+    text-decoration:none;
+    transition:transform .15s ease;
+  }
+  .wa-float:hover{transform:scale(1.07);}
+  .wa-float svg{width:28px; height:28px; display:block;}
+  @media (max-width:620px){
+    .wa-float{bottom:18px; right:18px; width:50px; height:50px;}
+    .wa-float svg{width:25px; height:25px;}
+  }
+  @media (max-width:480px){
+    .nav{padding:14px 16px; gap:8px;}
+    .wordmark .mono{display:none;}
+    .wordmark{font-size:1rem;}
+    .cart-pill{padding:8px 10px;}
+    .pill-label{display:none;}
+  }
+</style>
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="enigma.css?v=20261013">
+<link rel="stylesheet" href="ep-chrome.css">
+<link rel="stylesheet" href="ep-theme.css">
 </head>
-<body>
-<div class="announce" id="announce" aria-label="Store notes"></div>
-<header class="site-header">
-  <div class="nav">
-    <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
-    <nav class="links" aria-label="Main">
-      <a href="shop.html">Shop</a>
-      <a href="brands.html">Brands</a>
-      <a href="about.html">About</a>
-    </nav>
-    <div class="nav-right">
-      <a class="pill" href="wishlist.html" aria-label="Wishlist"><span>♡<span class="pill-label"> Wishlist</span></span><span class="count" data-wishlist-count>0</span></a>
-      <a class="pill" href="cart.html" aria-label="Cart"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h12l-1 10H5l-1-10Z"/><path d="M7 6.5V5a3 3 0 0 1 6 0v1.5"/></svg><span class="pill-label">Cart</span><span class="count" data-cart-count>0</span></a>
-      <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-    <a href="shop.html">Shop</a>
-    <a href="brands.html">Brands</a>
-    <a href="about.html">About</a>
-    <a href="wishlist.html">Wishlist</a>
-    <a href="cart.html">Cart</a>
-  </nav>
-</header>
+<body data-page="cart">
+
+<div id="epHeader"></div>
 
 <div class="page-head">
   <div class="wrap">
-    <div class="breadcrumb"><a href="shop.html">Shop</a> / <span>Cart</span></div>
+    <div class="breadcrumb"><a href="index.html">Catalogue</a> / <span>Cart</span></div>
     <h1>Your cart</h1>
+    <p class="sub" id="subCopy">Review your decants before they're poured.</p>
   </div>
 </div>
 
-<main class="wrap" id="cartRoot"></main>
-
-<footer>
-  <div class="wrap">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <h4>Enigma Perfumes</h4>
-        <p>BNIB and tester perfumes.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Links</h4>
-        <ul>
-          <li><a href="shop.html">Shop</a></li>
-          <li><a href="brands.html">Brands</a></li>
-          <li><a href="wishlist.html">Wishlist</a></li>
-          <li><a href="cart.html">Cart</a></li>
-          <li><a href="about.html">About</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Contact us</h4>
-        <div class="contact-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
-        <div class="contact-line">✉️ <a href="mailto:enigma6perfumes@gmail.com">enigma6perfumes@gmail.com</a></div>
-        <div class="contact-line">💬 <a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a></div>
-        <div class="contact-line">👥 <a href="https://chat.whatsapp.com/B5WdEerbCnMCQhUUtj97U0" target="_blank" rel="noopener">Join our WhatsApp community</a></div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© Enigma Perfumes.</span>
-    </div>
-  </div>
-</footer>
-
-<script src="enigma-store.js?v=20261030c"></script>
-<script>
-const root = document.getElementById("cartRoot");
-
-function lineHtml(l){
-  const f = l.listing;
-  const atMax = l.qty >= l.maxQty;
-  return `
-  <div class="line" data-id="${enEsc(f.id)}">
-    ${enThumbHtml(f)}
+<main class="wrap">
+  <div class="cart-layout">
     <div>
-      <div class="line-house">${enEsc(f.house)}</div>
-      <div class="line-name">${enEsc(f.name)}</div>
-      <div class="line-meta">${enBadgeHtml(f)}<span>${enEsc(f.bottleSize)}</span><span>${enEsc(enBoxText(f))}</span></div>
+      <div class="line-list" id="lineList"></div>
+      <a class="continue-link" href="shop.html" style="text-align:left; margin-top:22px; display:inline-block;">← Continue browsing the catalogue</a>
     </div>
-    <div class="line-side">
-      <div class="price">${enFormatPrice(l.lineTotal)}</div>
-      <div class="stepper" role="group" aria-label="Quantity for ${enEsc(f.name)}">
-        <button type="button" data-act="dec" aria-label="Decrease quantity"${l.qty <= 1 ? " disabled" : ""}>−</button>
-        <span class="q" aria-live="polite">${l.qty}</span>
-        <button type="button" data-act="inc" aria-label="Increase quantity"${atMax ? " disabled" : ""}>+</button>
+
+    <aside class="summary">
+      <h2>Order summary</h2>
+
+      <div class="ship-progress" id="shipProgress">
+        <div class="ship-progress-track">
+          <div class="ship-progress-fill" id="shipProgressFill"></div>
+        </div>
+        <p class="ship-progress-label" id="shipProgressLabel"></p>
       </div>
-      <button class="link-btn" type="button" data-act="remove">Remove</button>
-    </div>
-  </div>`;
+
+      <div class="summary-row">
+        <span id="itemCountLabel">0 items</span>
+        <span class="mono" id="subtotalVal">₹0</span>
+      </div>
+      <div class="summary-row zone-row">
+        <span>Shipping to</span>
+      </div>
+      <div class="zone-tabs" id="zoneTabs">
+        <button class="zone-tab" data-zone="ncr">Delhi NCR</button>
+        <button class="zone-tab" data-zone="india">Rest of India</button>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span class="mono" id="shippingVal">₹0</span>
+      </div>
+      <div class="summary-row total">
+        <span>Estimated total</span>
+        <span class="mono" id="totalVal">₹0</span>
+      </div>
+      <a class="btn-primary" href="checkout.html" id="checkoutBtn">Proceed to checkout</a>
+      <p class="note-line" id="shipNote">Free shipping on orders of 4+ decants · dispatched within 48 hrs</p>
+    </aside>
+  </div>
+</main>
+
+<section class="recently-viewed" id="recentlyViewed" style="display:none;">
+  <div class="wrap">
+    <h2>Recently viewed</h2>
+    <div class="rv-grid" id="rvGrid"></div>
+  </div>
+</section>
+
+<div id="epFooter"></div>
+
+<script src="store.js?v=1"></script>
+<script src="ep-chrome.js?v=1"></script>
+<script>
+const FILL_LEVEL = { "3ml": 28, "5ml": 40, "10ml": 62, "20ml": 92, "30ml": 100 };
+
+const SHIPPING_ZONES = {
+  ncr:   { label: "Delhi NCR", flat: 55 },
+  india: { label: "Rest of India",      flat: 75 }
+};
+const FREE_SHIP_QTY = 4;
+const ZONE_KEY = "le_ship_zone";
+let currentZone = localStorage.getItem(ZONE_KEY) || "ncr";
+if(!SHIPPING_ZONES[currentZone]) currentZone = "ncr";
+
+function vialSVG(id, color, size){
+  const fill = FILL_LEVEL[size] || FILL_LEVEL["10ml"];
+  const y = 190 - (fill / 100) * 180;
+  const clipId = "clip-cart-" + id;
+  return `
+  <svg class="vial" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M38 10 H62 V38 C62 42 66 44 72 52 C82 64 84 78 84 100 V172 C84 182 76 190 66 190 H34 C24 190 16 182 16 172 V100 C16 78 18 64 28 52 C34 44 38 42 38 38 Z"
+          stroke="#A64A66" stroke-width="3"/>
+    <clipPath id="${clipId}">
+      <path d="M38 10 H62 V38 C62 42 66 44 72 52 C82 64 84 78 84 100 V172 C84 182 76 190 66 190 H34 C24 190 16 182 16 172 V100 C16 78 18 64 28 52 C34 44 38 42 38 38 Z"/>
+    </clipPath>
+    <g clip-path="url(#${clipId})">
+      <rect class="liquid-fill" x="10" y="${y}" width="84" height="200" fill="${color}"/>
+    </g>
+    <rect x="34" y="2" width="32" height="8" rx="2" fill="#A64A66"/>
+  </svg>`;
 }
+
+function currency(n){ return leFormatPrice(n); }
+
+function renderEmpty(){
+  const list = document.getElementById("lineList");
+  list.innerHTML = `
+    <div class="empty-state">
+      ${vialSVG("empty", "#121316", "5ml").replace('class="vial"','class="vial" style="width:56px;margin:0 auto;"')}
+      <h3>Your cart is empty</h3>
+      <p>Nothing decanted yet — pick a bottle from the catalogue to begin.</p>
+      <a class="btn-primary" href="shop.html" style="display:inline-block; width:auto; margin-top:0;">Browse the catalogue</a>
+    </div>`;
+}
+
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+if(hamburgerBtn && mobileMenu){
+  hamburgerBtn.addEventListener("click", () => {
+    const isOpen = mobileMenu.classList.toggle("open");
+    hamburgerBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+  mobileMenu.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+      hamburgerBtn.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+const addOpen = new Set(); // fragrance ids whose 'other sizes' list is expanded
+
 
 function render(){
-  const lines = enCartLines();
-  if(!lines.length){
-    root.innerHTML = `<div class="empty">Your cart is empty. <a href="shop.html">Browse the perfumes</a></div><div style="height:64px"></div>`;
-    return;
+  const lines = leCartLines();
+  const list = document.getElementById("lineList");
+  const sub = document.getElementById("subCopy");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  if(lines.length === 0){
+    renderEmpty();
+    checkoutBtn.style.pointerEvents = "none";
+    checkoutBtn.style.opacity = "0.4";
+  } else {
+    checkoutBtn.style.pointerEvents = "";
+    checkoutBtn.style.opacity = "";
+
+    const fragrances = [...new Map(lines.map(l => [l.id, l.fragrance])).values()];
+
+    list.innerHTML = fragrances.map(f => {
+      const sizes = Object.keys(f.prices);
+      const fLines = lines.filter(l => l.id === f.id);
+      const cartSizes = fLines.map(l => l.size);
+      const inCart = sizes.filter(s => cartSizes.includes(s));
+      const others = sizes.filter(s => !cartSizes.includes(s));
+      const rowTotal = fLines.reduce((s, l) => s + l.lineTotal, 0);
+      const open = addOpen.has(f.id) && others.length > 0;
+      const sizeRow = (s, showEach) => `
+              <div class="size-table-row" data-size="${s}">
+                <span class="size-table-size">${leSizeLabel(s, f.id)}</span>
+                <div class="size-table-right">
+                  <span class="size-table-price mono">${currency(f.prices[s])}${showEach ? "<small>each</small>" : ""}</span>
+                  <span class="le-card-qty-slot" data-size="${s}"></span>
+                </div>
+              </div>`;
+      return `
+      <div class="line-item" data-id="${f.id}">
+        <div class="vial-slot">${f.image
+          ? `<img src="${f.image}" alt="${f.name}" style="width:56px;height:80px;object-fit:contain;border-radius:6px;">`
+          : vialSVG(f.id, f.color, inCart[0] || sizes[0])}</div>
+        <div class="li-main">
+          <div class="li-house">${f.house}</div>
+          <h3 class="li-name">${f.name}</h3>
+          <div class="li-notes">${[f.notes.top, f.notes.heart, f.notes.base].filter(Boolean).join(" · ")}</div>
+          <div class="li-controls">
+            <button class="li-wishlist${leIsWishlisted(f.id) ? " active" : ""}">${leIsWishlisted(f.id) ? "♥ Saved" : "♡ Save for later"}</button>
+          </div>
+          <div class="size-table">${inCart.map(s => sizeRow(s, true)).join("")}
+          </div>
+          ${others.length ? `
+          <button class="li-add-size" aria-expanded="${open}">${open ? "− Hide other sizes" : "+ Add another size"}</button>
+          ${open ? `<div class="size-table other">${others.map(s => sizeRow(s, false)).join("")}
+          </div>` : ""}` : ""}
+        </div>
+        <div class="li-price">
+          <span class="total mono">${currency(rowTotal)}</span>
+        </div>
+      </div>`;
+    }).join("");
   }
-  const count = enCartCount();
-  const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-  root.innerHTML = `
-  <div class="cart-layout">
-    <div id="lines">${lines.map(lineHtml).join("")}</div>
-    <aside class="summary">
-      <h2>Summary</h2>
-      <div class="summary-row"><span>${count === 1 ? "1 perfume" : count + " perfumes"}</span><span class="price">${enFormatPrice(subtotal)}</span></div>
-      <div class="summary-row"><span>Shipping</span><span>Free</span></div>
-      <div class="summary-row total"><span>Total</span><span>${enFormatPrice(subtotal)}</span></div>
-      <a class="btn btn-block" href="checkout.html">Checkout</a>
-      ${enDeliveryHtml()}
-      <p class="note">Stock is limited. We confirm availability on WhatsApp when you place your order.</p>
-    </aside>
-  </div>`;
+
+  const count = leCartCount();
+  document.getElementById("itemCountLabel").textContent = count === 1 ? "1 item" : `${count} items`;
+  sub.textContent = count === 0 ? "Nothing decanted yet." : `Review your ${count === 1 ? "decant" : "decants"} before they're poured.`;
+
+  const shipProgress = document.getElementById("shipProgress");
+  const shipProgressFill = document.getElementById("shipProgressFill");
+  const shipProgressLabel = document.getElementById("shipProgressLabel");
+  if(count === 0){
+    shipProgress.style.display = "none";
+  }else{
+    shipProgress.style.display = "block";
+    const pct = leCartHasPartial() ? 100 : Math.min((count / FREE_SHIP_QTY) * 100, 100);
+    const unlocked = count >= FREE_SHIP_QTY || leCartHasPartial();
+    shipProgressFill.style.width = pct + "%";
+    shipProgressFill.classList.toggle("complete", unlocked);
+    shipProgressLabel.classList.toggle("complete", unlocked);
+    shipProgressLabel.textContent = unlocked
+      ? "✓ Free shipping unlocked!"
+      : `${FREE_SHIP_QTY - count} more decant${FREE_SHIP_QTY - count === 1 ? "" : "s"} for free shipping`;
+  }
+
+  const st = lines.reduce((s, l) => s + l.lineTotal, 0);
+  const zone = SHIPPING_ZONES[currentZone];
+  const qualifiesFreeShip = count >= FREE_SHIP_QTY || leCartHasPartial();
+  const shipping = st === 0 ? 0 : (qualifiesFreeShip ? 0 : zone.flat);
+
+  document.getElementById("subtotalVal").textContent = currency(st);
+  document.getElementById("shippingVal").textContent = shipping === 0 ? "Free" : currency(shipping);
+  document.getElementById("shipNote").textContent = qualifiesFreeShip
+    ? `${leCartHasPartial() ? "Free shipping — included with your bottle" : `Free shipping unlocked — ${FREE_SHIP_QTY}+ decants in your cart`} · dispatched within 48 hrs`
+    : `Free shipping on orders of ${FREE_SHIP_QTY}+ decants · otherwise ${currency(zone.flat)} to ${zone.label} · dispatched within 48 hrs`;
+
+  document.querySelectorAll(".zone-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.zone === currentZone);
+  });
+
+  document.getElementById("totalVal").textContent = currency(Math.max(st + shipping, 0));
+
+  attachHandlers();
 }
 
-root.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-act]");
+function attachHandlers(){
+  document.querySelectorAll(".line-item").forEach(row => {
+    const id = row.dataset.id;
+
+    row.querySelectorAll(".le-card-qty-slot").forEach(slot => {
+      leWireQtyControl(slot, id, slot.dataset.size, "dark", render);
+    });
+
+    row.querySelector(".li-wishlist").addEventListener("click", () => {
+      leToggleWishlist(id);
+      render();
+    });
+
+    const addSizeBtn = row.querySelector(".li-add-size");
+    if(addSizeBtn) addSizeBtn.addEventListener("click", () => {
+      if(addOpen.has(id)) addOpen.delete(id); else addOpen.add(id);
+      render();
+    });
+  });
+}
+
+function renderRecentlyViewed(){
+  const section = document.getElementById("recentlyViewed");
+  const grid = document.getElementById("rvGrid");
+  const items = leGetRecentlyViewed(6);
+  if(!items.length){
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  grid.innerHTML = items.map(f => `
+    <div class="rv-card" data-id="${f.id}">
+      <div class="rv-swatch" style="${f.image ? `background-image:url('${f.image}');background-size:contain;background-repeat:no-repeat;background-position:center;` : `background:${f.color};`}"></div>
+      <div class="rv-house mono">${f.house}</div>
+      <div class="rv-name">${f.name}</div>
+    </div>
+  `).join("");
+  grid.querySelectorAll(".rv-card").forEach(card => {
+    card.addEventListener("click", () => leOpenProductModal(card.dataset.id));
+  });
+}
+
+render();
+renderRecentlyViewed();
+window.addEventListener("le-data-updated", () => { leValidateCart(); render(); });
+
+document.getElementById("zoneTabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".zone-tab");
   if(!btn) return;
-  const id = btn.closest(".line").dataset.id;
-  const cur = enCartQtyFor(id);
-  if(btn.dataset.act === "inc") enUpdateQty(id, cur + 1);
-  else if(btn.dataset.act === "dec") enUpdateQty(id, cur - 1);
-  else if(btn.dataset.act === "remove") enRemoveFromCart(id);
+  currentZone = btn.dataset.zone;
+  localStorage.setItem(ZONE_KEY, currentZone);
   render();
 });
-window.addEventListener("storage", (e) => { if(e.key === EN_CART_KEY) render(); });
-render();
 </script>
-<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I%27d%20like%20to%20ask%20about%20a%20perfume." target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg></a>
+
+<a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I'd%20like%20to%20place%20a%20decant%20order." target="_blank" rel="noopener" aria-label="Order via WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg>
+</a>
 </body>
 </html>

@@ -1,0 +1,11 @@
+/* ep-theme.css — gives the Liquid Emotions page layouts (cart, checkout, wishlist, about) Enigma's palette and fonts.
+   Loaded AFTER each page's own <style>, so it only re-points the colour variables, fonts and the old background. */
+:root{
+  --ink:#ECE8F1; --ink-deep:#211A33; --parchment:#211A33; --parchment-dim:#5B5470;
+  --amber:#A64A66; --amber-bright:#8B1E3F; --brass:#A64A66; --line:rgba(91,84,112,0.32);
+  --moss:#F8F6FB; --burgundy:#211A33; --radius:4px; --blush:#E1DBEA; --taupe:#5B5470;
+}
+body{font-family:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif !important; font-size:16px !important; background:#ECE8F1 !important; color:#211A33}
+h1,h2,h3,.display{font-family:'Gloock',Georgia,serif !important; font-weight:400 !important; letter-spacing:-0.005em}
+.mono{font-family:'Hanken Grotesk',system-ui,sans-serif !important; letter-spacing:0 !important}
+body::before{display:none !important}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full bottles — Enigma Perfumes</title>
+<meta name="description" content="Sealed BNIB bottles, testers and vials.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="enigma.css">
+<link rel="stylesheet" href="ep.css">
+</head>
+<body data-page="bottles" data-mode="bottles">
+<div id="epHeader"></div>
+<main class="wrap">
+  <div class="page-head" style="padding:22px 0 8px"><h1>Full bottles</h1><p style="color:var(--ink-soft);margin:6px 0 0">Brand new sealed bottles, testers and vials.</p></div>
+  
+  <section class="catalogue" id="catalogue">
+    <div class="shop-tabs" id="shopTabs" role="tablist" aria-label="Type"></div>
+    <div class="search-row" style="margin-top:12px"><input type="search" id="q" placeholder="Search perfumes" aria-label="Search perfumes" autocomplete="off"></div>
+    <div class="cat-row" id="catRow"></div>
+    <div class="filter-row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+      <select id="brandSel" class="sort-select" aria-label="Brand"></select>
+      <select id="sortSel" class="sort-select" aria-label="Sort"><option value="new">Newest first</option><option value="plow">Price: low to high</option><option value="phigh">Price: high to low</option><option value="az">A to Z</option></select>
+    </div>
+    <p class="result-count" id="resultCount" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+<div id="epFooter"></div>
+<script src="store.js?v=1"></script>
+<script src="ep-ui.js?v=1"></script>
+</body>
+</html>

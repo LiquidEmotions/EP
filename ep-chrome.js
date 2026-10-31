@@ -4,6 +4,9 @@
 "use strict";
 const ACTIVE = document.body.dataset.page || "";
 const SLIM = document.body.dataset.chrome === "slim";    // checkout: no scrolling text
+/* Mini cart: slides in from the right. Not on the cart or checkout pages, where it would only repeat them. */
+const MINI = !SLIM && ACTIVE !== "cart" && typeof leCartLines === "function";
+const AUTO_OPEN = true;   // slide the mini cart open whenever something is added; set false to open it only from the cart button
 /* Lines that scroll across the top. "{bottles}" becomes the full-bottle sizes you have in stock. */
 const TICKER = ["Decants from 3ml", "{bottles}", "Decanted by syringe, sealed by hand", "Authentic, from genuine bottles", "Free shipping on every bottle"];
 const NAV = [["index.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"], ["brands.html", "Brands", "brands"], ["about.html", "About", "about"]];
@@ -44,7 +47,13 @@ const header = `<div class="epc">${SLIM ? "" : `<div class="epc-ticker" aria-lab
 <aside class="epc-drawer" id="epcDrawer" aria-hidden="true" aria-label="Menu">
   <button class="epc-close" id="epcClose" type="button" aria-label="Close menu">×</button>
   <nav class="epc-drawer-links">${drawerLinks}</nav>
-</aside></div>`;
+</aside>
+${MINI ? `<div class="epc-overlay epm-overlay" id="epmOverlay"></div>
+<aside class="epm" id="epm" aria-hidden="true" aria-label="Your cart">
+  <div class="epm-head"><strong>Your cart <span id="epmN"></span></strong><button class="epm-x" id="epmClose" type="button" aria-label="Close cart">×</button></div>
+  <div class="epm-body" id="epmBody"></div>
+  <div class="epm-foot" id="epmFoot"></div>
+</aside>` : ""}</div>`;
 const footer = `<div class="epc"><div class="epc-footer"><div class="epc-wrap"><div class="epc-cols">
   <div class="epc-col"><h4>Enigma Perfumes</h4><p>Decants, sealed bottles, testers and vials.</p></div>
   <div class="epc-col"><h4>Links</h4><ul>${NAV.map(n => `<li><a href="${n[0]}">${n[1]}</a></li>`).join("")}<li><a href="wishlist.html">Wishlist</a></li><li><a href="cart.html">Cart</a></li></ul></div>
@@ -72,6 +81,74 @@ if(ham){
   ov.addEventListener("click", () => setMenu(false));
   drawer.addEventListener("click", e => { if(e.target.closest("a")) setMenu(false); });
   document.addEventListener("keydown", e => { if(e.key === "Escape") setMenu(false); });
+}
+/* ---------- mini cart ---------- */
+if(MINI && h){
+  const mini = document.getElementById("epm"), mOv = document.getElementById("epmOverlay");
+  const mBody = document.getElementById("epmBody"), mFoot = document.getElementById("epmFoot"), mN = document.getElementById("epmN");
+  const money = n => (typeof leFormatPrice === "function" ? leFormatPrice(n) : "₹" + n);
+  let lastCount = 0; try{ lastCount = leCartCount(); }catch(e){}
+  const isOpen = () => mini.classList.contains("open");
+  function miniRender(){
+    let lines = []; try{ lines = leCartLines(); }catch(e){}
+    mN.textContent = lines.length ? "(" + lines.reduce((n, l) => n + l.qty, 0) + ")" : "";
+    if(!lines.length){
+      mBody.innerHTML = `<div class="epm-empty"><p>Your cart is empty.</p><a href="shop.html">Browse the shop</a><a href="decants.html">Browse decants</a></div>`;
+      mFoot.innerHTML = ""; return;
+    }
+    mBody.innerHTML = lines.map(l => {
+      const f = l.fragrance;
+      const img = f.image ? `<img src="${esc(f.image)}" alt="" loading="lazy">` : `<span class="epm-sw" style="background:${esc(f.color || "#CDC6DA")}"></span>`;
+      const single = typeof leMaxQtyFor === "function" && leMaxQtyFor(l.size) <= 1;
+      return `<div class="epm-line" data-id="${esc(l.id)}" data-size="${esc(l.size)}">
+  <div class="epm-img">${img}</div>
+  <div class="epm-info"><div class="epm-name">${esc(f.name)}</div><div class="epm-meta">${esc(f.house)} · ${esc(leSizeLabel(l.size, l.id))}</div>
+    <div class="epm-qty">${single ? `<span class="epm-one">1 only</span>` : `<button type="button" data-act="dec" aria-label="Decrease quantity">−</button><span>${l.qty}</span><button type="button" data-act="inc" aria-label="Increase quantity">+</button>`}<button type="button" class="epm-rm" data-act="rm">Remove</button></div></div>
+  <div class="epm-price">${money(l.lineTotal)}</div></div>`;
+    }).join("");
+    const total = lines.reduce((n, l) => n + l.lineTotal, 0);
+    mFoot.innerHTML = `<div class="epm-sub"><span>Subtotal</span><strong>${money(total)}</strong></div>
+<p class="epm-note">Shipping and payment are worked out at checkout.</p>
+<a class="epm-btn epm-btn-main" href="checkout.html">Checkout</a><a class="epm-btn" href="cart.html">View full cart</a>`;
+  }
+  function miniOpen(){
+    try{ leValidateCart(); }catch(e){}
+    miniRender();
+    mini.classList.add("open"); mOv.classList.add("open"); mini.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+  }
+  function miniClose(){
+    mini.classList.remove("open"); mOv.classList.remove("open"); mini.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+  }
+  mBody.addEventListener("click", e => {
+    const b = e.target.closest("[data-act]"); if(!b) return;
+    const row = b.closest(".epm-line"), id = row.dataset.id, size = row.dataset.size;
+    const cur = (leGetCart().find(i => i.id === id && i.size === size) || { qty: 0 }).qty;
+    if(b.dataset.act === "inc") leUpdateQty(id, size, cur + 1);
+    else if(b.dataset.act === "dec") leUpdateQty(id, size, cur - 1);
+    else leRemoveFromCart(id, size);
+    miniRender();
+  });
+  document.getElementById("epmClose").addEventListener("click", miniClose);
+  mOv.addEventListener("click", miniClose);
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && isOpen()) miniClose(); });
+  mFoot.addEventListener("click", e => { if(e.target.closest("a")) miniClose(); });
+  /* the cart button opens the mini cart instead of leaving the page (a middle-click or ctrl-click still opens cart.html) */
+  document.querySelectorAll('a.epc-pill[href="cart.html"]').forEach(a => a.addEventListener("click", e => {
+    if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+    e.preventDefault(); setMenu(false); miniOpen();
+  }));
+  /* store.js calls this whenever the cart changes */
+  const prev = window.leOnCartChanged;
+  window.leOnCartChanged = function(){
+    if(typeof prev === "function"){ try{ prev(); }catch(e){} }
+    let n = lastCount; try{ n = leCartCount(); }catch(e){}
+    const grew = n > lastCount; lastCount = n;
+    if(isOpen()) miniRender();
+    else if(AUTO_OPEN && grew && document.hasFocus()) miniOpen();
+  };
+  window.epOpenMiniCart = miniOpen;
 }
 /* keep the full-bottle sizes in the scrolling text up to date when the sheet loads */
 const refreshTicker = () => { const t = document.getElementById("epcTrack"); if(t) t.innerHTML = tickerHtml(); };

@@ -112,7 +112,7 @@ function renderPicker(){
   <div class="pk-foot"><a class="btn btn-ghost" href="cart.html">View cart (<span data-cart-count>${leCartCount()}</span>)</a><a class="btn" href="checkout.html">Checkout</a></div>`;
 }
 function openPicker(id, mode){
-  ensurePicker(); pkId = id; pkMode = mode || MODE;
+  ensurePicker(); pkId = id; pkMode = "all";   // the picker always shows every size: decants, vials, testers and the sealed bottle
   renderPicker();
   $("#pkOverlay").classList.add("open"); pk.classList.add("open");
   document.body.style.overflow = "hidden";

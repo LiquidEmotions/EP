@@ -18,21 +18,12 @@
   h1,h2,h3,.display{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em;}
   .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
   a{color:inherit;}
-  /* ---------- Background: champagne gold + light rose gold (static, minimal) ---------- */
-  body::before{
-    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-    background:
-      linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.55) 50%, transparent 62%),
-      radial-gradient(1100px 720px at 0% 0%, rgba(233,212,160,0.42), transparent 62%),
-      radial-gradient(1000px 760px at 100% 100%, rgba(232,184,166,0.36), transparent 62%),
-      linear-gradient(160deg, #FBF8F0 0%, #ECE8F1 50%, #F9EEE9 100%);
-  }
   img,svg{display:block;max-width:100%;}
   button, input, select{font-family:inherit;}
   button{cursor:pointer;}
   :focus-visible{outline:2px solid var(--amber-bright); outline-offset:3px;}
   .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
-  header{position:sticky; top:0; z-index:20; background:rgba(250,246,242,0.85); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  header{position:sticky; top:0; z-index:20; background:rgba(236,232,241,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
   .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 28px;}
   .wordmark{font-size:1.15rem; display:flex; align-items:baseline; gap:8px; text-decoration:none;}
   .wordmark .mono{font-size:0.62rem; color:var(--amber-bright); letter-spacing:0.14em;}
@@ -364,13 +355,13 @@
   <a class="btn-primary" id="waSendBtn" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
   <p style="margin-top:18px;">Want updates on new decants and offers? <a href="https://chat.whatsapp.com/BDzNrJFW8PXB9tdmqReyhZ" target="_blank" rel="noopener" style="text-decoration:underline;">Join our WhatsApp community</a></p>
   <br>
-  <a href="home.html" style="display:inline-block; margin-top:22px; font-size:0.85rem; color:var(--parchment-dim);">Back to the catalogue</a>
+  <a href="index.html" style="display:inline-block; margin-top:22px; font-size:0.85rem; color:var(--parchment-dim);">Back to the catalogue</a>
 </div>
 
 <div id="epFooter"></div>
 
 <script src="store.js?v=3"></script>
-<script src="ep-chrome.js?v=3"></script>
+<script src="ep-chrome.js?v=4"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>

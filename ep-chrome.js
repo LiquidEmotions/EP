@@ -6,7 +6,7 @@ const ACTIVE = document.body.dataset.page || "";
 const SLIM = document.body.dataset.chrome === "slim";    // checkout: no scrolling text
 /* Lines that scroll across the top. "{bottles}" becomes the full-bottle sizes you have in stock. */
 const TICKER = ["Decants from 3ml", "{bottles}", "Decanted by syringe, sealed by hand", "Authentic, from genuine bottles", "Free shipping on every bottle"];
-const NAV = [["home.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"], ["brands.html", "Brands", "brands"], ["about.html", "About", "about"]];
+const NAV = [["index.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"], ["brands.html", "Brands", "brands"], ["about.html", "About", "about"]];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 function bottleSizes(){
@@ -33,7 +33,7 @@ const header = `<div class="epc">${SLIM ? "" : `<div class="epc-ticker" aria-lab
 <div class="epc-header" role="banner"><div class="epc-nav">
   <div class="epc-left">
     <button class="epc-ham" id="epcHam" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="epcDrawer"><span></span><span></span><span></span></button>
-    <a class="epc-wordmark" href="home.html"><span>Enigma</span><span>Perfumes</span></a>
+    <a class="epc-wordmark" href="index.html"><span>Enigma</span><span>Perfumes</span></a>
   </div>
   <nav class="epc-links" aria-label="Main">${mainLinks}</nav>
   <div class="epc-right">

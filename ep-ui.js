@@ -7,54 +7,6 @@ const PAGE = document.body.dataset.page || "";
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const $ = (s, r) => (r || document).querySelector(s);
 
-/* ---- what scrolls across the top (edit these lines) ---- */
-const TICKER = [
-  "Decants from 3ml",
-  "Decanted by syringe, sealed by hand",
-  "Authentic, from genuine bottles",
-  "Sealed BNIB bottles, testers and vials",
-  "Free shipping on every bottle"
-];
-const NAV = [
-  ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"],
-  ["brands.html", "Brands", "brands"], ["about.html", "About", "about"]
-];
-
-function header(){
-  const links = NAV.map(n => `<a href="${n[0]}"${n[2] === PAGE ? ' class="active"' : ""}>${n[1]}</a>`).join("");
-  const track = TICKER.map(t => `<span>${esc(t)}</span>`).join("");
-  return `<div class="ticker" aria-label="Store notes"><div class="ticker-track">${track}${track}</div></div>
-<header class="site-header"><div class="nav">
-  <a class="wordmark" href="index.html"><span class="wm-name">Enigma</span><span class="wm-sub">Perfumes</span></a>
-  <nav class="links" aria-label="Main">${links}</nav>
-  <div class="nav-right">
-    <a class="pill" href="wishlist.html" aria-label="Wishlist"><span>♡<span class="pill-label"> Wishlist</span></span><span class="count" data-wishlist-count>0</span></a>
-    <a class="pill" href="cart.html" aria-label="Cart"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h12l-1 10H5l-1-10Z"/><path d="M7 6.5V5a3 3 0 0 1 6 0v1.5"/></svg><span class="pill-label">Cart</span><span class="count" data-cart-count>0</span></a>
-    <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  </div></div>
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">${links}<a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a></nav>
-</header>`;
-}
-function footer(){
-  return `<footer><div class="wrap"><div class="footer-cols">
-  <div class="footer-col"><h4>Enigma Perfumes</h4><p>Decants, sealed bottles, testers and vials.</p></div>
-  <div class="footer-col"><h4>Links</h4><ul>${NAV.map(n => `<li><a href="${n[0]}">${n[1]}</a></li>`).join("")}<li><a href="wishlist.html">Wishlist</a></li><li><a href="cart.html">Cart</a></li></ul></div>
-  <div class="footer-col"><h4>Contact us</h4>
-    <div class="contact-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
-    <div class="contact-line">✉️ <a href="mailto:enigma6perfumes@gmail.com">enigma6perfumes@gmail.com</a></div>
-    <div class="contact-line">💬 <a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a></div>
-    <div class="contact-line">👥 <a href="https://chat.whatsapp.com/B5WdEerbCnMCQhUUtj97U0" target="_blank" rel="noopener">Join our WhatsApp community</a></div>
-  </div></div></div></footer>`;
-}
-function mountChrome(){
-  const h = $("#epHeader"), f = $("#epFooter");
-  if(h) h.outerHTML = header();
-  if(f) f.outerHTML = footer();
-  const hb = $("#hamburgerBtn"), mm = $("#mobileMenu");
-  if(hb && mm) hb.addEventListener("click", () => { const o = mm.classList.toggle("open"); hb.setAttribute("aria-expanded", o); });
-  leUpdateCartBadges(); leUpdateWishlistBadges();
-}
-
 /* ---- sizes, prices, cards ---- */
 const KIND_ORDER = ["decant", "partial", "vial", "tester", "bottle"];
 const KIND_TITLE = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "New sealed bottles (BNIB)" };
@@ -83,7 +35,7 @@ function tagsHtml(f, mode){
   if(kinds.has("bottle")) t.push('<span class="tag t-bottle">Bottle</span>');
   if(kinds.has("tester")) t.push('<span class="tag t-tester">Tester</span>');
   if(kinds.has("vial")) t.push('<span class="tag t-vial">Vial</span>');
-  if(MODE === "all" && (kinds.has("decant") || kinds.has("partial")) && !kinds.has("bottle") && !kinds.has("tester") && !kinds.has("vial")) t.push('<span class="tag">Decant only</span>');
+  if(MODE !== "bottles" && (kinds.has("decant") || kinds.has("partial")) && !kinds.has("bottle")) t.push('<span class="tag t-sold">Bottle sold out</span>');
   return t.join("");
 }
 function initials(f){ return esc((f.house || "?").split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase()); }
@@ -137,6 +89,9 @@ function renderPicker(){
   const f = leFragranceById(pkId); if(!f) return;
   const sizes = sizesOf(f, pkMode);
   const groups = KIND_ORDER.map(k => [k, sizes.filter(sz => leSizeKind(sz) === k)]).filter(g => g[1].length);
+  const hasDecant = sizes.some(sz => leSizeKind(sz) === "decant" || leSizeKind(sz) === "partial");
+  const noBottle = pkMode !== "bottles" && hasDecant && !sizes.some(sz => leSizeKind(sz) === "bottle");
+  const soldBottleGroup = noBottle ? `<div class="pk-group"><h4>New sealed bottle</h4><div class="pk-row"><div><span class="pk-size">Full bottle</span><span class="pk-note">Brand new, sealed</span></div><div class="pk-price"></div><span class="pk-sold">Sold out</span></div></div>` : "";
   const rows = groups.map(([k, list]) => `<div class="pk-group"><h4>${KIND_TITLE[k]}</h4>${list.map(sz => {
     const sold = leIsSoldOut(f.id, sz) || (f.comingSoon && leSizeKind(sz) === "decant");
     const q = leCartQtyFor(f.id, sz), cap = leMaxQtyFor(sz);
@@ -147,9 +102,11 @@ function renderPicker(){
       : `<button class="pk-add" type="button" data-act="add" data-size="${esc(sz)}">Add</button>`;
     const note = rowNote(f, sz);
     return `<div class="pk-row"><div><span class="pk-size">${esc(leSizeLabel(sz, f.id))}</span>${note ? `<span class="pk-note">${esc(note)}</span>` : ""}${q >= cap && cap < 5 ? `<span class="pk-max">Max ${cap} per order</span>` : ""}</div><div class="pk-price num">${leFormatPrice(price)}${mrp}</div>${act}</div>`;
-  }).join("")}</div>`).join("");
+  }).join("")}</div>`).join("") + soldBottleGroup;
+  const top = Math.max.apply(null, sizes.map(sz => f.prices[sz]));
+  const emi = top >= EP_EMI_MIN ? `<div class="pk-info">💳 EMI available at checkout on eligible credit cards (orders ₹3,000 and above).</div>` : "";
   const n = f.notes ? ["top", "heart", "base"].filter(k => f.notes[k]).map(k => `<b>${k[0].toUpperCase() + k.slice(1)}:</b> ${esc(Array.isArray(f.notes[k]) ? f.notes[k].join(", ") : f.notes[k])}`).join(" · ") : "";
-  const info = (n ? `<div class="pk-info">${n}</div>` : "") + (f.fragranticaUrl ? `<div class="pk-info"><a href="${esc(f.fragranticaUrl)}" target="_blank" rel="noopener">See on Fragrantica ↗</a></div>` : "");
+  const info = emi + (n ? `<div class="pk-info">${n}</div>` : "") + (f.fragranticaUrl ? `<div class="pk-info"><a href="${esc(f.fragranticaUrl)}" target="_blank" rel="noopener">See on Fragrantica ↗</a></div>` : "");
   pk.innerHTML = `<div class="pk-head">${f.image ? `<img src="${esc(f.image)}" alt="" onerror="this.remove()">` : ""}<div class="pk-title"><small>${esc(f.house)}</small><h3>${esc(f.name)}</h3></div><button class="pk-x" type="button" data-act="close" aria-label="Close">×</button></div>
   <div class="pk-body">${rows}${info}</div>
   <div class="pk-foot"><a class="btn btn-ghost" href="cart.html">View cart (<span data-cart-count>${leCartCount()}</span>)</a><a class="btn" href="checkout.html">Checkout</a></div>`;
@@ -291,6 +248,17 @@ function initShop(){
 /* ---- home page ---- */
 function initHome(){
   if(PAGE !== "home") return;
+  const hs = $("#homeSearch"), sug = $("#homeSug");
+  if(hs && sug){
+    hs.addEventListener("input", () => {
+      const toks = norm(hs.value).split(" ").filter(Boolean);
+      if(!toks.length){ sug.innerHTML = ""; sug.hidden = true; return; }
+      const hits = FRAGRANCES.filter(f => visible(f, "all") && toks.every(t => norm(f.house + " " + f.name).includes(t))).slice(0, 6);
+      sug.innerHTML = hits.map(f => `<a href="shop.html?q=${encodeURIComponent(f.house + " " + f.name)}"><b>${esc(f.name)}</b><small>${esc(f.house)}</small></a>`).join("") || `<span class="sug-none">No match. Press search to browse all.</span>`;
+      sug.hidden = false;
+    });
+    document.addEventListener("click", e => { if(!e.target.closest(".home-search")) sug.hidden = true; });
+  }
   const ban = $("#banners"); if(ban) mountBanners(ban, 6);
   const tiles = $("#typeTiles");
   const count = () => {
@@ -327,7 +295,6 @@ function initBrands(){
   draw(); window.addEventListener("le-data-updated", draw);
 }
 
-mountChrome();
 initShop(); initHome(); initBrands();
 window.EP = { openPicker, closePicker, cardHtml, wireCards };
 })();

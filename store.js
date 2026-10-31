@@ -1605,6 +1605,18 @@ function leIsTesterPartial(id, size){
    reads f.prices (cart, checkout, the server price check) treats them like any other size.
    Keep leIsBottle in step with api/_pricing.js. */
 const EP_MAX_BOTTLE_QTY = 2;     // most bottles of one kind a customer can add (change if you hold more stock)
+/* Card EMI: Razorpay shows EMI for eligible credit cards on orders of this amount and above. */
+const EP_EMI_MIN = 3000;
+function epEmiLine(total){
+  if(!(total > 0)) return "";
+  return total >= EP_EMI_MIN ? "💳 EMI available at checkout on eligible credit cards."
+    : "💳 Add " + leFormatPrice(EP_EMI_MIN - total) + " more to unlock card EMI at checkout.";
+}
+function epRenderEmiNote(elId){
+  const el = document.getElementById(elId || "emiNote"); if(!el) return;
+  const total = leCartLines().reduce((n, l) => n + (l.lineTotal || 0), 0);
+  el.textContent = epEmiLine(total);
+}
 function leIsBottle(size){ return /-[BTV]$/.test(String(size || "")); }
 function leSizeKind(size){
   const m = /-([PBTV])$/.exec(String(size || ""));
@@ -2292,7 +2304,7 @@ function leCheckoutGuard(redirectUrl){
 }
 
 /* ============================================================
-   Order number — LE-00001, LE-00002, ...
+   Order number — EP-00001, EP-00002, ...
    Backed by a Google Apps Script Web App that atomically
    increments a counter cell in the shop's Google Sheet, so the
    number is unique across every customer/device, not just this
@@ -2308,9 +2320,11 @@ function leCheckoutGuard(redirectUrl){
        // request failed — fall back to leFallbackOrderNumber()
      }
    ============================================================ */
-const LE_ORDER_COUNTER_URL = "https://script.google.com/macros/s/AKfycbx-DJzp1TAsu4U8Ha9bGrP0BB8j_WR3iL2bG1SyuKZQAgt0QH8-5RqGCyfx3RoKZa2N/exec";
+/* EP order counter (Apps Script web app that returns { orderNumber: "EP-00001" }). Leave "" until it is deployed: orders then get a temporary EP-LOCAL number. */
+const LE_ORDER_COUNTER_URL = "";
 
 async function leGetNextOrderNumber(){
+  if(!LE_ORDER_COUNTER_URL) return null;
   try {
     const res = await fetch(LE_ORDER_COUNTER_URL, { method: "POST" });
     if(!res.ok) throw new Error("Bad response: " + res.status);
@@ -2329,7 +2343,7 @@ function leFallbackOrderNumber(){
   const key = "le_local_order_seq";
   const n = (parseInt(localStorage.getItem(key), 10) || 0) + 1;
   localStorage.setItem(key, n);
-  return "LE-LOCAL-" + String(n).padStart(5, "0");
+  return "EP-LOCAL-" + String(n).padStart(5, "0");
 }
 
 /* ============================================================

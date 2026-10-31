@@ -181,27 +181,21 @@
 <link rel="stylesheet" href="ep-chrome.css">
 <link rel="stylesheet" href="ep-theme.css">
 </head>
-<body data-page="checkout">
+<body data-page="checkout" data-chrome="slim">
 
-<header>
-  <div class="nav">
-    <a class="wordmark" href="index.html">
-      <span>Enigma Perfumes</span>
-    </a>
-    <div class="progress">
+<div id="epHeader"></div>
+<div style="display:flex;justify-content:center;padding:16px 16px 0"><div class="progress">
       <span class="step done"><span class="dot"></span>Cart</span>
       <span class="sep"></span>
       <span class="step current"><span class="dot"></span>Checkout</span>
       <span class="sep"></span>
       <span class="step"><span class="dot"></span>Confirmation</span>
-    </div>
-  </div>
-</header>
+    </div></div>
 
 <div id="checkoutView">
   <div class="page-head">
     <div class="wrap">
-      <div class="breadcrumb"><a href="index.html">Catalogue</a> / <a href="cart.html">Cart</a> / <span>Checkout</span></div>
+      <div class="breadcrumb"><a href="shop.html">Catalogue</a> / <a href="cart.html">Cart</a> / <span>Checkout</span></div>
       <h1>Checkout</h1>
     </div>
   </div>
@@ -316,7 +310,8 @@
         </div>
         <button type="submit" form="checkoutForm" class="btn-primary" id="placeOrderBtn">Pay now</button>
         <p class="pay-error" id="payError" role="alert"></p>
-        <p class="lock-note" id="lockNote">Pay by UPI to our UPI ID. After you pay, send your order on WhatsApp.</p>
+        <p class="lock-note" id="emiNote" style="margin-bottom:6px"></p>
+      <p class="lock-note" id="lockNote">Pay by UPI to our UPI ID. After you pay, send your order on WhatsApp.</p>
       </aside>
     </div>
   </main>
@@ -369,13 +364,13 @@
   <a class="btn-primary" id="waSendBtn" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
   <p style="margin-top:18px;">Want updates on new decants and offers? <a href="https://chat.whatsapp.com/BDzNrJFW8PXB9tdmqReyhZ" target="_blank" rel="noopener" style="text-decoration:underline;">Join our WhatsApp community</a></p>
   <br>
-  <a href="index.html" style="display:inline-block; margin-top:22px; font-size:0.85rem; color:var(--parchment-dim);">Back to the catalogue</a>
+  <a href="home.html" style="display:inline-block; margin-top:22px; font-size:0.85rem; color:var(--parchment-dim);">Back to the catalogue</a>
 </div>
 
 <div id="epFooter"></div>
 
 <script src="store.js?v=1"></script>
-<script src="ep-chrome.js?v=1"></script>
+<script src="ep-chrome.js?v=2"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -497,7 +492,7 @@ const UPI_KEY = "le_pending_upi";
 const PENDING_KEY = "le_pending_payment";
 
 /* ---------- Save every order to the Orders sheet (Apps Script web app) ---------- */
-const ORDERS_API_URL = "https://script.google.com/macros/s/AKfycbzuqXm7-A2d9fPnI3QiflfmUfEemj44Iq6nJKEoAwWEN90iO_yBBwrb6aABrt09QdO2/exec";
+const ORDERS_API_URL = "PASTE_EP_ORDERS_URL_HERE";   // the EP orders web app (Apps Script) goes here
 
 function orderItemsText(s){
   return s.lines.slice().sort((a, b) =>
@@ -618,7 +613,7 @@ function finishPaid(snap, v, rzpOrderId){
 
 /* Paid, but we couldn't reach our server to confirm. Never leave the customer stranded. */
 function showPaidUnconfirmed(paymentId){
-  const msg = `Hi! I paid for a Liquid Emotions order but the page didn't confirm it. Payment ID: ${paymentId}`;
+  const msg = `Hi! I paid for an Enigma Perfumes order but the page didn't confirm it. Payment ID: ${paymentId}`;
   showConfirm({
     title: "Payment received, one more step.",
     text: "Your payment went through, but we couldn't confirm it automatically. Message us on WhatsApp with this payment ID and we'll complete your order.",
@@ -898,8 +893,8 @@ document.getElementById("checkoutForm").addEventListener("submit", async (e) => 
     order_id: order.orderId,
     amount: order.amount,
     currency: order.currency,
-    name: "Liquid Emotions",
-    description: "Perfume decants",
+    name: "Enigma Perfumes",
+    description: "Perfume order",
     prefill: { name: snap.customer.name, email: snap.customer.email, contact: snap.customer.phone },
     theme: { color: "#8B1E3F" },
     method: { card: true, netbanking: false, upi: false, wallet: false, emi: true, paylater: false },
@@ -966,5 +961,6 @@ window.addEventListener("le-data-updated", () => { leValidateCart(); renderSumma
 <a class="wa-float" href="https://wa.me/917982410620?text=Hi!%20I'd%20like%20to%20place%20a%20decant%20order." target="_blank" rel="noopener" aria-label="Order via WhatsApp">
   <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.34.653 4.527 1.786 6.393L4 29l7.8-1.75A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.354l-.355-.21-4.626 1.038 1.02-4.507-.232-.367A9.72 9.72 0 0 1 5.25 15c0-5.93 4.823-10.75 10.754-10.75S26.75 9.07 26.75 15 21.935 24.75 16.004 24.75zm5.55-7.98c-.304-.152-1.795-.886-2.073-.987-.278-.101-.48-.152-.683.152-.202.303-.783.986-.96 1.19-.176.202-.353.227-.657.076-.304-.152-1.283-.473-2.443-1.51-.903-.805-1.513-1.8-1.69-2.104-.177-.303-.019-.467.133-.618.137-.136.304-.354.456-.53.152-.177.202-.303.304-.505.101-.202.05-.38-.025-.531-.076-.152-.683-1.648-.936-2.257-.246-.593-.497-.513-.683-.522-.177-.008-.38-.01-.582-.01-.202 0-.531.076-.809.38-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.198 1.908.12.582-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.443-.076-.127-.278-.202-.582-.354z"/></svg>
 </a>
+<script>epRenderEmiNote(); document.addEventListener("click", () => setTimeout(epRenderEmiNote, 80)); window.addEventListener("storage", () => epRenderEmiNote());</script>
 </body>
 </html>

@@ -7,8 +7,6 @@ const SLIM = document.body.dataset.chrome === "slim";    // checkout: no scrolli
 /* Mini cart: slides in from the right. Not on the cart or checkout pages, where it would only repeat them. */
 const MINI = !SLIM && ACTIVE !== "cart" && typeof leCartLines === "function";
 const AUTO_OPEN = true;   // slide the mini cart open whenever something is added; set false to open it only from the cart button
-/* Lines that scroll across the top. "{bottles}" becomes the full-bottle sizes you have in stock. */
-const TICKER = ["Decants from 3ml", "{bottles}", "Decanted by syringe, sealed by hand", "Authentic, from genuine bottles", "Free shipping on every bottle"];
 const NAV = [["index.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"], ["brands.html", "Brands", "brands"], ["about.html", "About", "about"]];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -22,10 +20,56 @@ function bottleSizes(){
   }catch(e){}
   return [...set].sort((a, b) => a - b);
 }
+/* Scrolling text: a different mix on every page load. Lines that use your catalogue (counts, prices, sizes, new arrivals)
+   are only used when the data supports them. Add or reword lines in POOL; each is a function that returns a string or "". */
+const SEED = Math.random();
+function seeded(seed){ let a = Math.floor(seed * 4294967296) >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function catalogue(){
+  const out = { decants: 0, minDecant: 0, minMl: 0, bottles: 0, testers: 0, vials: 0, fresh: [] };
+  try{
+    FRAGRANCES.forEach(f => {
+      if(f.hidden) return;
+      const keys = Object.keys(f.prices || {}).filter(k => !leIsSoldOut(f.id, k));
+      const kinds = new Set(keys.map(leSizeKind));
+      if(kinds.has("decant") || kinds.has("partial")){
+        out.decants++;
+        keys.filter(k => ["decant", "partial"].includes(leSizeKind(k))).forEach(k => {
+          const pr = f.prices[k], ml = parseFloat(k);
+          if(!out.minDecant || pr < out.minDecant) out.minDecant = pr;
+          if(ml > 0 && (!out.minMl || ml < out.minMl)) out.minMl = ml;
+        });
+      }
+      if(kinds.has("bottle")) out.bottles++;
+      if(kinds.has("tester")) out.testers++;
+      if(kinds.has("vial")) out.vials++;
+      if(f.isNew) out.fresh.push(f.name);
+    });
+  }catch(e){}
+  return out;
+}
+const POOL = [
+  c => c.decants > 4 ? `${c.decants} perfumes to try before you buy` : "",
+  c => c.minDecant ? `Your next favourite scent starts at ${leFormatPrice(c.minDecant)}` : "",
+  c => c.minMl ? `Sample first, commit later: decants from ${c.minMl}ml` : "",
+  c => { const z = bottleSizes(); return z.length ? "Sealed bottles in " + z.map(x => x + "ml").join(" · ") + ", brand new" : ""; },
+  c => c.bottles > 2 ? `${c.bottles} sealed bottles, free shipping on every one` : "",
+  c => c.fresh.length ? "Just in: " + c.fresh.slice(0, 2).join(" & ") : "",
+  c => c.testers > 0 ? "Tester bottles: same scent, plain box, friendlier price" : "",
+  c => c.vials > 0 ? "Official vials to try a scent before you own it" : "",
+  () => "Don't buy blind. Smell it first.",
+  c => c.minMl ? `Find your signature scent, ${c.minMl}ml at a time` : "",
+  () => "Decanted by syringe, sealed by hand",
+  () => "Authentic, from genuine bottles",
+  () => "Free shipping on every bottle",
+  () => "Big perfume energy, small price tag",
+  () => "Make your wardrobe of scents, one decant at a time",
+  () => "Love it? Go for the full bottle. Not sure? Start small."
+];
 function tickerHtml(){
-  const sizes = bottleSizes();
-  const items = TICKER.map(t => t === "{bottles}" ? (sizes.length ? "Full bottles in " + sizes.map(x => x + "ml").join(" · ") : "") : t).filter(Boolean);
-  const one = items.map(t => `<span>${esc(t)}</span>`).join("");
+  const rnd = seeded(SEED), c = catalogue();
+  const lines = POOL.map(fn => { try{ return fn(c); }catch(e){ return ""; } }).filter(Boolean);
+  for(let i = lines.length - 1; i > 0; i--){ const j = Math.floor(rnd() * (i + 1)); [lines[i], lines[j]] = [lines[j], lines[i]]; }
+  const one = lines.slice(0, 6).map(t => `<span>${esc(t)}</span>`).join("");
   return one + one;
 }
 const mainLinks = NAV.filter(n => n[2] !== "home").map(n => `<a href="${n[0]}"${n[2] === ACTIVE ? ' class="active"' : ""}>${n[1]}</a>`).join("");

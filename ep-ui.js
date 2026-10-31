@@ -32,10 +32,14 @@ function tagsHtml(f, mode){
   const t = [];
   if(kinds.has("decant")) t.push('<span class="tag t-decant">Decants</span>');
   if(kinds.has("partial")) t.push('<span class="tag t-decant">Partial</span>');
-  if(kinds.has("bottle")) t.push('<span class="tag t-bottle">Bottle</span>');
+  /* The sealed bottle is judged from ALL of the perfume's sizes, not just the ones this page lists
+     (the decants page only lists decants, so it would otherwise never see the bottle). */
+  const allSizes = Object.keys(f.prices || {});
+  const bottleOpen = allSizes.some(sz => leSizeKind(sz) === "bottle" && !leIsSoldOut(f.id, sz));
+  if(bottleOpen) t.push('<span class="tag t-bottle">Bottle</span>');
   if(kinds.has("tester")) t.push('<span class="tag t-tester">Tester</span>');
   if(kinds.has("vial")) t.push('<span class="tag t-vial">Vial</span>');
-  if(MODE !== "bottles" && (kinds.has("decant") || kinds.has("partial")) && !kinds.has("bottle")) t.push('<span class="tag t-sold">Bottle sold out</span>');
+  if(MODE !== "bottles" && (kinds.has("decant") || kinds.has("partial")) && !bottleOpen) t.push('<span class="tag t-sold">Bottle sold out</span>');
   return t.join("");
 }
 function initials(f){ return esc((f.house || "?").split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase()); }

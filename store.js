@@ -2943,6 +2943,15 @@ function epApplyBottles(rows, present){
       f.bottles[k] = { kind: r.type, ml: r.ml, mrp: r.mrp || 0, box: r.box, condition: r.condition || "" };
       if(!r.inStock) (f.soldSizes = f.soldSizes || []).push(k);
     });
+    /* a bottle added recently makes the perfume "new" as well, even when its decant was listed long ago */
+    const addedDates = list.map(r => leParseAddedDate(r.added)).filter(Boolean).sort();
+    if(!f.bottleOnly && addedDates.length){
+      const latest = addedDates[addedDates.length - 1];
+      if(!f.newSince || latest > f.newSince){
+        f.newSince = latest;
+        if(!Object.getOwnPropertyDescriptor(f, "isNew")) Object.defineProperty(f, "isNew", { get(){ return leComputeIsNew(f.newSince); }, enumerable: true, configurable: true });
+      }
+    }
     touched.add(f);
     present.add(f.id);
   });

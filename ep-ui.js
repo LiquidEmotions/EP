@@ -39,7 +39,7 @@ function tagsHtml(f, mode){
   if(bottleOpen) t.push('<span class="tag t-bottle">Bottle</span>');
   if(kinds.has("tester")) t.push('<span class="tag t-tester">Tester</span>');
   if(kinds.has("vial")) t.push('<span class="tag t-vial">Vial</span>');
-  if(MODE !== "bottles" && (kinds.has("decant") || kinds.has("partial")) && !bottleOpen) t.push('<span class="tag t-sold">Bottle sold out</span>');
+  if(MODE !== "bottles" && (kinds.has("decant") || kinds.has("partial")) && !bottleOpen) t.push('<span class="tag t-sold">No bottle</span>');
   return t.join("");
 }
 function initials(f){ return esc((f.house || "?").split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase()); }
@@ -274,9 +274,15 @@ function initHome(){
   };
   count();
   const grid = $("#newGrid");
+  /* A different pick on every refresh: the new arrivals first (shuffled), topped up to 8 with other perfumes from the shop. */
+  const seed = Math.random();
+  const rng = (() => { let a = Math.floor(seed * 4294967296) >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; })();
+  const shuffle = arr => { const x = arr.slice(); for(let i = x.length - 1; i > 0; i--){ const j = Math.floor(rng() * (i + 1)); [x[i], x[j]] = [x[j], x[i]]; } return x; };
   const draw = () => {
-    let a = FRAGRANCES.filter(f => visible(f) && f.isNew).slice(0, 8);
-    if(a.length < 4) a = FRAGRANCES.filter(f => visible(f)).slice(-8).reverse();
+    const all = FRAGRANCES.filter(f => visible(f));
+    const fresh = shuffle(all.filter(f => f.isNew)).slice(0, 8);
+    const rest = shuffle(all.filter(f => !fresh.includes(f) && !f.soldOut));
+    const a = fresh.concat(rest).slice(0, 8);
     grid.innerHTML = a.map(f => cardHtml(f, "all")).join("");
   };
   draw(); wireCards(grid, () => "all");

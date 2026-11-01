@@ -6,7 +6,8 @@
 .ticker span::after{content:"·";margin-left:56px;opacity:.5;}
 @keyframes epTick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
-.tags{display:flex;flex-wrap:wrap;gap:4px;min-height:20px;}
+.tags{display:flex;flex-wrap:wrap;align-content:flex-start;gap:4px;min-height:22px;}
+@media (max-width:700px){.tags{min-height:48px}.tag{font-size:.64rem;padding:2px 6px}}   /* phones: room for two rows on every card so titles and prices line up */
 .tag{font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:99px;border:1px solid var(--line);color:var(--ink-soft);background:var(--paper);}
 .tag.t-decant{color:#1F4E6B;border-color:#B9CFE0;background:#EAF2F8}
 .tag.t-bottle{color:var(--seal);border-color:#E3B9C5;background:#F8EAEE}

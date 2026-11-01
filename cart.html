@@ -81,10 +81,14 @@
   .size-table-row:last-child{border-bottom:none;}
   .size-table-right{display:flex; align-items:center; gap:12px;}
   .size-table-size{color:var(--parchment-dim);}
+  .size-table-row{gap:10px}
+  .size-pick{flex:1; min-width:0; max-width:64%; background:var(--moss); color:var(--parchment); border:1px solid var(--line); border-radius:var(--radius); padding:8px 8px; font-family:inherit; font-size:0.85rem;}
+  .size-pick:focus{border-color:var(--amber-bright); outline:none}
   .size-table-price{color:var(--amber-bright); font-size:0.92rem; font-weight:600; min-width:52px; text-align:right;}
   .size-table-price small{font-size:0.7rem; font-weight:400; color:var(--parchment-dim); margin-left:4px;}
   .li-add-size{background:none; border:none; padding:12px 2px 0; font-size:0.78rem; color:var(--amber-bright); text-decoration:underline; text-underline-offset:3px;}
   .li-add-size:hover{color:var(--parchment);}
+  .size-group{font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--parchment-dim); padding:12px 0 2px;}
   .size-table.other{margin-top:10px;}
   .size-table.other .size-table-price{color:var(--parchment-dim); font-weight:400;}
   .recently-viewed{padding:44px 28px; border-top:1px solid var(--line);}
@@ -251,7 +255,7 @@
 
 <div id="epFooter"></div>
 
-<script src="store.js?v=3"></script>
+<script src="store.js?v=4"></script>
 <script src="ep-chrome.js?v=6"></script>
 <script>
 const FILL_LEVEL = { "3ml": 28, "5ml": 40, "10ml": 62, "20ml": 92, "30ml": 100 };
@@ -311,6 +315,20 @@ if(hamburgerBtn && mobileMenu){
   });
 }
 
+const SIZE_GROUPS = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Sealed bottles" };
+function otherGroups(list, sizeRow){
+  const groups = {};
+  list.forEach(sz => { (groups[leSizeKind(sz)] = groups[leSizeKind(sz)] || []).push(sz); });
+  return Object.keys(groups).map(k => `<div class="size-group">${SIZE_GROUPS[k]}</div>${groups[k].map(sz => sizeRow(sz, false)).join("")}`).join("");
+}
+function pickOptions(f, current){
+  const keys = Object.keys(f.prices).filter(sz => sz === current || !leIsSoldOut(f.id, sz))
+    .sort((a, b) => leSizeRank(a) - leSizeRank(b) || parseFloat(a) - parseFloat(b));
+  const groups = {};
+  keys.forEach(sz => { (groups[leSizeKind(sz)] = groups[leSizeKind(sz)] || []).push(sz); });
+  return Object.keys(groups).map(k => `<optgroup label="${SIZE_GROUPS[k]}">${groups[k].map(sz =>
+    `<option value="${sz}"${sz === current ? " selected" : ""}>${leSizeLabel(sz, f.id)} · ${currency(f.prices[sz])}</option>`).join("")}</optgroup>`).join("");
+}
 const addOpen = new Set(); // fragrance ids whose 'other sizes' list is expanded
 
 
@@ -335,10 +353,17 @@ function render(){
       const fLines = lines.filter(l => l.id === f.id);
       const cartSizes = fLines.map(l => l.size);
       const inCart = sizes.filter(s => cartSizes.includes(s));
-      const others = sizes.filter(s => !cartSizes.includes(s));
+      /* every other size that can be bought right now: decants, partials, vials, testers, sealed bottles */
+      const others = sizes.filter(s => !cartSizes.includes(s) && !leIsSoldOut(f.id, s))
+        .sort((a, b) => leSizeRank(a) - leSizeRank(b) || parseFloat(a) - parseFloat(b));
       const rowTotal = fLines.reduce((s, l) => s + l.lineTotal, 0);
       const open = addOpen.has(f.id) && others.length > 0;
-      const sizeRow = (s, showEach) => `
+      /* sizes already in the cart get a dropdown listing every size that can be bought right now */
+      const sizeRow = (s, showEach) => showEach ? `
+              <div class="size-table-row" data-size="${s}">
+                <select class="size-pick" data-id="${f.id}" data-size="${s}" aria-label="Size of ${f.name}">${pickOptions(f, s)}</select>
+                <div class="size-table-right"><span class="le-card-qty-slot" data-size="${s}"></span></div>
+              </div>` : `
               <div class="size-table-row" data-size="${s}">
                 <span class="size-table-size">${leSizeLabel(s, f.id)}</span>
                 <div class="size-table-right">
@@ -362,7 +387,7 @@ function render(){
           </div>
           ${others.length ? `
           <button class="li-add-size" aria-expanded="${open}">${open ? "− Hide other sizes" : "+ Add another size"}</button>
-          ${open ? `<div class="size-table other">${others.map(s => sizeRow(s, false)).join("")}
+          ${open ? `<div class="size-table other">${otherGroups(others, sizeRow)}
           </div>` : ""}` : ""}
         </div>
         <div class="li-price">
@@ -420,6 +445,11 @@ function attachHandlers(){
     row.querySelectorAll(".le-card-qty-slot").forEach(slot => {
       leWireQtyControl(slot, id, slot.dataset.size, "dark", render);
     });
+
+    row.querySelectorAll("select.size-pick").forEach(sel => sel.addEventListener("change", () => {
+      leUpdateSize(id, sel.dataset.size, sel.value);
+      render();
+    }));
 
     row.querySelector(".li-wishlist").addEventListener("click", () => {
       leToggleWishlist(id);

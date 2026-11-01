@@ -133,6 +133,13 @@
   /* editable order summary */
   .mini-size{background:var(--moss); border:1px solid var(--line); color:var(--parchment-dim); font-size:0.74rem; padding:5px 8px; border-radius:var(--radius); max-width:100%;}
   .mini-size:focus{border-color:var(--amber); color:var(--parchment);}
+  .mini-sizes{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
+  .mini-chip{display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:62px; padding:6px 8px; border:1px solid var(--line); background:transparent; color:var(--parchment); border-radius:var(--radius); font-family:inherit; cursor:pointer; line-height:1.2}
+  .mini-chip span{font-size:0.8rem; font-weight:600}
+  .mini-chip b{font-size:0.7rem; font-weight:400; color:var(--parchment-dim)}
+  .mini-chip.on{background:var(--amber-bright); border-color:var(--amber-bright); color:#fff}
+  .mini-chip.on b{color:#fff}
+  .mini-chip.gone{opacity:.45; cursor:not-allowed; text-decoration:line-through}
   .mini-qty{display:flex; align-items:center; gap:6px; margin-top:7px;}
   .mini-qty button{border:1px solid var(--taupe); background:transparent; color:var(--parchment); width:28px; height:28px; border-radius:50%; font-size:1rem; line-height:1; padding:0; display:flex; align-items:center; justify-content:center;}
   .mini-qty button:hover{border-color:var(--amber-bright); color:var(--amber-bright);}
@@ -425,9 +432,9 @@ function renderSummary(){
         <div>${miniVial(line.fragrance)}</div>
         <div class="mini-info">
           <p class="mini-name">${line.fragrance.name}</p>
-          <select class="mini-size" data-id="${line.id}" data-size="${line.size}" aria-label="Size for ${line.fragrance.name}">
-            ${Object.keys(line.fragrance.prices).filter(sz => leIsPartial(line.size) ? sz === line.size : leSizeKind(sz) === leSizeKind(line.size)).map(sz => `<option value="${sz}"${sz === line.size ? " selected" : ""}>${leSizeLabel(sz, line.id)} · ${currency(line.fragrance.prices[sz])}</option>`).join("")}
-          </select>
+          <div class="mini-sizes" role="group" aria-label="Size for ${line.fragrance.name}">
+            ${Object.keys(line.fragrance.prices).filter(sz => leIsPartial(line.size) ? sz === line.size : leSizeKind(sz) === leSizeKind(line.size)).map(sz => { const gone = sz !== line.size && leIsSoldOut(line.id, sz); return `<button type="button" class="mini-chip${sz === line.size ? " on" : ""}${gone ? " gone" : ""}" data-id="${line.id}" data-size="${line.size}" data-to="${sz}" aria-pressed="${sz === line.size}"${gone ? " disabled" : ""}><span>${leSizeLabel(sz, line.id)}</span><b>${gone ? "Sold out" : currency(line.fragrance.prices[sz])}</b></button>`; }).join("")}
+          </div>
           <div class="mini-qty" data-id="${line.id}" data-size="${line.size}">
             ${leIsPartial(line.size) ? "" : `<button type="button" data-act="dec" aria-label="Decrease quantity">−</button>`}
             <span class="mini-qty-n mono">${line.qty}</span>
@@ -868,6 +875,7 @@ document.getElementById("checkoutForm").addEventListener("submit", async (e) => 
       setTimeout(() => location.reload(), 1800);
       return;
     }
+    if(r.status === 404 || r.status === 405) throw new Error("The payment service isn't available at this web address. Please open the main site link to pay.");
     if(!r.ok) throw new Error(r.data.message || r.data.error || "Could not start the payment.");
     order = r.data;
   }catch(err){
@@ -919,10 +927,11 @@ document.getElementById("miniItems").addEventListener("click", (e) => {
   /* leSetCart() fires leOnCartChanged, which redraws the summary. */
 });
 /* Switch a line to another size (merges with the same size if it's already in the cart). */
-document.getElementById("miniItems").addEventListener("change", (e) => {
-  const sel = e.target.closest("select.mini-size");
-  if(!sel || busy || confirming) return;
-  leUpdateSize(sel.dataset.id, sel.dataset.size, sel.value);
+document.getElementById("miniItems").addEventListener("click", (e) => {
+  const chip = e.target.closest(".mini-chip");
+  if(!chip || chip.disabled || busy || confirming) return;
+  if(chip.dataset.to === chip.dataset.size) return;
+  leUpdateSize(chip.dataset.id, chip.dataset.size, chip.dataset.to);
 });
 window.leOnCartChanged = renderSummary;
 

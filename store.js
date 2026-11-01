@@ -1716,16 +1716,18 @@ function leUpdateQty(id, size, qty){
 }
 
 function leUpdateSize(id, oldSize, newSize){
-  if(leSizeKind(oldSize) !== leSizeKind(newSize)) return;   // a partial, bottle, tester or vial can't be swapped for another kind
+  if(oldSize === newSize) return;
+  if(leIsSoldOut(id, newSize)) return;     // only sizes that are available can be chosen
   const cart = leGetCart();
   const item = cart.find(i => i.id === id && i.size === oldSize);
   if(!item) return;
   const dup = cart.find(i => i.id === id && i.size === newSize && i !== item);
   if(dup){
-    dup.qty += item.qty;
+    dup.qty = Math.min(dup.qty + item.qty, leMaxQtyFor(newSize));
     leSetCart(cart.filter(i => i !== item));
   }else{
     item.size = newSize;
+    item.qty = Math.min(item.qty, leMaxQtyFor(newSize));   // e.g. a partial or a bottle has a lower limit than decants
     leSetCart(cart);
   }
 }

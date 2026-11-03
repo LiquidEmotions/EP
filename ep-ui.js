@@ -236,13 +236,22 @@ function initShop(){
     $("#resultCount").textContent = items.length + (items.length === 1 ? " perfume" : " perfumes");
     grid.innerHTML = items.length ? items.map(f => cardHtml(f)).join("") : `<div class="empty" style="grid-column:1/-1">No perfumes match. <a href="#" id="clr">Clear filters</a></div>`;
   };
+  /* After a filter is tapped, glide down to the results (just under the sticky header). Typing in the search box does not scroll. */
+  const toResults = () => requestAnimationFrame(() => {
+    const target = $("#resultCount") || grid;
+    const hdr = document.querySelector(".epc-header");
+    const off = (hdr ? hdr.getBoundingClientRect().height : 0) + 12;
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - off);
+    const calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top, behavior: calm ? "auto" : "smooth" });
+  });
   const q = $("#q"); q.value = state.q;
   q.addEventListener("input", () => { state.q = q.value; render(); });
-  $("#shopTabs") && $("#shopTabs").addEventListener("click", e => { const b = e.target.closest("[data-type]"); if(b){ state.type = b.dataset.type; render(); } });
-  $("#catRow").addEventListener("click", e => { const b = e.target.closest("[data-cat]"); if(b){ state.cat = b.dataset.cat; state.brand = "All"; render(); } });
-  $("#brandSel").addEventListener("change", e => { state.brand = e.target.value; render(); });
-  $("#sortSel").addEventListener("change", e => { state.sort = e.target.value; render(); });
-  grid.addEventListener("click", e => { if(e.target.id === "clr"){ e.preventDefault(); state.q = ""; q.value = ""; state.type = "All"; state.cat = "All"; state.brand = "All"; render(); } });
+  $("#shopTabs") && $("#shopTabs").addEventListener("click", e => { const b = e.target.closest("[data-type]"); if(b){ state.type = b.dataset.type; render(); toResults(); } });
+  $("#catRow").addEventListener("click", e => { const b = e.target.closest("[data-cat]"); if(b){ state.cat = b.dataset.cat; state.brand = "All"; render(); toResults(); } });
+  $("#brandSel").addEventListener("change", e => { state.brand = e.target.value; render(); toResults(); });
+  $("#sortSel").addEventListener("change", e => { state.sort = e.target.value; render(); toResults(); });
+  grid.addEventListener("click", e => { if(e.target.id === "clr"){ e.preventDefault(); state.q = ""; q.value = ""; state.type = "All"; state.cat = "All"; state.brand = "All"; render(); toResults(); } });
   wireCards(grid);
   window.addEventListener("le-data-updated", render);
   render();

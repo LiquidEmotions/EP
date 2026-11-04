@@ -10,10 +10,12 @@ const $ = (s, r) => (r || document).querySelector(s);
 /* ---- sizes, prices, cards ---- */
 const KIND_ORDER = ["decant", "partial", "vial", "tester", "bottle"];
 const KIND_TITLE = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Brand new bottles (BNIB)" };
+let partialsOnly = false;   // true while the "Partials only" tab is being drawn: cards then show only partial-bottle sizes
 function sizesOf(f, mode){
   mode = mode || MODE;
   return Object.keys(f.prices || {}).filter(sz => {
     const k = leSizeKind(sz);
+    if(partialsOnly) return k === "partial" && !leIsSoldOut(f.id, sz);
     if(mode === "decants") return k === "decant" || k === "partial";
     if(mode === "bottles") return k === "bottle" || k === "tester" || k === "vial";
     return true;
@@ -284,10 +286,10 @@ function initShop(){
   const grid = $("#grid"); if(!grid) return;
   const qs = new URLSearchParams(location.search);
   const state = { q: qs.get("q") || "", type: qs.get("type") || "All", cat: qs.get("cat") || "All", brand: qs.get("brand") || "All", fam: qs.get("family") || "All", occ: qs.get("occasion") || "All", sort: "new", stock: "All" };
-  const TYPE_TABS = MODE === "decants" ? [] : MODE === "bottles"
+  const TYPE_TABS = MODE === "decants" ? [["All", "All decants"], ["partial", "Partials only"]] : MODE === "bottles"
     ? [["All", "All bottles"], ["bottle", "New (BNIB)"], ["tester", "Testers"], ["vial", "Vials"]]
-    : [["All", "All"], ["decant", "Decants"], ["bottle", "Bottles"], ["tester", "Testers"], ["vial", "Vials"]];
-  const kindsOf = f => new Set(sizesOf(f).map(k => { const x = leSizeKind(k); return x === "partial" ? "decant" : x; }));
+    : [["All", "All"], ["decant", "Decants"], ["partial", "Partials"], ["bottle", "Bottles"], ["tester", "Testers"], ["vial", "Vials"]];
+  const kindsOf = f => { const out = new Set(); sizesOf(f).forEach(sz => { const x = leSizeKind(sz); if(x === "partial"){ out.add("decant"); if(!leIsSoldOut(f.id, sz)) out.add("partial"); } else out.add(x); }); return out; };
   const base = () => FRAGRANCES.filter(f => visible(f));
   const matchType = f => state.type === "All" || kindsOf(f).has(state.type);
   const list = () => {
@@ -312,10 +314,12 @@ function initShop(){
     const all = base();
     const tabs = $("#shopTabs");
     if(tabs){
-      tabs.innerHTML = TYPE_TABS.map(([k, label]) => {
+      partialsOnly = false;
+      const tabHtml = TYPE_TABS.map(([k, label]) => {
         const n = k === "All" ? all.length : all.filter(f => kindsOf(f).has(k)).length;
         return n || k === state.type ? `<button type="button" role="tab" class="shop-tab${state.type === k ? " active" : ""}" data-type="${k}" aria-selected="${state.type === k}">${label}<small>${n}</small></button>` : "";
-      }).join("");
+      }).filter(Boolean);
+      tabs.innerHTML = tabHtml.length < 2 && state.type === "All" ? "" : tabHtml.join("");
     }
     const cats = ["All", "Middle Eastern", "Designer", "Niche"].filter(c => c === "All" || all.some(f => leHouseCategory(f.house) === c));
     $("#catRow").innerHTML = cats.map(c => `<button type="button" class="chip${state.cat === c ? " active" : ""}" data-cat="${c}">${c}</button>`).join("");
@@ -325,9 +329,11 @@ function initShop(){
     const famCount = k => all.filter(f => tagsOf(f).fam.has(k)).length, occCount = k => all.filter(f => tagsOf(f).occ.has(k)).length;
     $("#famSel").innerHTML = `<option value="All">All families</option>` + FAMILIES.filter(([k]) => famCount(k) || k === state.fam).map(([k, l]) => `<option value="${k}"${k === state.fam ? " selected" : ""}>${l} (${famCount(k)})</option>`).join("");
     $("#occSel").innerHTML = `<option value="All">Any occasion</option>` + OCCASIONS.filter(([k]) => occCount(k) || k === state.occ).map(([k, l]) => `<option value="${k}"${k === state.occ ? " selected" : ""}>${l} (${occCount(k)})</option>`).join("");
+    partialsOnly = state.type === "partial";
     const items = list();
     $("#resultCount").innerHTML = items.length + (items.length === 1 ? " perfume" : " perfumes") + (state.fam !== "All" || state.occ !== "All" ? ' <small class="ep-filter-note">· matched from listed notes</small>' : "");
     grid.innerHTML = items.length ? items.map(f => cardHtml(f)).join("") : `<div class="empty" style="grid-column:1/-1">No perfumes match. <a href="#" id="clr">Clear filters</a></div>`;
+    partialsOnly = false;
   };
   /* After a filter is tapped, glide down to the results (just under the sticky header). Typing in the search box does not scroll. */
   const toResults = () => requestAnimationFrame(() => {

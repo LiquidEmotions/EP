@@ -85,7 +85,7 @@ function brandLinks(){
   return top.map(h => L("shop.html?brand=" + encodeURIComponent(h), esc(h))).join("") + L("brands.html", "View all brands →", ' class="epc-more"');
 }
 function drawerHtml(){
-  const shop = sub("By type", L("decants.html", "Decants") + L("bottles.html?type=bottle", "Brand new bottles") + L("bottles.html?type=tester", "Testers") + L("bottles.html?type=vial", "Vials") + L("shop.html", "All perfumes"))
+  const shop = sub("By type", L("decants.html", "Decants") + L("decants.html?type=partial", "Partials only") + L("bottles.html?type=bottle", "Brand new bottles") + L("bottles.html?type=tester", "Testers") + L("bottles.html?type=vial", "Vials") + L("shop.html", "All perfumes"))
     + sub("By style", L("shop.html?cat=Middle%20Eastern", "Middle Eastern") + L("shop.html?cat=Designer", "Designer") + L("shop.html?cat=Niche", "Niche"), true)
     + sub("By fragrance family", FAM_MENU.map(([k, l]) => L("shop.html?family=" + k, l)).join(""), true)
     + sub("By occasion", OCC_MENU.map(([k, l]) => L("shop.html?occasion=" + k, l)).join(""), true)

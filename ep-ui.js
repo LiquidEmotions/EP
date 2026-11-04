@@ -9,7 +9,7 @@ const $ = (s, r) => (r || document).querySelector(s);
 
 /* ---- sizes, prices, cards ---- */
 const KIND_ORDER = ["decant", "partial", "vial", "tester", "bottle"];
-const KIND_TITLE = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "New sealed bottles (BNIB)" };
+const KIND_TITLE = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Brand new bottles (BNIB)" };
 function sizesOf(f, mode){
   mode = mode || MODE;
   return Object.keys(f.prices || {}).filter(sz => {
@@ -37,8 +37,10 @@ function tagsHtml(f, mode){
   const allSizes = Object.keys(f.prices || {});
   const bottleOpen = allSizes.some(sz => leSizeKind(sz) === "bottle" && !leIsSoldOut(f.id, sz));
   if(bottleOpen) t.push('<span class="tag t-bottle">Bottle</span>');
-  if(kinds.has("tester")) t.push('<span class="tag t-tester">Tester</span>');
-  if(kinds.has("vial")) t.push('<span class="tag t-vial">Vial</span>');
+  /* Tester and vial are judged from ALL of the perfume's sizes too, so a tester shows as available on the decants page as well. */
+  const openKind = k => allSizes.some(sz => leSizeKind(sz) === k && !leIsSoldOut(f.id, sz));
+  if(openKind("tester")) t.push('<span class="tag t-tester">Tester available</span>');
+  if(openKind("vial")) t.push('<span class="tag t-vial">Vial available</span>');
   if(MODE !== "bottles" && (kinds.has("decant") || kinds.has("partial")) && !bottleOpen) t.push('<span class="tag t-sold">Bottle sold out</span>');
   return t.join("");
 }
@@ -120,7 +122,7 @@ function renderPicker(){
   const groups = KIND_ORDER.map(k => [k, sizes.filter(sz => leSizeKind(sz) === k)]).filter(g => g[1].length);
   const hasDecant = sizes.some(sz => leSizeKind(sz) === "decant" || leSizeKind(sz) === "partial");
   const noBottle = pkMode !== "bottles" && hasDecant && !sizes.some(sz => leSizeKind(sz) === "bottle");
-  const soldBottleGroup = noBottle ? `<div class="pk-group"><h4>New sealed bottle</h4><div class="pk-row"><div><span class="pk-size">Full bottle</span><span class="pk-note">Brand new, sealed</span></div><div class="pk-price"></div><span class="pk-sold">Sold out</span></div></div>` : "";
+  const soldBottleGroup = noBottle ? `<div class="pk-group"><h4>Brand new bottle</h4><div class="pk-row"><div><span class="pk-size">Full bottle</span><span class="pk-note">Brand new, sealed</span></div><div class="pk-price"></div><span class="pk-sold">Sold out</span></div></div>` : "";
   const rows = groups.map(([k, list]) => `<div class="pk-group"><h4>${KIND_TITLE[k]}</h4>${list.map(sz => {
     const sold = leIsSoldOut(f.id, sz) || (f.comingSoon && leSizeKind(sz) === "decant");
     const q = leCartQtyFor(f.id, sz), cap = leMaxQtyFor(sz);
@@ -370,7 +372,7 @@ function initHome(){
   const count = () => {
     const vis = FRAGRANCES.filter(f => !f.hidden);
     const n = k => vis.filter(f => Object.keys(f.prices).some(sz => leSizeKind(sz) === k || (k === "decant" && leSizeKind(sz) === "partial"))).length;
-    tiles.innerHTML = [["decants.html", "Decants", n("decant") + " perfumes, from 3ml"], ["bottles.html?type=bottle", "Sealed bottles", n("bottle") + " brand new BNIB"],
+    tiles.innerHTML = [["decants.html", "Decants", n("decant") + " perfumes, from 3ml"], ["bottles.html?type=bottle", "Brand new bottles", n("bottle") + " sealed, in box (BNIB)"],
       ["bottles.html?type=tester", "Testers", n("tester") + " perfumes"], ["bottles.html?type=vial", "Vials", n("vial") + " perfumes"]]
       .map(t => `<a class="type-tile" href="${t[0]}"><b>${t[1]}</b><small>${t[2]}</small></a>`).join("");
   };

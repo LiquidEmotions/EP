@@ -51,8 +51,8 @@ const POOL = [
   c => c.decants > 4 ? `${c.decants} perfumes to try before you buy` : "",
   c => c.minDecant ? `Your next favourite scent starts at ${leFormatPrice(c.minDecant)}` : "",
   c => c.minMl ? `Sample first, commit later: decants from ${c.minMl}ml` : "",
-  c => { const z = bottleSizes(); return z.length ? "Sealed bottles in " + z.map(x => x + "ml").join(" · ") + ", brand new" : ""; },
-  c => c.bottles > 2 ? `${c.bottles} sealed bottles, free shipping on every one` : "",
+  c => { const z = bottleSizes(); return z.length ? "Brand new bottles in " + z.map(x => x + "ml").join(" · ") + ", sealed in box" : ""; },
+  c => c.bottles > 2 ? `${c.bottles} brand new bottles, free shipping on every one` : "",
   c => c.fresh.length ? "Just in: " + c.fresh.slice(0, 2).join(" & ") : "",
   c => c.testers > 0 ? "Tester bottles: same scent, plain box, friendlier price" : "",
   c => c.vials > 0 ? "Official vials to try a scent before you own it" : "",
@@ -85,7 +85,7 @@ function brandLinks(){
   return top.map(h => L("shop.html?brand=" + encodeURIComponent(h), esc(h))).join("") + L("brands.html", "View all brands →", ' class="epc-more"');
 }
 function drawerHtml(){
-  const shop = sub("By type", L("decants.html", "Decants") + L("bottles.html?type=bottle", "Sealed bottles") + L("bottles.html?type=tester", "Testers") + L("bottles.html?type=vial", "Vials") + L("shop.html", "All perfumes"))
+  const shop = sub("By type", L("decants.html", "Decants") + L("bottles.html?type=bottle", "Brand new bottles") + L("bottles.html?type=tester", "Testers") + L("bottles.html?type=vial", "Vials") + L("shop.html", "All perfumes"))
     + sub("By style", L("shop.html?cat=Middle%20Eastern", "Middle Eastern") + L("shop.html?cat=Designer", "Designer") + L("shop.html?cat=Niche", "Niche"), true)
     + sub("By fragrance family", FAM_MENU.map(([k, l]) => L("shop.html?family=" + k, l)).join(""), true)
     + sub("By occasion", OCC_MENU.map(([k, l]) => L("shop.html?occasion=" + k, l)).join(""), true)
@@ -122,7 +122,7 @@ ${MINI ? `<div class="epc-overlay epm-overlay" id="epmOverlay"></div>
   <div class="epm-foot" id="epmFoot"></div>
 </aside>` : ""}</div>`;
 const footer = `<div class="epc"><div class="epc-footer"><div class="epc-wrap"><div class="epc-cols">
-  <div class="epc-col"><h4>Enigma Perfumes</h4><p>Decants, sealed bottles, testers and vials.</p></div>
+  <div class="epc-col"><h4>Enigma Perfumes</h4><p>Decants, brand new bottles, testers and vials.</p></div>
   <div class="epc-col"><h4>Shop</h4><ul><li><a href="shop.html">All perfumes</a></li><li><a href="decants.html">Decants</a></li><li><a href="bottles.html">Full bottles</a></li><li><a href="brands.html">Brands</a></li><li><a href="wishlist.html">Wishlist</a></li><li><a href="cart.html">Cart</a></li><li><a href="track.html">Track order</a></li></ul></div>
   <div class="epc-col"><h4>Customer support</h4><ul><li><a href="contact.html">Contact us</a></li><li><a href="faq.html">FAQs</a></li><li><a href="shipping-policy.html">Shipping policy</a></li><li><a href="return-policy.html">Returns &amp; cancellations</a></li><li><a href="request.html">Request a fragrance</a></li><li><a href="about.html">Our story</a></li></ul></div>
   <div class="epc-col"><h4>Contact us</h4>

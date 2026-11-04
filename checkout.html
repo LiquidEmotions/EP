@@ -362,7 +362,7 @@
 
 <script src="ep-config.js?v=1"></script>
 <script src="store.js?v=6"></script>
-<script src="ep-chrome.js?v=8"></script>
+<script src="ep-chrome.js?v=9"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -412,8 +412,8 @@ function calcTotals(){
   return { lines, count, subtotal, shipping, base, fee, total: base + fee, zone };
 }
 
-/* Every size of this perfume that can be bought right now (decants, partials, vials, testers, sealed bottles), grouped by type. */
-const SIZE_GROUPS = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Sealed bottles" };
+/* Every size of this perfume that can be bought right now (decants, partials, vials, testers, brand new bottles), grouped by type. */
+const SIZE_GROUPS = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Brand new bottles" };
 function sizeOptions(line){
   const f = line.fragrance;
   const keys = Object.keys(f.prices).filter(sz => sz === line.size || !leIsSoldOut(line.id, sz));

@@ -256,7 +256,7 @@
 <div id="epFooter"></div>
 
 <script src="store.js?v=6"></script>
-<script src="ep-chrome.js?v=8"></script>
+<script src="ep-chrome.js?v=9"></script>
 <script>
 const FILL_LEVEL = { "3ml": 28, "5ml": 40, "10ml": 62, "20ml": 92, "30ml": 100 };
 
@@ -315,7 +315,7 @@ if(hamburgerBtn && mobileMenu){
   });
 }
 
-const SIZE_GROUPS = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Sealed bottles" };
+const SIZE_GROUPS = { decant: "Decants", partial: "Partial bottles", vial: "Vials", tester: "Testers", bottle: "Brand new bottles" };
 function otherGroups(list, sizeRow){
   const groups = {};
   list.forEach(sz => { (groups[leSizeKind(sz)] = groups[leSizeKind(sz)] || []).push(sz); });
@@ -353,7 +353,7 @@ function render(){
       const fLines = lines.filter(l => l.id === f.id);
       const cartSizes = fLines.map(l => l.size);
       const inCart = sizes.filter(s => cartSizes.includes(s));
-      /* every other size that can be bought right now: decants, partials, vials, testers, sealed bottles */
+      /* every other size that can be bought right now: decants, partials, vials, testers, brand new bottles */
       const others = sizes.filter(s => !cartSizes.includes(s) && !leIsSoldOut(f.id, s))
         .sort((a, b) => leSizeRank(a) - leSizeRank(b) || parseFloat(a) - parseFloat(b));
       const rowTotal = fLines.reduce((s, l) => s + l.lineTotal, 0);

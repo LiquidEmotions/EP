@@ -7,7 +7,7 @@ const SLIM = document.body.dataset.chrome === "slim";    // checkout: no scrolli
 /* Mini cart: slides in from the right. Not on the cart or checkout pages, where it would only repeat them. */
 const MINI = !SLIM && ACTIVE !== "cart" && typeof leCartLines === "function";
 const AUTO_OPEN = true;   // slide the mini cart open whenever something is added; set false to open it only from the cart button
-const NAV = [["index.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"], ["brands.html", "Brands", "brands"], ["about.html", "About", "about"]];
+const NAV = [["index.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["decants.html", "Decants", "decants"], ["bottles.html", "Full Bottles", "bottles"], ["brands.html", "Brands", "brands"], ["about.html", "About", "about"], ["track.html", "Track order", "track"]];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 function bottleSizes(){
@@ -73,8 +73,31 @@ function tickerHtml(){
   return one + one;
 }
 const mainLinks = NAV.filter(n => n[2] !== "home").map(n => `<a href="${n[0]}"${n[2] === ACTIVE ? ' class="active"' : ""}>${n[1]}</a>`).join("");
-const drawerLinks = NAV.map(n => `<a href="${n[0]}"${n[2] === ACTIVE ? ' class="active"' : ""}>${n[1]}</a>`).join("")
-  + `<a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a><a href="https://wa.me/917982410620" target="_blank" rel="noopener">WhatsApp us</a>`;
+const L = (href, label, extra) => `<a href="${href}"${extra || ""}>${label}</a>`;
+const FAM_MENU = [["woody", "Woody"], ["amber", "Amber"], ["citrus", "Citrus"], ["floral", "Floral"], ["fruity", "Fruity"], ["gourmand", "Gourmand"], ["fresh", "Fresh & aquatic"], ["aromatic", "Aromatic"], ["spicy", "Spicy"], ["oud", "Oud & incense"]];
+const OCC_MENU = [["office", "Office & daily"], ["date", "Date night"], ["party", "Party & night out"], ["summer", "Summer days"], ["winter", "Winter"]];
+const grp = (id, title, inner, open) => `<details class="epc-grp" data-grp="${id}"${open ? " open" : ""}><summary>${title}</summary><div class="epc-grp-body">${inner}</div></details>`;
+const sub = (t, links, chips) => `<h5>${t}</h5><div class="epc-sublinks${chips ? " chips" : ""}">${links}</div>`;
+function brandLinks(){
+  const n = {};
+  try{ FRAGRANCES.forEach(f => { if(!f.hidden) n[f.house] = (n[f.house] || 0) + 1; }); }catch(e){}
+  const top = Object.keys(n).sort((a, b) => n[b] - n[a] || a.localeCompare(b)).slice(0, 10).sort((a, b) => a.localeCompare(b));
+  return top.map(h => L("shop.html?brand=" + encodeURIComponent(h), esc(h))).join("") + L("brands.html", "View all brands →", ' class="epc-more"');
+}
+function drawerHtml(){
+  const shop = sub("By type", L("decants.html", "Decants") + L("bottles.html?type=bottle", "Sealed bottles") + L("bottles.html?type=tester", "Testers") + L("bottles.html?type=vial", "Vials") + L("shop.html", "All perfumes"))
+    + sub("By style", L("shop.html?cat=Middle%20Eastern", "Middle Eastern") + L("shop.html?cat=Designer", "Designer") + L("shop.html?cat=Niche", "Niche"), true)
+    + sub("By fragrance family", FAM_MENU.map(([k, l]) => L("shop.html?family=" + k, l)).join(""), true)
+    + sub("By occasion", OCC_MENU.map(([k, l]) => L("shop.html?occasion=" + k, l)).join(""), true)
+    + `<div class="epc-request">${L("request.html", "Looking for a specific fragrance? <b>Request it</b>")}</div>`;
+  const about = L("about.html", "Our story") + L("contact.html", "Contact us") + L("faq.html", "FAQs") + L("shipping-policy.html", "Shipping policy") + L("return-policy.html", "Returns &amp; cancellations");
+  return grp("shop", "Fragrances", shop, ["shop", "decants", "bottles"].includes(ACTIVE))
+    + grp("brands", "Brands", `<div class="epc-sublinks" id="epcBrandLinks">${brandLinks()}</div>`, ACTIVE === "brands")
+    + grp("about", "About &amp; help", `<div class="epc-sublinks">${about}</div>`, ["about", "faq", "contact"].includes(ACTIVE))
+    + L("track.html", "Track order", ACTIVE === "track" ? ' class="epc-top active"' : ' class="epc-top"')
+    + L("wishlist.html", "Wishlist", ' class="epc-top"') + L("cart.html", "Cart", ' class="epc-top"')
+    + L("https://wa.me/917982410620", "WhatsApp us", ' class="epc-top" target="_blank" rel="noopener"');
+}
 
 const header = `<div class="epc">${SLIM ? "" : `<div class="epc-ticker" aria-label="Store notes"><div class="epc-ticker-track" id="epcTrack">${tickerHtml()}</div></div>`}
 <div class="epc-header" role="banner"><div class="epc-nav">
@@ -90,7 +113,7 @@ const header = `<div class="epc">${SLIM ? "" : `<div class="epc-ticker" aria-lab
 <div class="epc-overlay" id="epcOverlay"></div>
 <aside class="epc-drawer" id="epcDrawer" aria-hidden="true" aria-label="Menu">
   <button class="epc-close" id="epcClose" type="button" aria-label="Close menu">×</button>
-  <nav class="epc-drawer-links">${drawerLinks}</nav>
+  <nav class="epc-drawer-links" id="epcDrawerNav">${drawerHtml()}</nav>
 </aside>
 ${MINI ? `<div class="epc-overlay epm-overlay" id="epmOverlay"></div>
 <aside class="epm" id="epm" aria-hidden="true" aria-label="Your cart">
@@ -100,7 +123,8 @@ ${MINI ? `<div class="epc-overlay epm-overlay" id="epmOverlay"></div>
 </aside>` : ""}</div>`;
 const footer = `<div class="epc"><div class="epc-footer"><div class="epc-wrap"><div class="epc-cols">
   <div class="epc-col"><h4>Enigma Perfumes</h4><p>Decants, sealed bottles, testers and vials.</p></div>
-  <div class="epc-col"><h4>Links</h4><ul>${NAV.map(n => `<li><a href="${n[0]}">${n[1]}</a></li>`).join("")}<li><a href="wishlist.html">Wishlist</a></li><li><a href="cart.html">Cart</a></li></ul></div>
+  <div class="epc-col"><h4>Shop</h4><ul><li><a href="shop.html">All perfumes</a></li><li><a href="decants.html">Decants</a></li><li><a href="bottles.html">Full bottles</a></li><li><a href="brands.html">Brands</a></li><li><a href="wishlist.html">Wishlist</a></li><li><a href="cart.html">Cart</a></li><li><a href="track.html">Track order</a></li></ul></div>
+  <div class="epc-col"><h4>Customer support</h4><ul><li><a href="contact.html">Contact us</a></li><li><a href="faq.html">FAQs</a></li><li><a href="shipping-policy.html">Shipping policy</a></li><li><a href="return-policy.html">Returns &amp; cancellations</a></li><li><a href="request.html">Request a fragrance</a></li><li><a href="about.html">Our story</a></li></ul></div>
   <div class="epc-col"><h4>Contact us</h4>
     <div class="epc-line">📞 <a href="tel:+917982410620">+91 79824 10620</a></div>
     <div class="epc-line">✉️ <a href="mailto:enigma6perfumes@gmail.com">enigma6perfumes@gmail.com</a></div>
@@ -126,6 +150,28 @@ if(ham){
   drawer.addEventListener("click", e => { if(e.target.closest("a")) setMenu(false); });
   document.addEventListener("keydown", e => { if(e.key === "Escape") setMenu(false); });
 }
+window.addEventListener("le-data-updated", () => { const b = document.getElementById("epcBrandLinks"); if(b) b.innerHTML = brandLinks(); });
+
+/* ---------- cart reminder bar: shows once per visit when something is waiting in the cart ---------- */
+(function(){
+  if(SLIM || ["cart", "checkout"].includes(ACTIVE) || !h || typeof leCartCount !== "function") return;
+  try{ if(sessionStorage.getItem("ep_nudge_off")) return; }catch(e){}
+  let bar = null;
+  function sync(){
+    let n = 0; try{ n = leCartCount(); }catch(e){}
+    if(!n){ if(bar){ bar.remove(); bar = null; } return; }
+    if(!bar){
+      bar = document.createElement("div"); bar.className = "epc-nudge"; bar.setAttribute("role", "status");
+      bar.innerHTML = '<span></span><a href="cart.html">View cart</a><a href="checkout.html" class="epc-nudge-go">Checkout</a><button type="button" aria-label="Dismiss">×</button>';
+      bar.querySelector("button").addEventListener("click", () => { try{ sessionStorage.setItem("ep_nudge_off", "1"); }catch(e){} bar.remove(); bar = null; });
+      document.body.appendChild(bar);
+    }
+    bar.firstChild.textContent = n === 1 ? "1 item is waiting in your cart" : n + " items are waiting in your cart";
+  }
+  setTimeout(sync, 1500);
+  window.addEventListener("storage", sync);
+})();
+
 /* ---------- mini cart ---------- */
 if(MINI && h){
   const mini = document.getElementById("epm"), mOv = document.getElementById("epmOverlay");

@@ -2323,7 +2323,7 @@ function leCheckoutGuard(redirectUrl){
      }
    ============================================================ */
 /* EP order counter (Apps Script web app that returns { orderNumber: "EP-00001" }). Leave "" until it is deployed: orders then get a temporary EP-LOCAL number. */
-const LE_ORDER_COUNTER_URL = "";
+const LE_ORDER_COUNTER_URL = (window.EP_CONFIG && window.EP_CONFIG.ordersUrl) || "";
 
 async function leGetNextOrderNumber(){
   if(!LE_ORDER_COUNTER_URL) return null;

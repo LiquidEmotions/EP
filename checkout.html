@@ -169,7 +169,7 @@
   }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="ep-chrome.css?v=5">
+<link rel="stylesheet" href="ep-chrome.css?v=6">
 <link rel="stylesheet" href="ep-theme.css?v=5">
 </head>
 <body data-page="checkout" data-chrome="slim">
@@ -360,8 +360,9 @@
 
 <div id="epFooter"></div>
 
-<script src="store.js?v=5"></script>
-<script src="ep-chrome.js?v=6"></script>
+<script src="ep-config.js?v=1"></script>
+<script src="store.js?v=6"></script>
+<script src="ep-chrome.js?v=8"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -495,7 +496,7 @@ const UPI_KEY = "le_pending_upi";
 const PENDING_KEY = "le_pending_payment";
 
 /* ---------- Save every order to the Orders sheet (Apps Script web app) ---------- */
-const ORDERS_API_URL = "PASTE_EP_ORDERS_URL_HERE";   // the EP orders web app (Apps Script) goes here
+const ORDERS_API_URL = (window.EP_CONFIG && window.EP_CONFIG.ordersUrl) || "PASTE_EP_ORDERS_URL_HERE";   // set in ep-config.js
 
 function orderItemsText(s){
   return s.lines.slice().sort((a, b) =>
@@ -519,6 +520,23 @@ async function sendOrderToSheet(payload, tries){
     if(tries < 3) setTimeout(() => sendOrderToSheet(payload, tries + 1), 3000 * tries);
   }
 }
+
+/* Abandoned cart: once the customer has typed a phone number, save the cart (quietly, no more than once per change).
+   The orders sheet shows it with a WhatsApp nudge link, and sends one reminder email if an email was given. */
+let lastCartSent = "", cartTimer = null;
+function captureCart(){
+  try{
+    const phone = (document.getElementById("phone").value || "").replace(/\D/g, "").slice(-10);
+    if(phone.length !== 10) return;
+    const t = calcTotals(); if(!t.count) return;
+    const snap = snapshotOrder(t, "cart");
+    const payload = { action: "cart", name: snap.customer.name, phone: phone, email: snap.customer.email, items: orderItemsText(snap), total: snap.total };
+    const key = JSON.stringify(payload); if(key === lastCartSent) return;
+    lastCartSent = key; sendOrderToSheet(payload);
+  }catch(e){}
+}
+function queueCartCapture(){ clearTimeout(cartTimer); cartTimer = setTimeout(captureCart, 2500); }
+["phone", "email", "fname", "lname"].forEach(id => { const el = document.getElementById(id); if(el){ el.addEventListener("input", queueCartCapture); el.addEventListener("blur", queueCartCapture); } });
 
 function orderPayload(snap, extra){
   const c = snap.customer;
@@ -594,6 +612,7 @@ function showConfirm(o){
 function finishPaid(snap, v, rzpOrderId){
   const id = v.orderNumber || leFallbackOrderNumber();
   const paid = v.paidPaise / 100;
+  try{ localStorage.setItem("ep_last_order", JSON.stringify({ no: id, phone: snap.customer.phone })); }catch(e){}
   if(rzpOrderId) sendOrderToSheet({ action: "attachNumber", razorpayOrderId: rzpOrderId, orderNo: id });
   /* Razorpay adds its own gateway fee on top of the order total; show it if the customer paid more. */
   const feeKept = snap.method === "card" ? Math.max(0, Math.round(paid - snap.total)) : 0;
@@ -730,6 +749,7 @@ async function startUpiPayment(t, method){
   let id = await leGetNextOrderNumber();
   if(!id) id = leFallbackOrderNumber();
   const o = { id, snap, amount: t.total, at: Date.now() };
+  try{ localStorage.setItem("ep_last_order", JSON.stringify({ no: id, phone: snap.customer.phone })); }catch(e){}
   try{ localStorage.setItem(UPI_KEY, JSON.stringify(o)); }catch(e){}
   try{ sendOrderToSheet(orderPayload(snap, { orderNo: id })); }catch(e){}   // saved before the UPI app even opens; can never block payment
   showUpiPanel(o);

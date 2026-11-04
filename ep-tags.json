@@ -1,0 +1,3 @@
+{
+  "_about": "Optional corrections for the Fragrance family and Occasion filters. By default they are worked out from each perfume's listed notes. To fix one, add a line like:  \"perfume-id\": { \"families\": [\"woody\", \"spicy\"], \"occasions\": [\"date\", \"winter\"] }.  Families: woody, amber, citrus, floral, fruity, gourmand, fresh, aromatic, spicy, oud.  Occasions: office, date, party, summer, winter."
+}

@@ -83,3 +83,60 @@
 .home-sug a:last-child{border-bottom:0}
 .home-sug small{color:var(--ink-soft)}
 .sug-none{display:block;padding:12px 16px;color:var(--ink-soft);font-size:.9rem}
+
+/* pincode delivery check + share row (size picker) */
+.pk-pin{margin:14px 0 4px;padding:12px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.pk-pin label{display:block;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+.pk-pin-row{display:flex;gap:8px}
+.pk-pin-row input{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius);font:inherit;background:var(--card);color:var(--ink)}
+.pk-pin-row button{border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:10px 16px;font-weight:600}
+.pk-pin-out{font-size:.88rem;color:var(--ink);margin-top:8px;line-height:1.5}
+.pk-pin-out:empty{display:none}
+.pk-pin-bad{color:var(--seal)}
+.pk-share{display:flex;gap:8px;margin:10px 0 6px}
+.pk-share button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:var(--radius);padding:9px 10px;font-weight:600;font-size:.86rem}
+
+/* trust strip (home) */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 8px}
+.trust-item{padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.trust-item b{display:block;font-family:var(--display);font-weight:400;font-size:1.05rem;margin-bottom:4px}
+.trust-item span{font-size:.88rem;color:var(--ink-soft);line-height:1.45}
+.trust-more{text-align:center;margin:8px 0 26px}
+.trust-more a{color:var(--seal);font-weight:600}
+@media (max-width:640px){.trust{grid-template-columns:repeat(2,1fr)}.trust-item{padding:13px}}
+
+/* FAQ page */
+.faq{max-width:760px}
+.faq h2{margin:26px 0 10px}
+.faq details{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);margin-bottom:8px}
+.faq summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--seal);font-size:1.2rem;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq details > div{padding:0 16px 14px;color:var(--ink-soft);line-height:1.6}
+.faq details > div p{margin:0 0 8px}
+
+/* forms + tracking + contact (new pages) */
+.prose{line-height:1.65}
+.prose h2{margin:24px 0 8px}
+.prose ul{padding-left:20px}
+.muted{color:var(--ink-soft);font-size:.9rem}
+.form-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:18px;margin:14px 0;display:grid;gap:12px}
+.form-card label{display:grid;gap:6px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.form-card input,.form-card select{padding:11px 12px;border:1px solid var(--line);border-radius:var(--radius);font:inherit;font-size:1rem;text-transform:none;letter-spacing:0;background:var(--paper);color:var(--ink)}
+.btn-seal{border:0;background:var(--seal);color:#fff;border-radius:var(--radius);padding:12px 18px;font-weight:600;font-size:1rem;cursor:pointer}
+.btn-seal:disabled{opacity:.6}
+.contact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+.contact-card{display:grid;gap:4px;padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);text-decoration:none;color:var(--ink)}
+.contact-card span{color:var(--ink-soft);font-size:.9rem;overflow-wrap:anywhere}
+@media (max-width:520px){.contact-grid{grid-template-columns:1fr}}
+.trk-steps{list-style:none;margin:6px 0 14px;padding:0;display:grid;gap:10px}
+.trk-steps li{display:flex;align-items:center;gap:10px;color:var(--ink-soft)}
+.trk-steps li span{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);flex:none;background:var(--paper)}
+.trk-steps li.done{color:var(--ink)}.trk-steps li.done span{background:var(--seal);border-color:var(--seal)}
+.trk-steps li.now{color:var(--seal);font-weight:600}.trk-steps li.now span{border-color:var(--seal);background:var(--paper);box-shadow:0 0 0 3px rgba(122,31,61,.18)}
+.trk-items{padding-left:18px;margin:8px 0}
+.trk-cancel{color:var(--seal)}
+
+/* shop filters: family + occasion */
+.ep-filter-note{font-size:.8rem;color:var(--ink-soft);margin:6px 0 0}
